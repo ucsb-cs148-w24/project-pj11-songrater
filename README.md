@@ -9,5 +9,5 @@ Amy Wang: @awaang \
 Emily Hu: @oomily \
 Aryaman Das: @akdas16 \
 Collin Qian: @collinq \
-Leyang Ni: @LeyaNg \
+Leyang Ni: @LeyangNi \
 Katyayani Raman: @humwooter 
