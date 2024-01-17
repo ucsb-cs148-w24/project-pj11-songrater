@@ -1,0 +1,1 @@
+My name is Collin Qian, a third year computer science major. I envision an application similar to letterboxd (for movies) or beli (for food), and creating something similar but unique with our songrater.
