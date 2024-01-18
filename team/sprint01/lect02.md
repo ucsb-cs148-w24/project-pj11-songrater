@@ -42,3 +42,13 @@ Katya:
 
 1. Got dinner with some friends this weekend!
 2. Gamepigeon, send an album or song in a gamepigeon-esque format where a friend can rate / comment on the song. Also likes the idea of making casette / song collections for friends and wants to bring that into digital.
+
+## General Notes
+
+Useful for the historical recordkeeping context
+
+- If you can rank new songs, you'll also get reminded of old songs
+- Spotify already has that, but how would we make the music rating accurate?
+- How do we make our app not a hassle?
+  - ReRate on a specified time line
+  - Monitors your listening history to keep track of new songs you've listened to
