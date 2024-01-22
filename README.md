@@ -11,3 +11,8 @@ Aryaman Das: @akdas16 \
 Collin Qian: @collinq \
 Leyang Ni: @LeyangNi \
 Katyayani Raman: @humwooter 
+
+
+__Tech Stack__ \
+Frontend: React Native
+Backend: Flask Server w/ PostgreSQL database
