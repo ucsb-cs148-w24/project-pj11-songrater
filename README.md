@@ -14,5 +14,5 @@ Katyayani Raman: @humwooter
 
 
 __Tech Stack__ \
-Frontend: React Native
+Frontend: React Native \
 Backend: Flask Server w/ PostgreSQL database
