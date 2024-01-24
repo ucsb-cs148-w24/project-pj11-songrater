@@ -12,7 +12,7 @@ Jeffrey Mun -
 
 Amy Wang -
 
-Emily Hu -
+Emily Hu - Some experience with React and React Native / no experience with backend databases
 
 Collin Qian -
 
@@ -28,7 +28,7 @@ Jeffrey Mun -
 
 Amy Wang -
 
-Emily Hu -
+Emily Hu - Watch youtube videos on how to set up databases and API calls. Brush up on javascript skills for the frontend.
 
 Collin Qian -
 
