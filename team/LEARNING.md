@@ -14,7 +14,7 @@ Amy Wang -
 
 Emily Hu - Some experience with React and React Native / no experience with backend databases
 
-Collin Qian -
+Collin Qian - Basic experience with frontend, good amount of experence with REST API's and SQL/NoSQL Databases
 
 Leyang Ni - 
 
@@ -30,7 +30,7 @@ Amy Wang -
 
 Emily Hu - Watch youtube videos on how to set up databases and API calls. Brush up on javascript skills for the frontend.
 
-Collin Qian -
+Collin Qian - Focus on learning more React Native principles and also help setting up the database. I will do this with tutorials
 
 Leyang Ni -
 
