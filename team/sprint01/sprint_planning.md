@@ -3,10 +3,12 @@ Team: Collin [x], Aryaman[x], Emily[x], Amy[x], Jeffrey[x], Katya[], Leyang[x]
 
 # Sprint Ends: 1/26/24
 
-Download the MusicBrainzDB (api database with list of songs and meta info)
+Set up discogsAPI
 
 Create a Python Flask Server
 
 Create a Basic Frontend:
 	Navbar
-	User Login 
+	User Login with Google Oauth
+
+Set up PostgreSQL database
