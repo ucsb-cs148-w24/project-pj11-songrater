@@ -1,0 +1,37 @@
+# Tech Stack discussion
+
+Frontend: React Native
+
+Backend: Flask Server w/ PostgreSQL database
+
+## Current level of familiarity (frontend/backend)
+
+Aryaman Das - No experience / some experience with REST APIs and SQL databases in general (have used a bit of flask and postgres in cs190b - took it last quarter)
+
+Jeffrey Mun -
+
+Amy Wang -
+
+Emily Hu -
+
+Collin Qian -
+
+Leyang Ni - 
+
+Katyayani Raman - 
+
+## Plans for improving certain skills/learning from scratch
+
+Aryaman Das - Focus on learning the nuances of Flask (like syntax for setting up the API handlers) in week 3, start learning React native from week 4
+
+Jeffrey Mun -
+
+Amy Wang -
+
+Emily Hu -
+
+Collin Qian -
+
+Leyang Ni -
+
+Katyayani Raman -
