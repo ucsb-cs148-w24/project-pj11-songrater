@@ -1,6 +1,7 @@
 
 # 01/22/2024
-
+Team: Collin [x], Aryaman[x], Emily[x], Amy[x], Jeffrey[x], Katya[x], Leyang[x] 
+(all members present)
 ## 2 Questions:
 
 1. What did you do over the weekend?
@@ -50,3 +51,4 @@ leadership.md
 Tech Stack:
 React Native
 Flask
+PostgreSQL
