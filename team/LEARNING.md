@@ -10,7 +10,7 @@ Aryaman Das - No experience / some experience with REST APIs and SQL databases i
 
 Jeffrey Mun -
 
-Amy Wang -
+Amy Wang - Experience with React and some experience with React Native. Intermediate experience with SQL databases and Flask
 
 Emily Hu - Some experience with React and React Native / no experience with backend databases
 
