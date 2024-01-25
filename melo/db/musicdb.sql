@@ -1,4 +1,7 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 102e0808 (set up sql database)
 -- Database: musicdb
 
 -- DROP DATABASE IF EXISTS musicdb;
@@ -12,10 +15,14 @@ CREATE DATABASE musicdb
     CONNECTION LIMIT = -1
     IS_TEMPLATE = False;
 
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> 102e0808 (set up sql database)
 -- Table: public.User
 
 -- DROP TABLE IF EXISTS public."User";
+USE musicdb;
 
 CREATE TABLE IF NOT EXISTS public."User"
 (
