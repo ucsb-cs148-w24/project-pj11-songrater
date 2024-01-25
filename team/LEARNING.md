@@ -16,7 +16,7 @@ Emily Hu - Some experience with React and React Native / no experience with back
 
 Collin Qian -
 
-Leyang Ni - 
+Leyang Ni - Some experience with SQL databases/ a little / no experience (maybe a little with HTML and CSS) with frontend developments. 
 
 Katyayani Raman - 
 
@@ -30,8 +30,8 @@ Amy Wang -
 
 Emily Hu - Watch youtube videos on how to set up databases and API calls. Brush up on javascript skills for the frontend.
 
-Collin Qian -
+Collin Qian - 
 
-Leyang Ni -
+Leyang Ni - Learn javascript skills and React Native/ review and learn databases management
 
 Katyayani Raman -
