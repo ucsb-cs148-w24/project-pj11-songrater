@@ -10,13 +10,13 @@ Aryaman Das - No experience / some experience with REST APIs and SQL databases i
 
 Jeffrey Mun -
 
-Amy Wang -
+Amy Wang - Experience with React and some experience with React Native. Intermediate experience with SQL databases and Flask
 
-Emily Hu -
+Emily Hu - Some experience with React and React Native / no experience with backend databases
 
 Collin Qian -
 
-Leyang Ni - 
+Leyang Ni - Some experience with SQL databases/ a little / no experience (maybe a little with HTML and CSS) with frontend developments. 
 
 Katyayani Raman - 
 
@@ -26,12 +26,12 @@ Aryaman Das - Focus on learning the nuances of Flask (like syntax for setting up
 
 Jeffrey Mun -
 
-Amy Wang -
+Amy Wang - Plan to improve javascript skills with practice and reading through documentation. Will watch tutorials on hard to understand topics. Focus on understanding Flask
 
-Emily Hu -
+Emily Hu - Watch youtube videos on how to set up databases and API calls. Brush up on javascript skills for the frontend.
 
-Collin Qian -
+Collin Qian - 
 
-Leyang Ni -
+Leyang Ni - Learn javascript skills and React Native/ review and learn databases management
 
 Katyayani Raman -
