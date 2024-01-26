@@ -1,5 +1,5 @@
 # Project-pj11-songrater README
-Project Name: Songrater 
+Project Name: Melo 
 
 Project description: A platform to rate albums / songs you've listened to and compare / share it with friends. 
 
