@@ -1,1 +1,0 @@
-Hi, I'm Amy! Since I am really enthusiastic about music genres, and I have a lot of trouble describing my music taste, I hope to be able to help people better classify music tastes using helpful music genre API's and such. And being able to share and compare music tastes with friends.
