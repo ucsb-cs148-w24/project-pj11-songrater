@@ -34,4 +34,4 @@ Collin Qian - Focus on learning more React Native principles and also help setti
 
 Leyang Ni - Learn javascript skills and React Native/ review and learn databases management
 
-Katyayani Raman -
+Katyayani Raman - Learn more about frontend (CSS and HTML) as well as backend.
