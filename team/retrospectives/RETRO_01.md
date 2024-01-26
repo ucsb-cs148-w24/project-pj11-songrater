@@ -1,14 +1,22 @@
 # Date of Retrospective: 01/26/24
 
 * Led by: Aryaman Das
-* Present: name1, name2, ... , nameN
-* Absent: name1, name2, ...
+* Present: Aryaman, Emily, Leyang, Amy, Collin, Jeffrey, Katya
+* Absent: N/A
 
-## Action item
+## Action items
 
-* a goal: identify something the team wants to get better at
-* a change: identify one thing that the team will change about how it works together
-* a measurement: identify at least one way to measure whether the change helped the team achieve the goal, or move closer to it.
+* a goal: Work more on the project outside of class
+* a change: Establish a time for working together outside of class. Doesn't have to be together in person, but just a time where everyone is working.
+* a measurement: We can be in a discord call together for easier communication but also a lot of freedom to do whatever is individually necessary.
+  
+* a goal: Manage absences effectively.
+* a change: When people are absent, they will be able to catch up more easily, and work still gets done.
+* a measurement: When people are absent, they should write a blurb about what they did, as well as read meeting notes.
+
+* a goal: Make class times more structured and useful.
+* a change: Create a routine, ie: as soon as the professor is done talking, we scrum. After, we work on tasks for the lab and the project as a whole.
+* a measurement: We can keep track of how often we scrum and our efficiency in moving on through time.
 
 ## Optional
 
