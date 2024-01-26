@@ -8,7 +8,7 @@ Backend: Flask Server w/ PostgreSQL database
 
 Aryaman Das - No experience / some experience with REST APIs and SQL databases in general (have used a bit of flask and postgres in cs190b - took it last quarter)
 
-Jeffrey Mun -
+Jeffrey Mun - Experience with React, React Native, and general full-stack integration. Intermediate experience with SQL and Flask.
 
 Amy Wang - Experience with React and some experience with React Native. Intermediate experience with SQL databases and Flask
 
@@ -24,7 +24,7 @@ Katyayani Raman -
 
 Aryaman Das - Focus on learning the nuances of Flask (like syntax for setting up the API handlers) in week 3, start learning React native from week 4
 
-Jeffrey Mun -
+Jeffrey Mun - Look into component libraries from the frontend and ways to bypass rate-limiting from API calls.
 
 Amy Wang - Plan to improve javascript skills with practice and reading through documentation. Will watch tutorials on hard to understand topics. Focus on understanding Flask
 
