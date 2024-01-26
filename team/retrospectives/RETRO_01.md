@@ -22,15 +22,11 @@
   based on what you learned today?
 
 ## Retro Records
-Start: 
+
 1. Start working in groups more
 2. Start reading all the notes if absent
 3. Start using communication tools more 
-
-Stop: 
 4. Stop making big issues
-
-Continue: 
 5. Continue posting resources 
 
 
