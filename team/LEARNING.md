@@ -26,7 +26,7 @@ Aryaman Das - Focus on learning the nuances of Flask (like syntax for setting up
 
 Jeffrey Mun -
 
-Amy Wang -
+Amy Wang - Plan to improve javascript skills with practice and reading through documentation. Will watch tutorials on hard to understand topics. Focus on understanding Flask
 
 Emily Hu - Watch youtube videos on how to set up databases and API calls. Brush up on javascript skills for the frontend.
 
