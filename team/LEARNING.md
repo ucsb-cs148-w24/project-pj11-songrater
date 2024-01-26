@@ -18,7 +18,7 @@ Collin Qian -
 
 Leyang Ni - Some experience with SQL databases/ a little / no experience (maybe a little with HTML and CSS) with frontend developments. 
 
-Katyayani Raman - 
+Katyayani Raman - Some with SQL databases and minimal experience with HTML and CSS. 
 
 ## Plans for improving certain skills/learning from scratch
 
