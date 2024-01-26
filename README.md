@@ -18,6 +18,7 @@ Frontend: React Native through Expo Go \
 Backend: Flask Server w/ PostgreSQL database 
 
 __User Roles__
+
 Our song rater app has two kinds of users: One is the general user browsing/ranking songs, and the other is the artist who releases their songs/albums.
 
 Users can do the following:
