@@ -26,10 +26,9 @@
 
 ## Retro Assessment
 
-* A brief description of what retro outline or process you used.
-* A brief assessment of how it went.
-* What advice would you give to the next person leading a retro
-  based on what you learned today?
+* We used the start/stop/continue retro template to frame our retrospective discussion, where everyone was given a chance to elaborate on the start/stop/continue points
+* It went pretty well. Everyone got a chance to participate in the discussion and overall we were able to do a deep introspection into ourselves in terms of what we have been doing well as a team and what we can do to improve/enhance the work+learning experience
+* One advice I would give is in order to make the retrospective substantial (in terms of quality of discussion and length of time), you should encourage each and every member in the team to speak their mind out so that there can be a fruitful discussion about various things, which will inevitably result in some sort of introspection taking place and thus help us as a team going forward. Also there is no need to change the retro template: start/stop/continue works just fine!
 
 ## Retro Records
 
