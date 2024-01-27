@@ -20,7 +20,9 @@
 
 ## Optional
 
-* Record anything else you think the team might want to remember from this retro
+* Start creating tasks that are more fine-grained (ie. divide an issue into sub-issues if possible) so that there is always something for everyone to work on
+* Add checkbox requirements in the description of github issues so that each person(s) knows exactly what needs to be accomplished (they can have some sort of checklist to follow and verify)
+* If you find anything useful online for learning a particular backend/frontend framework, put that link to the resource on our discord channel so that everyone can learn/benefit from it
 
 ## Retro Assessment
 
