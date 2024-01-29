@@ -75,7 +75,7 @@ def delete_user():
         print(response["MESSAGE"])
   return jsonify(response)
 
-# Added new skeleton endpoints for user lists feature below - Katya 
+# Added new skeleton endpoints for user song list feature below - Katya 
 
 #  Adds a new song to a user's list
 @app.route("/api/add_song", methods=['POST'])
