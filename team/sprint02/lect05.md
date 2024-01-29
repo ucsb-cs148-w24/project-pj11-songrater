@@ -1,5 +1,6 @@
 # 01/29/2024
-Team: Collin [x], Aryaman[x], Emily[x], Amy[x], Jeffrey[x], Katya[x], Leyang[x] 
+
+Team: Collin [x], Aryaman[x], Emily[x], Amy[x], Jeffrey[x], Katya[x], Leyang[x]
 
 ## 2 Questions:
 
