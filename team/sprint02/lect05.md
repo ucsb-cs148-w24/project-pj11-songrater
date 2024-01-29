@@ -31,7 +31,7 @@ Amy:
 Jeffrey:
 
 1. Very chill weekend, played board games, went grocery shopping, did laundry
-2. Finished setting up Discod API, there is now a Flask endpoint that will return song information from title, did some basic frontend
+2. Finished setting up Discogs API, there is now a Flask endpoint that will return song information from title, did some basic frontend
 
 Leyang:
 
