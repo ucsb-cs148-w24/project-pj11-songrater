@@ -10,3 +10,4 @@
 | Wed 01/24 | Emily             | Scribe                                                 | 
 | Fri 01/26 | Aryaman           | Lead Retrospective
 | Mon 01/29 | Aryaman           | Scrum Master
+| Mon 01/29 | Amy Wang          | Scribe
