@@ -1,10 +1,39 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
+import discogs_client
 
 app = Flask(__name__)
+CORS(app)
+d = discogs_client.Client('melo/0.1', user_token='zqyCtqGCQpvbemuOmtNwjJtPImAgtAtcApcUsavp')
+d_url = 'https://api.discogs.com/database/search'
 
-@app.route("/")
-def say_melo():
-  return "Melo"
+
+@app.route("/title", methods=["GET"])
+def find_by_title():
+  response = {}
+
+  # This function expects the following parameters: title
+  # This GET request receives the Discogs_API information for a requested title
+
+  try:
+    title = request.args.get("title")
+    results = d.search(title, type='track')
+    parsed_results = []
+    for item in results.page(1):
+       if isinstance(item, discogs_client.models.Release):
+          release_title = item.title
+          artist_name = ', '.join(artist.name for artist in item.artists)
+          data = {
+             'title': release_title,
+             'artist': artist_name
+          }
+          parsed_results.append(data)
+    response["results"] = parsed_results
+  except Exception as e:
+    response["MESSAGE"] = f"EXCEPTION: /title {e}"
+    print(response["MESSAGE"])
+  return jsonify(response)
+  
 
 @app.route("/api/signup", methods=['POST'])
 def create_user():
