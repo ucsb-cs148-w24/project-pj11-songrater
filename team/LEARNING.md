@@ -37,6 +37,6 @@ Leyang Ni - Learn javascript skills and React Native/ review and learn databases
 Katyayani Raman - Learn more about frontend (CSS and HTML) as well as backend.
 
 ## Contributions to `.._help` Channels:
-1: Guide to organized PRs and Commits in `git_help` from Cockroach Labs (established startups) 
-2: Helped Lixing Guo with their question on `git pull origin main --rebase` by providing insight on `git fetch` in `git_help`
-3: Linked documentation to Expo Go in `react_native_help`
+* Guide to organized PRs and Commits in `git_help` from Cockroach Labs (established startups) *
+* Helped Lixing Guo with their question on `git pull origin main --rebase` by providing insight on `git fetch` in `git_help`
+* Linked documentation to Expo Go in `react_native_help`
