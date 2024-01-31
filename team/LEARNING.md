@@ -41,5 +41,6 @@ Jeffrey:
 * Guide to organized PRs and Commits in `git_help` from Cockroach Labs (established startups) *
 * Helped Lixing Guo with their question on `git pull origin main --rebase` by providing insight on `git fetch` in `git_help`
 * Linked documentation to Expo Go in `react_native_help`
+
 Emily:
 * Added a resource about React Hooks to 'js_help' for those learning react and js.
