@@ -1,6 +1,7 @@
 import { StatusBar } from "expo-status-bar";
 import { useEffect, useState } from "react";
 import { Button, StyleSheet, Text, TextInput, View } from "react-native";
+import MainContainer from "./navigation/MainContainer";
 
 export default function App() {
   const [title, setTitle] = useState("");
@@ -21,17 +22,18 @@ export default function App() {
   };
 
   return (
-    <View style={styles.container}>
-      <TextInput
-        value={title}
-        onChangeText={setTitle}
-        placeholder="Enter a title"
-      />
-      <Button title="Submit" onPress={fetchTitle} />
-      <Text>Response:</Text>
-      <Text>{titleData}</Text>
-      {/* Add StatusBar if needed */}
-    </View>
+    // <View style={styles.container}>
+    //   <TextInput
+    //     value={title}
+    //     onChangeText={setTitle}
+    //     placeholder="Enter a title"
+    //   />
+    //   <Button title="Submit" onPress={fetchTitle} />
+    //   <Text>Response:</Text>
+    //   <Text>{titleData}</Text>
+    //   {/* Add StatusBar if needed */}
+    // </View>
+    <MainContainer/>
   );
 }
 
