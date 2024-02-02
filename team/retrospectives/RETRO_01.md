@@ -39,3 +39,10 @@
 5. Continue posting resources 
 
 
+## Experiment/Change
+Updated Jan 31
+
+* Putting lab checklist in issues for organization
+* We believe the first retro was successful because it helped us save time and start the development of the project because we could assign each other issues to tackle individually
+* We will keep the change
+
