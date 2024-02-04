@@ -17,11 +17,11 @@ ALTER TABLE IF EXISTS public."User"
     OWNER to postgres;
 
 
--- Table: public.User_Lists
+-- Table: public.User_Lists_Good
 
--- DROP TABLE IF EXISTS public."User_Lists";
+-- DROP TABLE IF EXISTS public."User_Lists_Good";
 
-CREATE TABLE IF NOT EXISTS public."User_Lists"
+CREATE TABLE IF NOT EXISTS public."User_Lists_Good"
 (
     user_id INT NOT NULL,
     song_id integer NOT NULL,
@@ -35,9 +35,53 @@ CREATE TABLE IF NOT EXISTS public."User_Lists"
 
 TABLESPACE pg_default;
 
-ALTER TABLE IF EXISTS public."User_Lists"
+ALTER TABLE IF EXISTS public."User_Lists_Good"
     OWNER to postgres;
+CREATE INDEX b_tree_idx ON User_Lists_Good USING btree (rank, userid);
 
+-- Table: public.User_Lists_Ok
+
+-- DROP TABLE IF EXISTS public."User_Lists_Ok";
+
+CREATE TABLE IF NOT EXISTS public."User_Lists_Ok"
+(
+    user_id INT NOT NULL,
+    song_id integer NOT NULL,
+    rank integer,
+    review character varying(1023) COLLATE pg_catalog."default",
+    CONSTRAINT user_id FOREIGN KEY (user_id)
+        REFERENCES public."User" (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public."User_Lists_Ok"
+    OWNER to postgres;
+CREATE INDEX b_tree_idx ON User_Lists_Ok USING btree (rank, userid);
+
+-- Table: public.User_Lists_Bad
+
+-- DROP TABLE IF EXISTS public."User_Lists_Bad";
+
+CREATE TABLE IF NOT EXISTS public."User_Lists_Bad"
+(
+    user_id INT NOT NULL,
+    song_id integer NOT NULL,
+    rank integer,
+    review character varying(1023) COLLATE pg_catalog."default",
+    CONSTRAINT user_id FOREIGN KEY (user_id)
+        REFERENCES public."User" (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public."User_Lists_Bad"
+    OWNER to postgres;
+CREATE INDEX b_tree_idx ON User_Lists_Bad USING btree (rank, userid);
 
 -- Table: public.Friend
 
