@@ -1,11 +1,13 @@
-import LandingPage from "./components/LandingPage";
+import LandingPage from "./components/LandingScreen";
 import { useFonts } from "expo-font";
 import { Button, StyleSheet, Text, TextInput, View } from "react-native";
 import MainContainer from "./navigation/MainContainer";
+import { NavigationContainer } from "@react-navigation/native";
+import MyStack from "./Navigation";
 
 export default function App() {
   const [fontsLoaded] = useFonts({
-    "Poppins-Black": require("./assets/fonts/Poppins-Black.ttf"),
+    "Poppins-Bold": require("./assets/fonts/Poppins-Bold.ttf"),
     "Poppins-Regular": require("./assets/fonts/Poppins-Regular.ttf"),
     "AnonymousPro-Bold": require("./assets/fonts/AnonymousPro-Bold.ttf"),
     "AnonymousPro-Regular": require("./assets/fonts/AnonymousPro-Regular.ttf"),
@@ -13,7 +15,8 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <MainContainer/>
+      <MainContainer />
+      <MyStack />
     </View>
   );
 }
@@ -21,8 +24,8 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
+    alignContent: "center",
     justifyContent: "center",
-    backgroundColor: "FFF9EC",
+    backgroundColor: "#FFFAEA",
   },
 });

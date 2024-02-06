@@ -1,36 +1,36 @@
 import { StyleSheet } from "react-native";
 
-const typography = StyleSheet.create({
+export const typography = StyleSheet.create({
   title: {
-    fontSize: 36,
-    fontFamily: "Poppins-Black",
+    fontSize: 48,
+    fontFamily: "Poppins-Bold",
   },
   header: {
-    fontSize: 28,
-    fontFamily: "Poppins-Black",
+    fontSize: 32,
+    fontFamily: "Poppins-Bold",
   },
   header2: {
-    fontSize: 20,
-    fontFamily: "Poppins-Black",
+    fontSize: 26,
+    fontFamily: "Poppins-Bold",
   },
   default: {
-    fontSize: 14,
-    fontFamily: "AnonymousPro-Regular",
-  },
-  default_bold: {
-    fontSize: 14,
-    fontFamily: "AnonymousPro-Bold",
-  },
-  default_l: {
     fontSize: 16,
     fontFamily: "AnonymousPro-Regular",
   },
+  default_bold: {
+    fontSize: 16,
+    fontFamily: "AnonymousPro-Bold",
+  },
+  default_l: {
+    fontSize: 20,
+    fontFamily: "AnonymousPro-Regular",
+  },
   default_s: {
-    fontSize: 12,
+    fontSize: 14,
     fontFamily: "AnonymousPro-Regular",
   },
   default_xs: {
-    fontSize: 10,
+    fontSize: 12,
     fontFamily: "AnonymousPro-Regular",
   },
 });

@@ -9,7 +9,7 @@
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#FDE385"
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
@@ -18,7 +18,7 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#FDE385"
       }
     },
     "web": {
@@ -29,7 +29,7 @@
         "expo-font",
         {
           "fonts": [
-            "./assets/fonts/Poppins-Black.ttf",
+            "./assets/fonts/Poppins-Bold.ttf",
             "./assets/fonts/Poppins-Regular.ttf",
             "./assets/fonts/AnonymousPro-Bold.ttf",
             "./assets/fonts/AnonymousPro-Bold.ttf"
