@@ -3,6 +3,8 @@ from flask_cors import CORS
 import discogs_client
 import os
 import psycopg2
+import numpy as np
+
 app = Flask(__name__)
 
 CORS(app)
@@ -137,14 +139,95 @@ def add_song():
 
 
 
-# Retrieves a user's song list
+# Retrieves a user's song list given his user id and song type preference
 @app.route("/api/get_user_songs", methods=['GET'])
-def get_user_songs():
+def get_user_songs_by_type():
   response = {}
   
+  # type is a string with one of three values: "good", "ok", "bad"
+  # make sure that when making this GET call, the type string is spelled properly with one of the three values shown above
+  # Example GET call: "http://127.0.0.1:5000/api/get_user_songs?user_id=${user_id}&type=${type}"
+  # Use the GET call above (same exact syntax) in the frontend
+
+  # This function retrieves all songs for a particular user id given his song type preference
+  # Also calculates the rating list from the rankings and returns everything as a JSON string
+
   try:
      user_id = request.args.get("user_id")
-     # look up user_id in user lists postgres table, then return the list of songs as a JSON string
+     type = request.args.get("type") 
+     conn = get_db_connection()
+     cur = conn.cursor()
+
+     if type == "good":
+        sql_query = f"SELECT * FROM User_Lists_Good WHERE user_id = {user_id} ORDER BY rank;"
+        cur.execute(sql_query)
+        good_songs = cur.fetchall()
+        num_rows = int(cur.rowcount)
+
+        if num_rows == 0:
+           response["MESSAGE"] = "No songs to display here"
+           return jsonify(response)
+        
+        final_result = []
+
+        rating_list = np.linspace(7.0, 10.0, num=num_rows)
+        idx = rating_list.size-1
+
+        for song in good_songs:
+           data = {'user_id': song[0], 'song_id': song[1], 'rank': song[2], 'review': song[3], 'rating': rating_list[idx]}
+           final_result.append(data)
+           idx = idx-1
+        
+        response["results"] = final_result
+           
+      
+     elif type == "ok":
+        sql_query = f"SELECT * FROM User_Lists_Ok WHERE user_id = {user_id} ORDER BY rank;"
+        cur.execute(sql_query)
+        ok_songs = cur.fetchall()
+        num_rows = int(cur.rowcount)
+
+        if num_rows == 0:
+           response["MESSAGE"] = "No songs to display here"
+           return jsonify(response)
+        
+        final_result = []
+
+        rating_list = np.linspace(4.0, 7.0, num=num_rows, endpoint=False)
+        idx = rating_list.size-1
+
+        for song in ok_songs:
+           data = {'user_id': song[0], 'song_id': song[1], 'rank': song[2], 'review': song[3], 'rating': rating_list[idx]}
+           final_result.append(data)
+           idx = idx-1
+
+        response["results"] = final_result
+
+     else:
+        sql_query = f"SELECT * FROM User_Lists_Bad WHERE user_id = {user_id} ORDER BY rank;"
+        cur.execute(sql_query)
+        bad_songs = cur.fetchall()
+        num_rows = int(cur.rowcount)
+
+        if num_rows == 0:
+           response["MESSAGE"] = "No songs to display here"
+           return jsonify(response)
+        
+        final_result = []
+
+        rating_list = np.linspace(0.0, 4.0, num=num_rows, endpoint=False)
+        idx = rating_list.size-1
+
+        for song in bad_songs:
+           data = {'user_id': song[0], 'song_id': song[1], 'rank': song[2], 'review': song[3], 'rating': rating_list[idx]}
+           final_result.append(data)
+           idx = idx-1
+
+        response["results"] = final_result
+      
+     cur.close()
+     conn.close()
+    
   except Exception as e:
         response["MESSAGE"] = f"EXCEPTION: /api/get_user_songs {e}"
         print(response["MESSAGE"])
