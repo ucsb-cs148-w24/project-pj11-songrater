@@ -34,6 +34,7 @@ def find_by_title():
     results = d.search(title, type='track')
     parsed_results = []
     for item in results.page(1):
+       print(type(item))
        if isinstance(item, discogs_client.models.Release):
           release_title = item.title
           artist_name = ', '.join(artist.name for artist in item.artists)
@@ -41,6 +42,8 @@ def find_by_title():
              'title': release_title,
              'artist': artist_name
           }
+          if data in parsed_results:
+            next
           parsed_results.append(data)
     response["results"] = parsed_results
   except Exception as e:
