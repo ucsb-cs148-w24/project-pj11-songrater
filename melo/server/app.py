@@ -35,7 +35,7 @@ def find_by_title():
     parsed_results = []
     for item in results.page(1):
        print(type(item))
-       if isinstance(item, discogs_client.models.Release):
+       if isinstance(item, discogs_client.models.Master):
           release_title = item.title
           artist_name = ', '.join(artist.name for artist in item.artists)
           data = {

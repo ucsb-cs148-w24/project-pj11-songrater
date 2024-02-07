@@ -3,6 +3,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import LandingScreen from "./components/LandingScreen";
 import SearchSongScreen from "./components/SearchSongScreen";
+import MainContainer from "./navigation/MainContainer";
 
 const Stack = createNativeStackNavigator();
 
@@ -16,8 +17,8 @@ export default function MyStack() {
           options={{ headerShown: false }}
         />
         <Stack.Screen
-          name="SearchSong"
-          component={SearchSongScreen}
+          name="MainContainer"
+          component={MainContainer}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>
