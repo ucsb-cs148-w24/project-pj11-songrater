@@ -1,12 +1,24 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import discogs_client
-
+import os
+import psycopg2
 app = Flask(__name__)
+
 CORS(app)
 d = discogs_client.Client('melo/0.1', user_token='zqyCtqGCQpvbemuOmtNwjJtPImAgtAtcApcUsavp')
 d_url = 'https://api.discogs.com/database/search'
 
+#To make the connection, you have to export your personal postgres username and password
+#export DB_USERNAME="postgres"
+#export DB_PASSWORD="your_passwork"
+
+def get_db_connection():
+  conn = psycopg2.connect(host='localhost',
+                          database='music_db',
+                          user=os.environ['DB_USERNAME'],
+                          password=os.environ['DB_PASSWORD'])
+  return conn
 
 @app.route("/title", methods=["GET"])
 def find_by_title():

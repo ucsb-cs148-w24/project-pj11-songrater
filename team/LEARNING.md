@@ -44,3 +44,6 @@ Jeffrey:
 
 Emily:
 * Added a resource about React Hooks to 'js_help' for those learning react and js.
+
+Aryaman:
+* Added a resource (video) that explains how the "git log" command works
