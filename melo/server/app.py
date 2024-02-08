@@ -124,15 +124,107 @@ def delete_user():
 @app.route("/api/add_song", methods=['POST'])
 def add_song():
   response = {}
-  
+  valid_rank_val = True
+
   try:
-     user_id = request.form.get("user_id")
-     song_id = request.form.get("song_id")
-     rank = request.form.get("rank")
-     review = request.form.get("review")
-     # add these pieces of information to user lists postgres table
+     user_id = request.args.get("user_id")
+     song_id = request.args.get("song_id")
+     rank = request.args.get("rank")
+     review = request.args.get("review")
+     type = request.args.get("type")
+    
+     rank_int = int(rank)
+     uid = int(user_id)
+     s_id = int(song_id)
+
+     conn = get_db_connection()
+     cur = conn.cursor()
+
+     if type == "good":
+        sql_query = f"SELECT * FROM \"User_Lists_Good\" WHERE user_id = {user_id} ORDER BY rank;"
+        cur.execute(sql_query)
+        good_songs = cur.fetchall()
+        num_rows = int(cur.rowcount)
+
+        if rank_int > num_rows+1 or rank_int < 1:
+           response["MESSAGE"] = "rank must be a valid integer between 1 and num_songs_in_list+1"
+           return jsonify(response)
+        elif rank_int == num_rows+1:
+           cur.execute("INSERT INTO \"User_Lists_Good\" (user_id, song_id, rank, review) VALUES (%s, %s, %s, %s)", 
+                       (uid, s_id, rank_int, review))
+           conn.commit()
+
+        elif rank_int >= 1 and rank_int <= num_rows:
+           for i in range(num_rows):
+              if (i+1) >= rank_int:
+                 curr_rank = good_songs[i][2]
+                 update_query = f"UPDATE \"User_Lists_Good\" SET rank = {curr_rank+1} WHERE user_id = {good_songs[i][0]} AND song_id = {good_songs[i][1]};"
+                 cur.execute(update_query)
+                 conn.commit()
+           cur.execute("INSERT INTO \"User_Lists_Good\" (user_id, song_id, rank, review) VALUES (%s, %s, %s, %s)", 
+                       (uid, s_id, rank_int, review))
+           conn.commit()
+      
+    
+     elif type == "ok":
+        sql_query = f"SELECT * FROM \"User_Lists_Ok\" WHERE user_id = {user_id} ORDER BY rank;"
+        cur.execute(sql_query)
+        ok_songs = cur.fetchall()
+        num_rows = int(cur.rowcount)
+
+        if rank_int > num_rows+1 or rank_int < 1:
+           response["MESSAGE"] = "rank must be a valid integer between 1 and num_songs_in_list+1"
+           return jsonify(response)
+        elif rank_int == num_rows+1:
+           cur.execute("INSERT INTO \"User_Lists_Ok\" (user_id, song_id, rank, review) VALUES (%s, %s, %s, %s)", 
+                       (uid, s_id, rank_int, review))
+           conn.commit()
+
+        elif rank_int >= 1 and rank_int <= num_rows:
+           for i in range(num_rows):
+              if (i+1) >= rank_int:
+                 curr_rank = ok_songs[i][2]
+                 update_query = f"UPDATE \"User_Lists_Ok\" SET rank = {curr_rank+1} WHERE user_id = {ok_songs[i][0]} AND song_id = {ok_songs[i][1]};"
+                 cur.execute(update_query)
+                 conn.commit()
+           cur.execute("INSERT INTO \"User_Lists_Ok\" (user_id, song_id, rank, review) VALUES (%s, %s, %s, %s)", 
+                       (uid, s_id, rank_int, review))
+           conn.commit()
+      
+
+     else:
+        sql_query = f"SELECT * FROM \"User_Lists_Bad\" WHERE user_id = {user_id} ORDER BY rank;"
+        cur.execute(sql_query)
+        bad_songs = cur.fetchall()
+        num_rows = int(cur.rowcount)
+
+        if rank_int > num_rows+1 or rank_int < 1:
+           response["MESSAGE"] = "rank must be a valid integer between 1 and num_songs_in_list+1"
+           return jsonify(response)
+        elif rank_int == num_rows+1:
+           cur.execute("INSERT INTO \"User_Lists_Bad\" (user_id, song_id, rank, review) VALUES (%s, %s, %s, %s)", 
+                       (uid, s_id, rank_int, review))
+           conn.commit()
+
+        elif rank_int >= 1 and rank_int <= num_rows:
+           for i in range(num_rows):
+              if (i+1) >= rank_int:
+                 curr_rank = bad_songs[i][2]
+                 update_query = f"UPDATE \"User_Lists_Bad\" SET rank = {curr_rank+1} WHERE user_id = {bad_songs[i][0]} AND song_id = {bad_songs[i][1]};"
+                 cur.execute(update_query)
+                 conn.commit()
+           cur.execute("INSERT INTO \"User_Lists_Bad\" (user_id, song_id, rank, review) VALUES (%s, %s, %s, %s)", 
+                       (uid, s_id, rank_int, review))
+           conn.commit()
+     
+     cur.close()
+     conn.close()
+     
      response["MESSAGE"] = "Successfully added new song to user list"
   except Exception as e:
+        valid_rank_val = False
+        if valid_rank_val is not True:
+          response["MESSAGE"] = "rank must be a valid integer between 1 and num_songs_in_list+1"
         response["MESSAGE"] = f"EXCEPTION: /api/add_song {e}"
         print(response["MESSAGE"])
   return jsonify(response)
