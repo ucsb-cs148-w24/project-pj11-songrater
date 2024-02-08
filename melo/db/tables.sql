@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS public."User"
 TABLESPACE pg_default;
 
 ALTER TABLE IF EXISTS public."User"
-    OWNER to postgres;
+    OWNER to adas16;
 
 
 -- Table: public.User_Lists_Good
@@ -36,8 +36,8 @@ CREATE TABLE IF NOT EXISTS public."User_Lists_Good"
 TABLESPACE pg_default;
 
 ALTER TABLE IF EXISTS public."User_Lists_Good"
-    OWNER to postgres;
-CREATE INDEX b_tree_idx ON User_Lists_Good USING btree (rank, userid);
+    OWNER to adas16;
+CREATE INDEX b_tree_idx ON public."User_Lists_Good" USING btree (rank, user_id);
 
 -- Table: public.User_Lists_Ok
 
@@ -58,8 +58,8 @@ CREATE TABLE IF NOT EXISTS public."User_Lists_Ok"
 TABLESPACE pg_default;
 
 ALTER TABLE IF EXISTS public."User_Lists_Ok"
-    OWNER to postgres;
-CREATE INDEX b_tree_idx ON User_Lists_Ok USING btree (rank, userid);
+    OWNER to adas16;
+CREATE INDEX b_tree_idx2 ON public."User_Lists_Ok" USING btree (rank, user_id);
 
 -- Table: public.User_Lists_Bad
 
@@ -80,8 +80,8 @@ CREATE TABLE IF NOT EXISTS public."User_Lists_Bad"
 TABLESPACE pg_default;
 
 ALTER TABLE IF EXISTS public."User_Lists_Bad"
-    OWNER to postgres;
-CREATE INDEX b_tree_idx ON User_Lists_Bad USING btree (rank, userid);
+    OWNER to adas16;
+CREATE INDEX b_tree_idx3 ON public."User_Lists_Bad" USING btree (rank, user_id);
 
 -- Table: public.Friend
 
@@ -104,4 +104,4 @@ CREATE TABLE IF NOT EXISTS public."Friend"
 TABLESPACE pg_default;
 
 ALTER TABLE IF EXISTS public."Friend"
-    OWNER to postgres;
+    OWNER to adas16;
