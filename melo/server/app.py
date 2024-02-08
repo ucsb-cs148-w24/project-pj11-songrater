@@ -17,7 +17,7 @@ d_url = 'https://api.discogs.com/database/search'
 
 def get_db_connection():
   conn = psycopg2.connect(host='localhost',
-                          database='music_db',
+                          database='musicdb',
                           user=os.environ['DB_USERNAME'],
                           password=os.environ['DB_PASSWORD'])
   return conn
@@ -159,7 +159,7 @@ def get_user_songs_by_type():
      cur = conn.cursor()
 
      if type == "good":
-        sql_query = f"SELECT * FROM User_Lists_Good WHERE user_id = {user_id} ORDER BY rank;"
+        sql_query = f"SELECT * FROM \"User_Lists_Good\" WHERE user_id = {user_id} ORDER BY rank;"
         cur.execute(sql_query)
         good_songs = cur.fetchall()
         num_rows = int(cur.rowcount)
@@ -182,7 +182,7 @@ def get_user_songs_by_type():
            
       
      elif type == "ok":
-        sql_query = f"SELECT * FROM User_Lists_Ok WHERE user_id = {user_id} ORDER BY rank;"
+        sql_query = f"SELECT * FROM \"User_Lists_Ok\" WHERE user_id = {user_id} ORDER BY rank;"
         cur.execute(sql_query)
         ok_songs = cur.fetchall()
         num_rows = int(cur.rowcount)
@@ -204,7 +204,7 @@ def get_user_songs_by_type():
         response["results"] = final_result
 
      else:
-        sql_query = f"SELECT * FROM User_Lists_Bad WHERE user_id = {user_id} ORDER BY rank;"
+        sql_query = f"SELECT * FROM \"User_Lists_Bad\" WHERE user_id = {user_id} ORDER BY rank;"
         cur.execute(sql_query)
         bad_songs = cur.fetchall()
         num_rows = int(cur.rowcount)
