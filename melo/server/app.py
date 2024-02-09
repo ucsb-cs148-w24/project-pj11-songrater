@@ -1,6 +1,5 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-import discogs_client
 import os
 import psycopg2
 import numpy as np

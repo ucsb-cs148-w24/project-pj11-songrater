@@ -15,9 +15,11 @@ import { PlusIcon } from "./helper/SVGIcons";
 export default function SearchSongScreen({ navigation }) {
   const [title, setTitle] = useState("");
   const [artist, setArtist] = useState("");
+  const [review, setReview] = useState("");
   const [selectedTitle, setSelectedTitle] = useState("");
   const [selectedArtist, setSelectedArtist] = useState("");
   const [selectedMBID, setSelectedMBID] = useState("");
+
   const [songData, setSongData] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -59,6 +61,7 @@ export default function SearchSongScreen({ navigation }) {
       rating: rating,
       title: selectedTitle,
       artist: selectedArtist,
+      review: review,
       mbid: selectedMBID,
     });
   };
@@ -114,7 +117,15 @@ export default function SearchSongScreen({ navigation }) {
                 <Text style={typography.header2}>By: {selectedArtist}</Text>
               </View>
               <View style={styles.RatingInformationContainer}>
-                <Text style={typography.default_l}>
+                <TextInput
+                  value={review}
+                  onChangeText={setReview}
+                  placeholder="Leave your review..."
+                  style={[typography.default, styles.reviewInput]}
+                  multiline={true}
+                  numberOfLines={5}
+                ></TextInput>
+                <Text style={[typography.default_l, { flex: 1, padding: 5 }]}>
                   Rate how you like the song!
                 </Text>
               </View>
@@ -184,6 +195,16 @@ const styles = StyleSheet.create({
     borderBottomWidth: StyleSheet.hairlineWidth,
     margin: 10,
   },
+  reviewInput: {
+    border: "black",
+    borderWidth: StyleSheet.hairlineWidth,
+    borderRadius: 25,
+    flex: 2,
+    padding: 15,
+    alignContent: "flex-start",
+    justifyContent: "flex-start",
+    width: "100%",
+  },
   songResultContainer: {
     flex: 1,
     padding: 20,
@@ -203,24 +224,26 @@ const styles = StyleSheet.create({
     flex: 2,
   },
   ModalContainer: {
-    height: "25%",
-    width: "60%",
+    height: "35%",
+    width: "70%",
     display: "flex",
     flexDirection: "column",
     backgroundColor: "white",
     borderRadius: 15,
   },
   ModalInformationContainer: {
-    flex: 1.5,
+    flex: 3,
     padding: 10,
   },
   SongInformationContainer: {
     alignItems: "flex-start",
     padding: 10,
+    flex: 1,
   },
   RatingInformationContainer: {
     padding: 25,
     alignItems: "center",
+    flex: 2,
   },
   ModalRatingContainer: {
     flexDirection: "row",

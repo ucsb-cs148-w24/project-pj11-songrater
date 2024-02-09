@@ -21,7 +21,7 @@ const Stack = createNativeStackNavigator();
 
 function SongStack() {
   return (
-    <Stack.Navigator initialRouteName={searchName}>
+    <Stack.Navigator initialRouteName={"SearchSong"}>
       <Stack.Screen
         name="SearchSong"
         component={SearchSongScreen}
