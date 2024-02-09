@@ -58,13 +58,15 @@ __Installation Steps__
 
 # Functionality
 
-1. 
+TODO
 
 
 # Known Problems
 
+TODO
 
 
+# Others
 __Initializing the Database__
 
 To initialize the database, cd into the db folder, then run these 2 commands:
