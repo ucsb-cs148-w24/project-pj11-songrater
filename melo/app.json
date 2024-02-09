@@ -6,6 +6,15 @@
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
+    "plugins": [
+      [
+        "react-native-auth0",
+        {
+          "domain": "dev-5dxtr87z3xjn6mhj.us.auth0.com"
+        }
+      ]
+    ],
+    "scheme": "melo",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
@@ -15,7 +24,8 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.auth0samples"
     },
     "android": {
       "adaptiveIcon": {
@@ -25,6 +35,11 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "91a581ef-b4d1-4a8e-8ecf-d1f34d5031e9"
+      }
     }
   }
 }

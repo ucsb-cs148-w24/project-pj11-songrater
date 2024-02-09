@@ -2,8 +2,10 @@ import { StatusBar } from "expo-status-bar";
 import { useEffect, useState } from "react";
 import { Button, StyleSheet, Text, TextInput, View } from "react-native";
 import MainContainer from "./navigation/MainContainer";
-import { StyleSheet, Text, View } from "react-native";
 import Login from "./components/Login.js";
+import Home from "./components/Home";
+import React from 'react';
+import {useAuth0, Auth0Provider} from 'react-native-auth0';
 
 export default function App() {
   const [title, setTitle] = useState("");
@@ -24,10 +26,15 @@ export default function App() {
   };
 
   return (
+    
     <View style={styles.container}>
-      <Text>Word: {word}</Text>
-      <StatusBar style="auto" />
-      <Login />
+      {/* <Text>Word: {word}</Text>
+      <StatusBar style="auto" /> */}
+      <Text>Hi</Text>
+      <Auth0Provider domain={"dev-5dxtr87z3xjn6mhj.us.auth0.com"} clientId={"jYKXbZxyumLHH1QDlWYzQyZwTAfsSGCe"} redirectUri={"melo://dev-5dxtr87z3xjn6mhj.us.auth0.com/ios/com.auth0samples/callback"}>
+        <Home />
+      </Auth0Provider>
+      {/* <Login /> */}
     </View>
   );
 }
