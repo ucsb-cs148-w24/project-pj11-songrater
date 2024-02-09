@@ -30,7 +30,47 @@ Users can do the following:
 Artist can do the following:
 1. See how their music is doing (which songs have been viewed the most, ranked the highest, etc.)
 
+# Installation
+__Prerequisite__
 
+1. latest version of `npm` and `node`
+2. Python 3.0
+3. Expo
+
+__Installing Packages / Dependencies__
+*Within Melo Folder*
+
+Ensure you're on the latest version of `npm` and `node`, and run `npm install`
+
+`cd` into the `/server` folder and `pip3 / pip install` the following packages:
+- flask
+- flask_cors
+- psycopg2
+- numpy
+- requests
+
+__Installation Steps__
+
+1. cd into '/server' folder
+2. run the app.py
+3. follow the steps on Expo to run the demo
+
+
+# Functionality
+
+1. Search a song by name and add it
+2. Evaluate the song with three choices: "Good", "Ok", "Bad"
+3. Leave a comment for this song
+4. Compare this song with other songs in the same category ("Good", "Ok", "Bad")
+5. Get the rank of the song and its score! 
+
+
+# Known Problems
+
+1. Need to update database settings 
+
+
+# Others
 __Initializing the Database__
 
 To initialize the database, cd into the db folder, then run these 2 commands:
@@ -44,3 +84,5 @@ Then, to connect the database to the flask, your postgres username and passwords
 2. export DB_PASSWORD="password"
 
 But with your username and password.
+
+

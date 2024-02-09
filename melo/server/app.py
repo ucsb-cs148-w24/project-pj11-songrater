@@ -1,13 +1,14 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-import discogs_client
 import os
 import psycopg2
+import numpy as np
+import requests
+
 app = Flask(__name__)
 
 CORS(app)
-d = discogs_client.Client('melo/0.1', user_token='zqyCtqGCQpvbemuOmtNwjJtPImAgtAtcApcUsavp')
-d_url = 'https://api.discogs.com/database/search'
+music_brainz_url = "https://musicbrainz.org/ws/2"
 
 #To make the connection, you have to export your personal postgres username and password
 #export DB_USERNAME="postgres"
@@ -15,7 +16,7 @@ d_url = 'https://api.discogs.com/database/search'
 
 def get_db_connection():
   conn = psycopg2.connect(host='localhost',
-                          database='music_db',
+                          database='musicdb',
                           user=os.environ['DB_USERNAME'],
                           password=os.environ['DB_PASSWORD'])
   return conn
@@ -28,19 +29,30 @@ def find_by_title():
   # This GET request receives the Discogs_API information for a requested title
 
   try:
-    title = request.args.get("title")
-    results = d.search(title, type='track')
-    parsed_results = []
-    for item in results.page(1):
-       if isinstance(item, discogs_client.models.Release):
-          release_title = item.title
-          artist_name = ', '.join(artist.name for artist in item.artists)
-          data = {
-             'title': release_title,
-             'artist': artist_name
-          }
-          parsed_results.append(data)
-    response["results"] = parsed_results
+    title = request.args.get("title", "")
+    artist = request.args.get("artist", "")
+    artist_encoded = requests.utils.quote(artist)
+    title_encoded = requests.utils.quote(title)
+    query_url = f"{music_brainz_url}/recording/?query=recording:\"{title_encoded}\" AND artist:\"{artist_encoded}\"&fmt=json"
+    response = {}
+    query = requests.get(query_url).json()
+    unique_tracks = {}
+    compiled_data = []
+
+    for index, recording in enumerate(query["recordings"]):
+       artist_name = recording["artist-credit"][0]["name"]
+       title = recording["title"]
+       mbid = recording["id"]
+
+       unique_key = f"{artist_name}-{title}"
+       if unique_key not in unique_tracks:
+          unique_tracks[unique_key] = True
+          compiled_data.append({
+             "artist": artist_name,
+             "title": title,
+             "mbid": mbid,
+          })
+    response["results"] = compiled_data
   except Exception as e:
     response["MESSAGE"] = f"EXCEPTION: /title {e}"
     print(response["MESSAGE"])
@@ -122,29 +134,202 @@ def delete_user():
 @app.route("/api/add_song", methods=['POST'])
 def add_song():
   response = {}
-  
+  valid_rank_val = True
+
   try:
-     user_id = request.form.get("user_id")
-     song_id = request.form.get("song_id")
-     rank = request.form.get("rank")
-     review = request.form.get("review")
-     # add these pieces of information to user lists postgres table
+     user_id = request.args.get("user_id")
+     song_id = request.args.get("song_id")
+     rank = request.args.get("rank")
+     review = request.args.get("review")
+     type = request.args.get("type")
+    
+     rank_int = int(rank)
+     uid = int(user_id)
+     s_id = int(song_id)
+
+     conn = get_db_connection()
+     cur = conn.cursor()
+
+     if type == "good":
+        sql_query = f"SELECT * FROM \"User_Lists_Good\" WHERE user_id = {user_id} ORDER BY rank;"
+        cur.execute(sql_query)
+        good_songs = cur.fetchall()
+        num_rows = int(cur.rowcount)
+
+        if rank_int > num_rows+1 or rank_int < 1:
+           response["MESSAGE"] = "rank must be a valid integer between 1 and num_songs_in_list+1"
+           return jsonify(response)
+        elif rank_int == num_rows+1:
+           cur.execute("INSERT INTO \"User_Lists_Good\" (user_id, song_id, rank, review) VALUES (%s, %s, %s, %s)", 
+                       (uid, s_id, rank_int, review))
+           conn.commit()
+
+        elif rank_int >= 1 and rank_int <= num_rows:
+           for i in range(num_rows):
+              if (i+1) >= rank_int:
+                 curr_rank = good_songs[i][2]
+                 update_query = f"UPDATE \"User_Lists_Good\" SET rank = {curr_rank+1} WHERE user_id = {good_songs[i][0]} AND song_id = {good_songs[i][1]};"
+                 cur.execute(update_query)
+                 conn.commit()
+           cur.execute("INSERT INTO \"User_Lists_Good\" (user_id, song_id, rank, review) VALUES (%s, %s, %s, %s)", 
+                       (uid, s_id, rank_int, review))
+           conn.commit()
+      
+    
+     elif type == "ok":
+        sql_query = f"SELECT * FROM \"User_Lists_Ok\" WHERE user_id = {user_id} ORDER BY rank;"
+        cur.execute(sql_query)
+        ok_songs = cur.fetchall()
+        num_rows = int(cur.rowcount)
+
+        if rank_int > num_rows+1 or rank_int < 1:
+           response["MESSAGE"] = "rank must be a valid integer between 1 and num_songs_in_list+1"
+           return jsonify(response)
+        elif rank_int == num_rows+1:
+           cur.execute("INSERT INTO \"User_Lists_Ok\" (user_id, song_id, rank, review) VALUES (%s, %s, %s, %s)", 
+                       (uid, s_id, rank_int, review))
+           conn.commit()
+
+        elif rank_int >= 1 and rank_int <= num_rows:
+           for i in range(num_rows):
+              if (i+1) >= rank_int:
+                 curr_rank = ok_songs[i][2]
+                 update_query = f"UPDATE \"User_Lists_Ok\" SET rank = {curr_rank+1} WHERE user_id = {ok_songs[i][0]} AND song_id = {ok_songs[i][1]};"
+                 cur.execute(update_query)
+                 conn.commit()
+           cur.execute("INSERT INTO \"User_Lists_Ok\" (user_id, song_id, rank, review) VALUES (%s, %s, %s, %s)", 
+                       (uid, s_id, rank_int, review))
+           conn.commit()
+      
+
+     else:
+        sql_query = f"SELECT * FROM \"User_Lists_Bad\" WHERE user_id = {user_id} ORDER BY rank;"
+        cur.execute(sql_query)
+        bad_songs = cur.fetchall()
+        num_rows = int(cur.rowcount)
+
+        if rank_int > num_rows+1 or rank_int < 1:
+           response["MESSAGE"] = "rank must be a valid integer between 1 and num_songs_in_list+1"
+           return jsonify(response)
+        elif rank_int == num_rows+1:
+           cur.execute("INSERT INTO \"User_Lists_Bad\" (user_id, song_id, rank, review) VALUES (%s, %s, %s, %s)", 
+                       (uid, s_id, rank_int, review))
+           conn.commit()
+
+        elif rank_int >= 1 and rank_int <= num_rows:
+           for i in range(num_rows):
+              if (i+1) >= rank_int:
+                 curr_rank = bad_songs[i][2]
+                 update_query = f"UPDATE \"User_Lists_Bad\" SET rank = {curr_rank+1} WHERE user_id = {bad_songs[i][0]} AND song_id = {bad_songs[i][1]};"
+                 cur.execute(update_query)
+                 conn.commit()
+           cur.execute("INSERT INTO \"User_Lists_Bad\" (user_id, song_id, rank, review) VALUES (%s, %s, %s, %s)", 
+                       (uid, s_id, rank_int, review))
+           conn.commit()
+     
+     cur.close()
+     conn.close()
+     
      response["MESSAGE"] = "Successfully added new song to user list"
   except Exception as e:
+        valid_rank_val = False
+        if valid_rank_val is not True:
+          response["MESSAGE"] = "rank must be a valid integer between 1 and num_songs_in_list+1"
         response["MESSAGE"] = f"EXCEPTION: /api/add_song {e}"
         print(response["MESSAGE"])
   return jsonify(response)
 
 
 
-# Retrieves a user's song list
+# Retrieves a user's song list given his user id and song type preference
 @app.route("/api/get_user_songs", methods=['GET'])
-def get_user_songs():
+def get_user_songs_by_type():
   response = {}
   
+  # type is a string with one of three values: "good", "ok", "bad"
+  # make sure that when making this GET call, the type string is spelled properly with one of the three values shown above
+  # Example GET call: "http://127.0.0.1:5000/api/get_user_songs?user_id=${user_id}&type=${type}"
+  # Use the GET call above (same exact syntax) in the frontend
+
+  # This function retrieves all songs for a particular user id given his song type preference
+  # Also calculates the rating list from the rankings and returns everything as a JSON string
+
   try:
      user_id = request.args.get("user_id")
-     # look up user_id in user lists postgres table, then return the list of songs as a JSON string
+     type = request.args.get("type") 
+     conn = get_db_connection()
+     cur = conn.cursor()
+
+     if type == "good":
+        sql_query = f"SELECT * FROM \"User_Lists_Good\" WHERE user_id = {user_id} ORDER BY rank;"
+        cur.execute(sql_query)
+        good_songs = cur.fetchall()
+        num_rows = int(cur.rowcount)
+
+        if num_rows == 0:
+           response["MESSAGE"] = "No songs to display here"
+           return jsonify(response)
+        
+        final_result = []
+
+        rating_list = np.linspace(7.0, 10.0, num=num_rows)
+        idx = rating_list.size-1
+
+        for song in good_songs:
+           data = {'user_id': song[0], 'song_id': song[1], 'rank': song[2], 'review': song[3], 'rating': rating_list[idx]}
+           final_result.append(data)
+           idx = idx-1
+        
+        response["results"] = final_result
+           
+      
+     elif type == "ok":
+        sql_query = f"SELECT * FROM \"User_Lists_Ok\" WHERE user_id = {user_id} ORDER BY rank;"
+        cur.execute(sql_query)
+        ok_songs = cur.fetchall()
+        num_rows = int(cur.rowcount)
+
+        if num_rows == 0:
+           response["MESSAGE"] = "No songs to display here"
+           return jsonify(response)
+        
+        final_result = []
+
+        rating_list = np.linspace(4.0, 7.0, num=num_rows, endpoint=False)
+        idx = rating_list.size-1
+
+        for song in ok_songs:
+           data = {'user_id': song[0], 'song_id': song[1], 'rank': song[2], 'review': song[3], 'rating': rating_list[idx]}
+           final_result.append(data)
+           idx = idx-1
+
+        response["results"] = final_result
+
+     else:
+        sql_query = f"SELECT * FROM \"User_Lists_Bad\" WHERE user_id = {user_id} ORDER BY rank;"
+        cur.execute(sql_query)
+        bad_songs = cur.fetchall()
+        num_rows = int(cur.rowcount)
+
+        if num_rows == 0:
+           response["MESSAGE"] = "No songs to display here"
+           return jsonify(response)
+        
+        final_result = []
+
+        rating_list = np.linspace(0.0, 4.0, num=num_rows, endpoint=False)
+        idx = rating_list.size-1
+
+        for song in bad_songs:
+           data = {'user_id': song[0], 'song_id': song[1], 'rank': song[2], 'review': song[3], 'rating': rating_list[idx]}
+           final_result.append(data)
+           idx = idx-1
+
+        response["results"] = final_result
+      
+     cur.close()
+     conn.close()
+    
   except Exception as e:
         response["MESSAGE"] = f"EXCEPTION: /api/get_user_songs {e}"
         print(response["MESSAGE"])

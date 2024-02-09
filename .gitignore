@@ -39,3 +39,8 @@ Thumbs.db
 # Node Modules
 */node_modules
 
+./melo/package-lock.json
+/melo/package-lock.json
+melo/package-lock.json
+
+node_modules
