@@ -31,6 +31,17 @@ Artist can do the following:
 1. See how their music is doing (which songs have been viewed the most, ranked the highest, etc.)
 
 
+__Installing Packages__
+*Within Melo Folder*
+Ensure you're on the latest version of `npm` and `node`, and run `npm install`
+
+`cd` into the `/server` folder and `pip3 / pip install` the following packages:
+- flask
+- flask_cors
+- psycopg2
+- numpy
+- requests
+
 __Initializing the Database__
 
 To initialize the database, cd into the db folder, then run these 2 commands:
