@@ -4,12 +4,12 @@ import discogs_client
 import os
 import psycopg2
 import numpy as np
+import requests
 
 app = Flask(__name__)
 
 CORS(app)
-d = discogs_client.Client('melo/0.1', user_token='zqyCtqGCQpvbemuOmtNwjJtPImAgtAtcApcUsavp')
-d_url = 'https://api.discogs.com/database/search'
+music_brainz_url = "https://musicbrainz.org/ws/2"
 
 #To make the connection, you have to export your personal postgres username and password
 #export DB_USERNAME="postgres"
@@ -30,22 +30,30 @@ def find_by_title():
   # This GET request receives the Discogs_API information for a requested title
 
   try:
-    title = request.args.get("title")
-    results = d.search(title, type='track')
-    parsed_results = []
-    for item in results.page(1):
-       print(type(item))
-       if isinstance(item, discogs_client.models.Master):
-          release_title = item.title
-          artist_name = ', '.join(artist.name for artist in item.artists)
-          data = {
-             'title': release_title,
-             'artist': artist_name
-          }
-          if data in parsed_results:
-            next
-          parsed_results.append(data)
-    response["results"] = parsed_results
+    title = request.args.get("title", "")
+    artist = request.args.get("artist", "")
+    artist_encoded = requests.utils.quote(artist)
+    title_encoded = requests.utils.quote(title)
+    query_url = f"{music_brainz_url}/recording/?query=recording:\"{title_encoded}\" AND artist:\"{artist_encoded}\"&fmt=json"
+    response = {}
+    query = requests.get(query_url).json()
+    unique_tracks = {}
+    compiled_data = []
+
+    for index, recording in enumerate(query["recordings"]):
+       artist_name = recording["artist-credit"][0]["name"]
+       title = recording["title"]
+       mbid = recording["id"]
+
+       unique_key = f"{artist_name}-{title}"
+       if unique_key not in unique_tracks:
+          unique_tracks[unique_key] = True
+          compiled_data.append({
+             "artist": artist_name,
+             "title": title,
+             "mbid": mbid,
+          })
+    response["results"] = compiled_data
   except Exception as e:
     response["MESSAGE"] = f"EXCEPTION: /title {e}"
     print(response["MESSAGE"])

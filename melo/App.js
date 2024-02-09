@@ -1,9 +1,6 @@
-import LandingPage from "./components/LandingScreen";
 import { useFonts } from "expo-font";
-import { Button, StyleSheet, Text, TextInput, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import MainContainer from "./navigation/MainContainer";
-import { NavigationContainer } from "@react-navigation/native";
-import MyStack from "./Navigation";
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -15,7 +12,7 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <MyStack />
+      <MainContainer />
     </View>
   );
 }

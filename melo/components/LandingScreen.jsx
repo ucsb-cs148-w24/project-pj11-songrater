@@ -1,18 +1,10 @@
-import { useFonts } from "expo-font";
-import {
-  Button,
-  Pressable,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 import { typography } from "./helper/Typography";
 import { buttons } from "./helper/Buttons";
 
 export default function LandingScreen({ navigation }) {
-  const navigateToMainContainer = () => {
-    navigation.navigate("MainContainer");
+  const navigateToSearch = () => {
+    navigation.navigate("Search");
   };
   return (
     <View style={{ flex: 1, backgroundColor: "#FFFAEA", padding: 20 }}>
@@ -22,7 +14,7 @@ export default function LandingScreen({ navigation }) {
       <View style={styles.buttonContainer}>
         <Pressable
           title="Enter Melo"
-          onPress={navigateToMainContainer}
+          onPress={navigateToSearch}
           style={buttons.outline}
         >
           <Text style={typography.default_l}>Search Song</Text>
