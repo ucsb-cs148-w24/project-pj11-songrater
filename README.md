@@ -58,12 +58,16 @@ __Installation Steps__
 
 # Functionality
 
-TODO
+1. Search a song by name and add it
+2. Evaluate the song with three choices: "Good", "Ok", "Bad"
+3. Leave a comment for this song
+4. Compare this song with other songs in the same category ("Good", "Ok", "Bad")
+5. Get the rank of the song and its score! 
 
 
 # Known Problems
 
-TODO
+1. Need to update database settings 
 
 
 # Others
