@@ -9,22 +9,33 @@
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#FDE385"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#FDE385"
       }
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "plugins": [
+      [
+        "expo-font",
+        {
+          "fonts": [
+            "./assets/fonts/Poppins-Bold.ttf",
+            "./assets/fonts/Poppins-Regular.ttf",
+            "./assets/fonts/AnonymousPro-Bold.ttf",
+            "./assets/fonts/AnonymousPro-Bold.ttf"
+          ]
+        }
+      ]
+    ]
   }
 }
