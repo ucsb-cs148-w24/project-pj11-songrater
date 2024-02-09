@@ -116,70 +116,152 @@ def delete_user():
         print(response["MESSAGE"])
   return jsonify(response)
 
-# Added new skeleton endpoints for user song list feature below - Katya 
+# Finished skeleton endpoints for user song list feature below by connecting with DB - Katya 
 
 #  Adds a new song to a user's list
 @app.route("/api/add_song", methods=['POST'])
 def add_song():
-  response = {}
-  
-  try:
-     user_id = request.form.get("user_id")
-     song_id = request.form.get("song_id")
-     rank = request.form.get("rank")
-     review = request.form.get("review")
-     # add these pieces of information to user lists postgres table
-     response["MESSAGE"] = "Successfully added new song to user list"
-  except Exception as e:
+    response = {}
+    try:
+        # retrieve data from the request
+        user_id = request.form.get("user_id")
+        song_id = request.form.get("song_id")
+        rank = int(request.form.get("rank"))  # Convert rank to integer
+        review = request.form.get("review")
+        
+        # determine the table based on rank
+        if 0 <= rank < 4:
+            table_name = "User_Lists_Bad"
+        elif 4 <= rank < 7:
+            table_name = "User_Lists_Ok"
+        else:  # rank is between 7 and 10
+            table_name = "User_Lists_Good"
+        
+        # establish a connection to the database
+        conn = get_db_connection()
+        cur = conn.cursor()
+        
+        # dynamically insert the new song into the determined table
+        cur.execute(f"INSERT INTO public.\"{table_name}\" (user_id, song_id, rank, review) VALUES (%s, %s, %s, %s)",
+                    (user_id, song_id, rank, review))
+        
+        # commit the transaction to make the change permanent
+        conn.commit()
+        
+        # close the cursor and connection to free resources
+        cur.close()
+        conn.close()
+        
+        response["MESSAGE"] = f"Successfully added new song to {table_name}"
+    except Exception as e:
         response["MESSAGE"] = f"EXCEPTION: /api/add_song {e}"
         print(response["MESSAGE"])
-  return jsonify(response)
-
+    return jsonify(response)
 
 
 # Retrieves a user's song list
 @app.route("/api/get_user_songs", methods=['GET'])
 def get_user_songs():
-  response = {}
-  
-  try:
-     user_id = request.args.get("user_id")
-     # look up user_id in user lists postgres table, then return the list of songs as a JSON string
-  except Exception as e:
+    response = {}
+    try:
+        user_id = request.args.get("user_id")
+        
+        # establish a connection to the database
+        conn = get_db_connection()
+        cur = conn.cursor()
+        
+        # initialize an empty list to hold all songs
+        all_songs = []
+        
+        # iterate over each table and append results
+        for table_name in ["User_Lists_Good", "User_Lists_Ok", "User_Lists_Bad"]:
+            cur.execute(f"SELECT song_id, rank, review FROM public.\"{table_name}\" WHERE user_id = %s", (user_id,))
+            songs = cur.fetchall()
+            all_songs.extend(songs)
+        
+        # close the cursor and connection to free resources
+        cur.close()
+        conn.close()
+        
+        # format the response with the retrieved songs
+        response["songs"] = [{"song_id": song[0], "rank": song[1], "review": song[2]} for song in all_songs]
+    except Exception as e:
         response["MESSAGE"] = f"EXCEPTION: /api/get_user_songs {e}"
         print(response["MESSAGE"])
-  return jsonify(response)
+    return jsonify(response)
 
 # Updates a song entry in a user's list.
 @app.route("/api/update_song", methods=['PUT'])
 def update_song():
-  response = {}
-  
-  try:
-     user_id = request.args.get("user_id")
-     song_id = request.args.get("song_id")
-     new_rank = request.args.get("new_rank")
-     new_review = request.args.get("new_review")
-     # look up user_id and song_id in user lists postgres table, then update the rank and review
-  except Exception as e:
+    response = {}
+    try:
+        user_id = request.args.get("user_id")
+        song_id = request.args.get("song_id")
+        new_rank = int(request.args.get("new_rank"))  # Convert new_rank to integer
+        new_review = request.args.get("new_review")
+        
+        # determine the table based on new_rank
+        if 0 <= new_rank < 4:
+            table_name = "User_Lists_Bad"
+        elif 4 <= new_rank < 7:
+            table_name = "User_Lists_Ok"
+        else:  # new_rank is between 7 and 10
+            table_name = "User_Lists_Good"
+        
+        conn = get_db_connection()
+        cur = conn.cursor()
+        
+        # dynamically update the song in the determined table
+        cur.execute(f"UPDATE public.\"{table_name}\" SET rank = %s, review = %s WHERE user_id = %s AND song_id = %s",
+                    (new_rank, new_review, user_id, song_id))
+        conn.commit()
+        cur.close()
+        conn.close()
+        
+        response["MESSAGE"] = "Successfully updated song in user list"
+    except Exception as e:
         response["MESSAGE"] = f"EXCEPTION: /api/update_song {e}"
         print(response["MESSAGE"])
-  return jsonify(response)
+    return jsonify(response)
 
 
 #  Deletes a song from a user's list.
 @app.route("/api/delete_song", methods=['DELETE'])
 def delete_song():
-  response = {}
-  
-  try:
-     user_id = request.args.get("user_id")
-     song_id = request.args.get("song_id")
-     # look up user_id and song_id in user lists postgres table, then delete that row
-  except Exception as e:
+    response = {}
+    try:
+        # retrieve user_id, song_id, and rank from the request
+        user_id = request.args.get("user_id")
+        song_id = request.args.get("song_id")
+        rank = int(request.args.get("rank"))  # Assuming rank is passed as a query parameter and converting it to integer
+
+        # establish a connection to the database
+        conn = get_db_connection()
+        cur = conn.cursor()
+        
+        # determine the table based on rank
+        if 0 <= rank < 4:
+            table_name = "User_Lists_Bad"
+        elif 4 <= rank < 7:
+            table_name = "User_Lists_Ok"
+        else:  # rank is between 7 and 10
+            table_name = "User_Lists_Good"
+        
+        # delete the specified song for the user from the determined table
+        cur.execute(f"DELETE FROM public.\"{table_name}\" WHERE user_id = %s AND song_id = %s", (user_id, song_id))
+        
+        # commit the transaction to make the change permanent
+        conn.commit()
+        
+        # close the cursor and connection to free resources
+        cur.close()
+        conn.close()
+        
+        response["MESSAGE"] = f"Successfully deleted song from {table_name}"
+    except Exception as e:
         response["MESSAGE"] = f"EXCEPTION: /api/delete_song {e}"
         print(response["MESSAGE"])
-  return jsonify(response)
+    return jsonify(response)
 
 
 if __name__ == '__main__':
