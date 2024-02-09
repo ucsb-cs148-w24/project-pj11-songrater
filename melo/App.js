@@ -1,12 +1,9 @@
 import { StatusBar } from "expo-status-bar";
 import { useEffect, useState } from "react";
-<<<<<<< HEAD
 import { Button, StyleSheet, Text, TextInput, View } from "react-native";
 import MainContainer from "./navigation/MainContainer";
-=======
 import { StyleSheet, Text, View } from "react-native";
 import Login from "./components/Login.js";
->>>>>>> basic login component
 
 export default function App() {
   const [title, setTitle] = useState("");
