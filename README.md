@@ -83,15 +83,15 @@ __Initializing the Database__
 
 To initialize the database, you first need to create a user role where you can have permissions for creating a db, creating tables, etc. Run the following commands:
 1. psql postgres
-2. Then inside of the psql client, run CREATE ROLE <username> CREATEDB LOGIN PASSWORD '<password>';
+2. Then inside of the psql client, run CREATE ROLE "username" CREATEDB LOGIN PASSWORD "password";
 3. Once you have created the user role (with username and password), save those credentials for later. You can also list all user roles with \du inside of psql client
 
 Exit out of psql client with \q, cd into the db folder, then inside of musicdb.sql file, replace this line "OWNER = adas16" with your own username (from create role). In tables.sql file, you will see these same "OWNER = " lines as well. Replace them with your username.
 Then, while still inside of db folder, run these 2 commands:
-1. psql postgres -U <username> -a -f musicdb.sql
-2. psql postgres -U <username> -d musicdb -a -f tables.sql
+1. psql postgres -U "username" -a -f musicdb.sql
+2. psql postgres -U "username" -d musicdb -a -f tables.sql
 
-<username> should be replaced with your username.
+"username" should be replaced with your username.
 
 Then, to connect the database from your flask server, your postgres username and passwords have to be exported. To do so, run:
 1. export DB_USERNAME="postgres"
@@ -103,7 +103,7 @@ __Interacting with the Database__
 
 Though you can use psql client and interact with postgres db from command line, we would recommend PGAdmin, a UI interface for interacting with the database. To get that set up, do the following:
 1. Go to  https://www.pgadmin.org/ and download the PGAdmin client for your OS
-2. Provide the following credentials for setting up your database server: host -> "localhost", user -> <username>, password -> <password>, maintenance database –> “postgres”
+2. Provide the following credentials for setting up your database server: host -> "localhost", user -> "username", password -> "password", maintenance database –> “postgres”
 3. Once everything is set up, you should be able to view all databases, tables you created inside each of them, any indexes created, and perform SQL queries on these tables. You will see nicely formatted tabular output when you execute SQL SELECT queries, which is really cool.
 
 
