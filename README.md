@@ -103,11 +103,7 @@ __Interacting with the Database__
 
 Though you can use psql client and interact with postgres db from command line, we would recommend PGAdmin, a UI interface for interacting with the database. To get that set up, do the following:
 1. Go to  https://www.pgadmin.org/ and download the PGAdmin client for your OS
-2. Provide the following credentials for setting up your database server:
-   host - "localhost",
-   user - <username>,
-   password - <password>,
-   maintenance database – “postgres”
+2. Provide the following credentials for setting up your database server: host -> "localhost", user -> <username>, password -> <password>, maintenance database –> “postgres”
 3. Once everything is set up, you should be able to view all databases, tables you created inside each of them, any indexes created, and perform SQL queries on these tables. You will see nicely formatted tabular output when you execute SQL SELECT queries, which is really cool.
 
 
