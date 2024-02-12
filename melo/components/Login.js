@@ -1,41 +1,12 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { Button, View } from 'react-native';
 
-function Login() {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    //todo
-  };
-
+const Login = ({ onLogin }) => {
   return (
-    <form onSubmit={handleSubmit}>
-      <div>
-        <label>
-          Username:
-          <input 
-            type="text" 
-            value={username} 
-            onChange={(e) => setUsername(e.target.value)} 
-          />
-        </label>
-      </div>
-      <div>
-        <label>
-          Password:
-          <input 
-            type="password" 
-            value={password} 
-            onChange={(e) => setPassword(e.target.value)} 
-          />
-        </label>
-      </div>
-      <div>
-        <button type="submit">Login</button>
-      </div>
-    </form>
+    <View>
+      <Button title="Log In" onPress={onLogin} />
+    </View>
   );
-}
+};
 
 export default Login;

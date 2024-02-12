@@ -1,0 +1,72 @@
+[
+    {
+        "song_id": 7,
+        "artist": "Megan Thee Stallion",
+        "song_name": "Hiss",
+        "rank": "1",
+        "review": "An electrifying track with a powerful performance."
+    },
+    {
+        "song_id": 13,
+        "artist": "Jack Harlow",
+        "song_name": "Lovin On Me",
+        "rank": "2",
+        "review": "A catchy tune that's climbing the charts rapidly."
+    },
+    {
+        "song_id": 68,
+        "artist": "Taylor Swift",
+        "song_name": "Cruel Summer",
+        "rank": "3",
+        "review": "An emotional rollercoaster packed into a song."
+    },
+    {
+        "song_id": 45,
+        "artist": "Teddy Swims",
+        "song_name": "Lose Control",
+        "rank": "4",
+        "review": "A soulful ballad that resonates with many."
+    },
+    {
+        "song_id": 80,
+        "artist": "Tate Mcrae",
+        "song_name": "Greedy",
+        "rank": "5",
+        "review": "An energetic song that gets you moving."
+    },
+    {
+        "song_id": 36,
+        "artist": "Zach Bryan and Kacey Musgraves",
+        "song_name": "I Remember Everything",
+        "rank": "6",
+        "review": "A heartfelt story turned into a beautiful melody."
+    },
+    {
+        "song_id": 5,
+        "artist": "Doja Cat",
+        "song_name": "Agora Hills",
+        "rank": "7",
+        "review": "A dynamic hit with an unforgettable rhythm."
+    },
+    {
+        "song_id": 50,
+        "artist": "Benson Boone",
+        "song_name": "Beautiful Things",
+        "rank": "8",
+        "review": "A track that showcases true musical talent."
+    },
+    {
+        "song_id": 78,
+        "artist": "21 Savage",
+        "song_name": "Redrum",
+        "rank": "9",
+        "review": "A bold and raw piece that captivates listeners."
+    },
+    {
+        "song_id": 37,
+        "artist": "SZA",
+        "song_name": "Snooze",
+        "rank": "10",
+        "review": "A smooth and catchy number with a cool vibe."
+    }
+]
