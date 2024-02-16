@@ -29,3 +29,18 @@ Users can do the following:
 
 Artist can do the following:
 1. See how their music is doing (which songs have been viewed the most, ranked the highest, etc.)
+
+
+__Initializing the Database__
+
+To initialize the database, cd into the db folder, then run these 2 commands:
+1. psql -U postgres -a -f musicdb.sql
+2. psql -U postgres -d musicdb -a -f tables.sql
+
+"postgres" can be changed to your prefered username.
+
+Then, to connect the database to the flask, your postgres username and passwords have to be exported. To do so, run:
+1. export DB_USERNAME="postgres"
+2. export DB_PASSWORD="password"
+
+But with your username and password.
