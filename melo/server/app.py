@@ -328,18 +328,20 @@ def get_user_songs_by_type():
 # Updates a song entry in a user's list.
 @app.route("/api/update_song", methods=['PUT'])
 def update_song():
-  response = {}
-  
-  try:
-     user_id = request.args.get("user_id")
-     song_id = request.args.get("song_id")
-     new_rank = request.args.get("new_rank")
-     new_review = request.args.get("new_review")
-     # look up user_id and song_id in user lists postgres table, then update the rank and review
-  except Exception as e:
+    response = {}
+    
+    try:
+        user_id = request.args.get("user_id")
+        song_id = request.args.get("song_id")
+        new_rank = request.args.get("new_rank")
+        new_review = request.args.get("new_review")        
+        # Add a success message to the response
+        response["MESSAGE"] = "Successfully updated song"
+    except Exception as e:
         response["MESSAGE"] = f"EXCEPTION: /api/update_song {e}"
         print(response["MESSAGE"])
-  return jsonify(response)
+    
+    return jsonify(response)
 
 
 #  Deletes a song from a user's list.
