@@ -6,6 +6,8 @@ __Collin__ -- Used Cursor to identify errors in my code and fix them. Cursor was
 
 __Emily__ -- Used ChatGPT to look at pros and cons for different ways of storing our rating system in a way that scales well. Also asked ChatGPT about database deployment options. Asked ChatGPT for some SQL code.
 
+__Jeffrey__ -- Used ChatGPT and Midjourney to critique / redesign frontend UI quirks. Also used it to learn more frontend tricks to handle our tricky state management.
+
 ## Outcomes
 
 __Leyang__ -- Got an overview of the whole process: Data Collection, Data Preprocessing, Feature Engineering, Build User              Profilesm, Model Training, Evaluation, Deployment, Monitoring and Iteration. 
@@ -13,6 +15,8 @@ __Leyang__ -- Got an overview of the whole process: Data Collection, Data Prepro
 __Collin__ -- Was able to make progress on my code and fix errors that I was having trouble with. Specifically with user authentication in Auth0.
 
 __Emily__ -- ChatGPT confirmed that the structure we came up with for the database is a good option, which give me confidence in our choice and implementation. ChatGPT also made it easier to find a good deployment option because it gave us a short list to look into.
+
+__Jeffrey__ -- ChatGPT was super helpful in pointing me to the right direction with using specific react hooks (callback), but was a little lacking on the design aspect.
 
 
 ## Reflections
@@ -25,11 +29,15 @@ __Collin__ -- Tool is super useful as it makes coding much less frustrating. Sin
 
 __Emily__ -- I think that ChatGPT is a good way to "rubber duck", and it can suggest things that I might not orignally think about. Becuase I'm not very familar with SQL, it's useful for finding out about ways to do things because it gives me the syntax for my thoughts, which is really useful.
 
+__Jeffrey__ -- I've been a big fan of ChatGPT for a long time in speeding up my development process; while it's debugging skills aren't the greatest and sometimes lead me into stray alleyways, I still am able to learn a lot from its explanations and learn about new technologies to solve problems that I'm currently uisng.
+
 ### What steps you needed to (or couldn’t) take to ensure that the AI output was correct, understandable, and fair use
 
 __Leyang__ -- I think it depends on what questions ChatGPT answers. If it is a certain conding task, after getting results from ChatGPT, we need to immediately test the code to see if it works. If it is a general suggestions such as how to generate amusic recommendation system, then we need to look for other resources, especially the experiences from people who have done that before, to check if the suggestions are applicable. 
 
 __Collin__ -- I would test the AI's code by looking through its logic witih my own eyes and running it in my local environment and seeing if it works. In general, the chat feature with Cursor explains the code it produces very well too, so having the chat to break down specific parts of the code and reason it with logic makes it much easier to understand as well.
+
+__Jeffrey__ -- For simple debugging errors, I would usually use a combination of my prior knowledge + testing the code out to determine whether ChatGPT was correct or not. For example, I was trying to use a variant of Binary Search to handle state management with our frontend song rankings, and ChatGPT wasn't able to provide a proper algorithm for it. After reasoning out my own algorithm + testing ChatGPT's, I used my algorithm over ChatGPTs to make things work effectively.
 
 __Emily__ -- When looking at databases, I went to the service's actual website to confirm costs and packages, which ChatGPT was sometimes outdated about. A way to potentially keep the usage of ChatGPT fair use is to not copy large chunks of code, and instead just read it to understand the logic/syntax that it's using so that we can write our own code.
 
