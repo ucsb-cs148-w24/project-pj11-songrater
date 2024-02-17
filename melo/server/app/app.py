@@ -85,11 +85,28 @@ def get_profile():
   response = {}
   
   # This function should return back to the user his profile info
-  # Note that this GET method is boilerplate code for ANY GET FUNCTION, can implement user login or some other GET functionality
-  # using this basic template
+  
   try:
-     uname = request.args.get("username")
-     # look up uname string in User postgres table, then return his profile info as a JSON string
+     user_id = request.args.get("user_id")
+     conn = get_db_connection()
+     cur = conn.cursor()
+
+     sql_query = f"SELECT * FROM \"User\" WHERE id = {user_id};"
+     cur.execute(sql_query)
+     user_profile = cur.fetchall()
+
+     final_result = []
+
+     for profile in user_profile:
+        data = {'id': profile[0], 'username': profile[1], 'email': profile[2], 'description': profile[3]}
+        final_result.append(data)
+        
+     response["results"] = final_result
+     
+     cur.close()
+     conn.close()
+     
+     response["MESSAGE"] = "Successfully retrieved profile of user"
   except Exception as e:
         response["MESSAGE"] = f"EXCEPTION: /api/get_profile {e}"
         print(response["MESSAGE"])
@@ -363,7 +380,65 @@ def delete_song():
   try:
      user_id = request.args.get("user_id")
      song_id = request.args.get("song_id")
-     # look up user_id and song_id in user lists postgres table, then delete that row
+     type = request.args.get("type") 
+     conn = get_db_connection()
+     cur = conn.cursor()
+
+     s_id = int(song_id)
+
+     if type == "good":
+        sql_query = f"SELECT * FROM \"User_Lists_Good\" WHERE user_id = {user_id} ORDER BY rank;"
+        cur.execute(sql_query)
+        good_songs = cur.fetchall()
+        
+        for song in reversed(good_songs):
+           if song[1] == s_id:
+              del_query = f"DELETE FROM \"User_Lists_Good\" WHERE user_id = {song[0]} AND song_id = {song[1]};"
+              cur.execute(del_query)
+              conn.commit()
+              break
+           
+           curr_rank = song[2]
+           update_query = f"UPDATE \"User_Lists_Good\" SET rank = {curr_rank-1} WHERE user_id = {song[0]} AND song_id = {song[1]};"
+           cur.execute(update_query)
+           conn.commit()
+     
+     elif type == "ok":
+        sql_query = f"SELECT * FROM \"User_Lists_Ok\" WHERE user_id = {user_id} ORDER BY rank;"
+        cur.execute(sql_query)
+        ok_songs = cur.fetchall()
+        
+        for song in reversed(ok_songs):
+           if song[1] == s_id:
+              del_query = f"DELETE FROM \"User_Lists_Ok\" WHERE user_id = {song[0]} AND song_id = {song[1]};"
+              cur.execute(del_query)
+              conn.commit()
+              break
+           
+           curr_rank = song[2]
+           update_query = f"UPDATE \"User_Lists_Ok\" SET rank = {curr_rank-1} WHERE user_id = {song[0]} AND song_id = {song[1]};"
+           cur.execute(update_query)
+           conn.commit()
+     
+     else:
+        sql_query = f"SELECT * FROM \"User_Lists_Bad\" WHERE user_id = {user_id} ORDER BY rank;"
+        cur.execute(sql_query)
+        bad_songs = cur.fetchall()
+        
+        for song in reversed(bad_songs):
+           if song[1] == s_id:
+              del_query = f"DELETE FROM \"User_Lists_Bad\" WHERE user_id = {song[0]} AND song_id = {song[1]};"
+              cur.execute(del_query)
+              conn.commit()
+              break
+           
+           curr_rank = song[2]
+           update_query = f"UPDATE \"User_Lists_Bad\" SET rank = {curr_rank-1} WHERE user_id = {song[0]} AND song_id = {song[1]};"
+           cur.execute(update_query)
+           conn.commit()
+     
+     cur.close()
+     conn.close()
 
      # Add a success message to the response
      response["MESSAGE"] = "Successfully deleted song from user list"
