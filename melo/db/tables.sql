@@ -36,7 +36,7 @@ TABLESPACE pg_default;
 
 CREATE TABLE IF NOT EXISTS public."User_Lists_Good"
 (
-    user_id integer NOT NULL,
+    user_id INT NOT NULL,
     song_id character varying(255) COLLATE pg_catalog."default" NOT NULL,
     rank integer,
     review character varying(1023) COLLATE pg_catalog."default",
@@ -61,7 +61,7 @@ CREATE INDEX b_tree_idx ON public."User_Lists_Good" USING btree (rank, user_id);
 
 CREATE TABLE IF NOT EXISTS public."User_Lists_Ok"
 (
-    user_id integer NOT NULL,
+    user_id INT NOT NULL,
     song_id character varying(255) COLLATE pg_catalog."default" NOT NULL,
     rank integer,
     review character varying(1023) COLLATE pg_catalog."default",
@@ -85,7 +85,7 @@ CREATE INDEX b_tree_idx2 ON public."User_Lists_Ok" USING btree (rank, user_id);
 
 CREATE TABLE IF NOT EXISTS public."User_Lists_Bad"
 (
-    user_id integer NOT NULL,
+    user_id INT NOT NULL,
     song_id character varying(255) COLLATE pg_catalog."default" NOT NULL,
     rank integer,
     review character varying(1023) COLLATE pg_catalog."default",
