@@ -6,7 +6,7 @@ export const styles = StyleSheet.create({
         alignContent: "center",
         justifyContent: "center",
         backgroundColor: "#FFFBFA",
-        padding: 30,
+        padding: 20,
     },
     searchContainer: {
         flex: 1,

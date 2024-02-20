@@ -8,7 +8,7 @@ export default function LandingScreen({ navigation }) {
     navigation.navigate("Search");
   };
   return (
-    <View style={{ flex: 1, backgroundColor: "#FFFBFA", padding: 20 }}>
+    <View style={styles.container}>
       <View style={styles.titleContainer}>
         <Text style={typography.title}>Melo</Text>
         <Text style={typography.default_l}>An app to rate music.</Text>
