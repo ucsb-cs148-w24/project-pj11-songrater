@@ -87,11 +87,11 @@ def get_profile():
   # This function should return back to the user his profile info
   
   try:
-     user_id = request.args.get("user_id")
+     uname = request.args.get("uname")
      conn = get_db_connection()
      cur = conn.cursor()
 
-     sql_query = f"SELECT * FROM \"User\" WHERE id = {user_id};"
+     sql_query = f"SELECT * FROM \"User\" WHERE username = '{uname}';"
      cur.execute(sql_query)
      user_profile = cur.fetchall()
 
@@ -349,6 +349,52 @@ def get_user_songs_by_type():
     
   except Exception as e:
         response["MESSAGE"] = f"EXCEPTION: /api/get_user_songs {e}"
+        print(response["MESSAGE"])
+  return jsonify(response)
+
+@app.route("/api/song_exists", methods=['GET'])
+def song_exists():
+  response = {}
+  
+  # Given user id and song id, check to see if the song exists in any of the three user list tables
+  # This is an important check to avoid adding the same song twice in any table
+  
+  try:
+     user_id = request.args.get("user_id")
+     song_id = request.args.get("song_id")
+     conn = get_db_connection()
+     cur = conn.cursor()
+
+     check_good = f"SELECT * FROM \"User_Lists_Good\" WHERE user_id = {user_id} AND song_id = {song_id};"
+     cur.execute(check_good)
+     good_exists = cur.fetchall()
+
+     if len(good_exists) != 0:
+        response["MESSAGE"] = "You have already ranked this song. Please choose a new song to rank."
+        return jsonify(response)
+
+     check_ok = f"SELECT * FROM \"User_Lists_Ok\" WHERE user_id = {user_id} AND song_id = {song_id};"
+     cur.execute(check_ok)
+     ok_exists = cur.fetchall()
+
+     if len(ok_exists) != 0:
+        response["MESSAGE"] = "You have already ranked this song. Please choose a new song to rank."
+        return jsonify(response)
+     
+     check_bad = f"SELECT * FROM \"User_Lists_Bad\" WHERE user_id = {user_id} AND song_id = {song_id};"
+     cur.execute(check_bad)
+     bad_exists = cur.fetchall()
+
+     if len(bad_exists) != 0:
+        response["MESSAGE"] = "You have already ranked this song. Please choose a new song to rank."
+        return jsonify(response)
+     
+     cur.close()
+     conn.close()
+     
+     response["MESSAGE"] = "You have not ranked this song."
+  except Exception as e:
+        response["MESSAGE"] = f"EXCEPTION: /api/get_profile {e}"
         print(response["MESSAGE"])
   return jsonify(response)
 
