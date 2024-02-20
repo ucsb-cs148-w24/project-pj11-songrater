@@ -1,5 +1,6 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { typography } from "./helper/Typography";
+// import { styles } from "./helper/Styles";
 import { useCallback, useState } from "react";
 
 const mockData = [
