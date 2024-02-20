@@ -11,6 +11,7 @@ export default function LandingScreen({ navigation }) {
     <View style={{ flex: 1, backgroundColor: "#FFFBFA", padding: 20 }}>
       <View style={styles.titleContainer}>
         <Text style={typography.title}>Melo</Text>
+        <Text style={typography.default_l}>An app to rate music.</Text>
       </View>
       <View style={styles.buttonContainer}>
         <Pressable

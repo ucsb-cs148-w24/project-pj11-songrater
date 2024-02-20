@@ -11,8 +11,11 @@ export const typography = StyleSheet.create({
     fontFamily: "Poppins",
   },
   header: {
+    color: '#3187D8',
+    textAlign: 'center',
     fontSize: 32,
-    fontFamily: "Poppins-Bold",
+    fontWeight: 'bold',
+    fontFamily: "Poppins",
   },
   header2: {
     fontSize: 26,
