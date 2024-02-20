@@ -104,9 +104,8 @@ export default function SearchSongScreen({ navigation }) {
         />
       </View>
       <Pressable
-        title="Enter Melo"
-        // onPress={navigateToSearch}
-        // style={buttons.outline}
+        title="Search Song"
+        onPress={fetchSong}
       >
         <Text style={styles.enterButton}>Search</Text>
       </Pressable>
