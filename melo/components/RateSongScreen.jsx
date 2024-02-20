@@ -197,7 +197,7 @@ export default function RateSongScreen({ route }) {
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
-    backgroundColor: "#FFFAEA",
+    backgroundColor: "#FFFBFA",
     padding: 20,
     display: "flex",
     flexDirection: "column",

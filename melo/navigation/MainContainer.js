@@ -5,8 +5,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Ionicons from "react-native-vector-icons/Ionicons";
 
 // Screens
-import HomeScreen from "./screens/HomeScreen";
-import ProfileScreen from "./screens/ProfileScreen";
+import ProfileScreen from "../components/ProfileScreen";
 import SearchSongScreen from "../components/SearchSongScreen";
 import RateSongScreen from "../components/RateSongScreen";
 import LandingScreen from "../components/LandingScreen";
@@ -51,19 +50,26 @@ function MainContainer() {
             } else if (rn === searchName) {
               iconName = focused ? "search" : "search-outline";
             } else if (rn === profileName) {
-              iconName = focused ? "settings" : "settings-outline";
+              iconName = focused ? "profile" : "person-circle-outline";
             }
 
             // You can return any component that you like here!
             return <Ionicons name={iconName} size={size} color={color} />;
           },
+          tabBarActiveTintColor: "black",
+          tabBarInactiveTintColor: "grey",
+          tabBarLabelStyle: {
+            "paddingBottom": 10,
+            "fontSize": 10
+          },
+          tabBarStyle: [
+            {
+              "display": "flex"
+            },
+            null
+          ],
+          tabBarBackgroundColor: "red",
         })}
-        tabBarOptions={{
-          activeTintColor: "turquoise",
-          inactiveTintColor: "grey",
-          labelStyle: { paddingBottom: 10, fontSize: 10 },
-          style: { padding: 10, height: 70 },
-        }}
       >
         <Tab.Screen name={homeName} component={LandingScreen} />
         <Tab.Screen name={searchName} component={SongStack} />

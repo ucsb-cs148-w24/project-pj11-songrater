@@ -102,6 +102,13 @@ export default function SearchSongScreen({ navigation }) {
           style={[typography.default, styles.textInput]}
         />
       </View>
+      <Pressable
+        title="Enter Melo"
+        // onPress={navigateToSearch}
+        // style={buttons.outline}
+      >
+        <Text style={styles.enterButton}>Search</Text>
+      </Pressable>
       <Modal
         transparent={true}
         visible={modalVisible}
@@ -181,7 +188,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignContent: "center",
     justifyContent: "center",
-    backgroundColor: "#FFFAEA",
+    backgroundColor: "#FFFBFA",
     padding: 30,
   },
   searchContainer: {
@@ -204,6 +211,18 @@ const styles = StyleSheet.create({
     alignContent: "flex-start",
     justifyContent: "flex-start",
     width: "100%",
+  },
+  buttonContainer: {
+    flex: 0.5,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  enterButton: {
+    color: '#3187D8',
+    textAlign: 'center',
+    fontSize: 20,
+    fontWeight: 'bold',
+    fontFamily: 'Poppins',
   },
   songResultContainer: {
     flex: 1,

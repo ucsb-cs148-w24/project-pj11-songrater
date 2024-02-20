@@ -7,9 +7,9 @@ export default function LandingScreen({ navigation }) {
     navigation.navigate("Search");
   };
   return (
-    <View style={{ flex: 1, backgroundColor: "#FFFAEA", padding: 20 }}>
+    <View style={{ flex: 1, backgroundColor: "#FFFBFA", padding: 20 }}>
       <View style={styles.titleContainer}>
-        <Text style={typography.title}>Melo</Text>
+        <Text style={styles.title}>Melo</Text>
       </View>
       <View style={styles.buttonContainer}>
         <Pressable
@@ -17,7 +17,7 @@ export default function LandingScreen({ navigation }) {
           onPress={navigateToSearch}
           style={buttons.outline}
         >
-          <Text style={typography.default_l}>Search Song</Text>
+          <Text style={styles.enterButton}>Rank a Song</Text>
         </Pressable>
       </View>
     </View>
@@ -34,5 +34,21 @@ const styles = StyleSheet.create({
     flex: 0.5,
     alignItems: "center",
     justifyContent: "center",
+  },
+  title: {
+    // marginTop: 16,
+    // paddingVertical: 8,
+    color: '#3187D8',
+    textAlign: 'center',
+    fontSize: 45,
+    fontWeight: 'bold',
+    fontFamily: 'Poppins',
+  },
+  enterButton: {
+    color: '#3187D8',
+    textAlign: 'center',
+    fontSize: 20,
+    fontWeight: 'bold',
+    fontFamily: 'Poppins',
   },
 });
