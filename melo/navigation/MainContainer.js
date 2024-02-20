@@ -50,7 +50,7 @@ function MainContainer() {
             } else if (rn === searchName) {
               iconName = focused ? "search" : "search-outline";
             } else if (rn === profileName) {
-              iconName = focused ? "profile" : "person-circle-outline";
+              iconName = focused ? "person-circle" : "person-circle-outline";
             }
 
             // You can return any component that you like here!
