@@ -134,15 +134,6 @@ export const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "center",
     },
-    title: {
-        // marginTop: 16,
-        // paddingVertical: 8,
-        color: '#3187D8',
-        textAlign: 'center',
-        fontSize: 45,
-        fontWeight: 'bold',
-        fontFamily: 'Poppins',
-    },
     enterButton: {
         color: '#3187D8',
         textAlign: 'center',

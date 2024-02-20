@@ -10,7 +10,7 @@ export default function ProfileScreen({ navigation }) {
   return (
     <View style={{ flex: 1, backgroundColor: "#FFFBFA", padding: 20 }}>
       <View style={styles.titleContainer}>
-        <Text style={styles.title}>My Profile</Text>
+        <Text style={typography.title}>My Profile</Text>
       </View>
     </View>
   );

@@ -10,7 +10,7 @@ export default function LandingScreen({ navigation }) {
   return (
     <View style={{ flex: 1, backgroundColor: "#FFFBFA", padding: 20 }}>
       <View style={styles.titleContainer}>
-        <Text style={styles.title}>Melo</Text>
+        <Text style={typography.title}>Melo</Text>
       </View>
       <View style={styles.buttonContainer}>
         <Pressable

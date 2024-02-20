@@ -2,8 +2,13 @@ import { StyleSheet } from "react-native";
 
 export const typography = StyleSheet.create({
   title: {
+    // marginTop: 16,
+    // paddingVertical: 8,
+    color: '#3187D8',
+    textAlign: 'center',
     fontSize: 48,
-    fontFamily: "Poppins-Bold",
+    fontWeight: 'bold',
+    fontFamily: "Poppins",
   },
   header: {
     fontSize: 32,
