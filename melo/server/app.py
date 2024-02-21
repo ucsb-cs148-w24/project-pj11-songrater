@@ -346,6 +346,9 @@ def update_song():
      new_rank = request.args.get("new_rank")
      new_review = request.args.get("new_review")
      # look up user_id and song_id in user lists postgres table, then update the rank and review
+
+     # Add a success message to the response
+     response["MESSAGE"] = "Successfully updated song"
   except Exception as e:
         response["MESSAGE"] = f"EXCEPTION: /api/update_song {e}"
         print(response["MESSAGE"])
@@ -361,6 +364,9 @@ def delete_song():
      user_id = request.args.get("user_id")
      song_id = request.args.get("song_id")
      # look up user_id and song_id in user lists postgres table, then delete that row
+
+     # Add a success message to the response
+     response["MESSAGE"] = "Successfully deleted song from user list"
   except Exception as e:
         response["MESSAGE"] = f"EXCEPTION: /api/delete_song {e}"
         print(response["MESSAGE"])
