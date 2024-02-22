@@ -15,9 +15,8 @@ CREATE TABLE IF NOT EXISTS public."User"
 
 TABLESPACE pg_default;
 
-
-
--- Table: public.Song_Info
+ALTER TABLE IF EXISTS public."User"
+    OWNER to username;
 
 -- DROP TABLE IF EXISTS public."Song_Info";
 
@@ -60,7 +59,8 @@ CREATE TABLE IF NOT EXISTS public."User_Lists_Good"
 
 TABLESPACE pg_default;
 
-
+ALTER TABLE IF EXISTS public."User_Lists_Good"
+    OWNER to username;
 CREATE INDEX b_tree_idx ON public."User_Lists_Good" USING btree (rank, user_id);
 
 -- Table: public.User_Lists_Ok
@@ -87,6 +87,8 @@ CREATE TABLE IF NOT EXISTS public."User_Lists_Ok"
 
 TABLESPACE pg_default;
 
+ALTER TABLE IF EXISTS public."User_Lists_Ok"
+    OWNER to username;
 CREATE INDEX b_tree_idx2 ON public."User_Lists_Ok" USING btree (rank, user_id);
 
 -- Table: public.User_Lists_Bad
@@ -113,6 +115,8 @@ CREATE TABLE IF NOT EXISTS public."User_Lists_Bad"
 
 TABLESPACE pg_default;
 
+ALTER TABLE IF EXISTS public."User_Lists_Bad"
+    OWNER to username;
 CREATE INDEX b_tree_idx3 ON public."User_Lists_Bad" USING btree (rank, user_id);
 
 -- Table: public.Friend
@@ -134,7 +138,6 @@ CREATE TABLE IF NOT EXISTS public."Friend"
 )
 
 TABLESPACE pg_default;
-
 
 
 CREATE OR REPLACE FUNCTION trigger_set_timestamp()
@@ -159,3 +162,7 @@ CREATE TRIGGER set_timestamp
 BEFORE UPDATE ON public."User_Lists_Ok"
 FOR EACH ROW
 EXECUTE PROCEDURE trigger_set_timestamp();
+=======
+
+ALTER TABLE IF EXISTS public."Friend"
+    OWNER to username;
