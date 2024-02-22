@@ -65,14 +65,29 @@ def find_by_title():
 def create_user():
   response = {}
   
-  # This function expects the following parameters: username (must be unique), email, and description (profile description)
-  # Note that this POST method is boilerplate code for ANY POST FUNCTION
+  # This function takes email as a parameter and returns back to the frontend email, username (unique), and description
+  # A new user will be added to db with these fields and the frontend should save this information as variables for currently
+  # logged in user
+
   try:
-     # Just example code below
-     uname = request.form.get("username")
-     email = request.form.get("email")
-     description = request.form.get("description")
-     # Add these pieces of information to User postgres table
+     email = request.args.get("email")
+     conn = get_db_connection()
+     cur = conn.cursor()
+
+     at_sign_idx = email.index('@')
+     username = email[:at_sign_idx]
+     description = 'Hi my name is ' + username + '.'
+
+     cur.execute("INSERT INTO \"User\" (username, email, description) VALUES (%s, %s, %s)", 
+                       (username, email, description))
+     conn.commit()
+
+     final_result = []
+     new_user_profile = {'username': username, 'email': email, 'description': description}
+     final_result.append(new_user_profile)
+
+     response["results"] = final_result     
+
      response["MESSAGE"] = "Successfully created new user and added to db"
   except Exception as e:
         response["MESSAGE"] = f"EXCEPTION: /api/signup {e}"
