@@ -458,11 +458,15 @@ def get_user_songs_by_type():
      conn = get_db_connection()
      cur = conn.cursor()
 
+     print(f"type: {type}")
+     
+
      if type == "good":
         sql_query = f"SELECT \"User_Lists_Good\".song_id,\"User_Lists_Good\".rank,\"User_Lists_Good\".review,\"Song_Info\".song_name,\"Song_Info\".artist_name,\"Song_Info\".release_date FROM \"User_Lists_Good\" INNER JOIN \"Song_Info\" ON \"User_Lists_Good\".song_id = \"Song_Info\".song_id WHERE \"User_Lists_Good\".user_id = {user_id} ORDER BY rank;"
         cur.execute(sql_query)
         good_songs = cur.fetchall()
         num_rows = int(cur.rowcount)
+        print(f"good_songs: {good_songs}")
 
         if num_rows == 0:
            response["MESSAGE"] = "No songs to display here"
