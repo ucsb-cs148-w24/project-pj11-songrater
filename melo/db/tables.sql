@@ -162,7 +162,6 @@ CREATE TRIGGER set_timestamp
 BEFORE UPDATE ON public."User_Lists_Ok"
 FOR EACH ROW
 EXECUTE PROCEDURE trigger_set_timestamp();
-=======
 
 ALTER TABLE IF EXISTS public."Friend"
     OWNER to username;

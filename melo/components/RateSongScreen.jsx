@@ -99,6 +99,7 @@ export default function RateSongScreen({ route }) {
   useEffect(() => {
     console.log(`rating: ${rating}`);
     fetchUserSongs({ rating });
+    setDoneRanking(false);
   }, []);
 
   useEffect(() => {
