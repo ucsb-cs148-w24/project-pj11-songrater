@@ -66,12 +66,6 @@ export default function SearchSongScreen({ navigation }) {
     );
   };
 
-  const SongRatings = {
-    GREAT: 0,
-    OKAY: 1,
-    BAD: 2,
-  };
-
   const navigateRateSong = ({ rating }) => {
     setModalVisible(false);
     navigation.navigate("RateSong", {
@@ -139,6 +133,7 @@ export default function SearchSongScreen({ navigation }) {
           style={styles.searchbar}
         />
       </View>
+<<<<<<< HEAD:melo/components/SearchSongScreen.tsx
       <View style={styles.preference}>
         <Searchbar
           value={artist}
@@ -153,6 +148,11 @@ export default function SearchSongScreen({ navigation }) {
         </Button>
       </View>
 
+=======
+      <Pressable title="Search Song" onPress={fetchSong}>
+        <Text style={styles.enterButton}>Search</Text>
+      </Pressable>
+>>>>>>> a4e3bf55 (linked get songs and add song):melo/components/SearchSongScreen.jsx
       <Modal
         transparent={true}
         visible={modalVisible}
@@ -184,7 +184,7 @@ export default function SearchSongScreen({ navigation }) {
             <View style={styles.ModalRatingContainer}>
               <Pressable
                 onPress={() => {
-                  navigateRateSong({ rating: SongRatings.GREAT });
+                  navigateRateSong({ rating: "good" });
                 }}
                 style={styles.GoodButton}
               >
@@ -192,7 +192,7 @@ export default function SearchSongScreen({ navigation }) {
               </Pressable>
               <Pressable
                 onPress={() => {
-                  navigateRateSong({ rating: SongRatings.OKAY });
+                  navigateRateSong({ rating: "ok" });
                 }}
                 style={styles.OkayButton}
               >
@@ -200,7 +200,7 @@ export default function SearchSongScreen({ navigation }) {
               </Pressable>
               <Pressable
                 onPress={() => {
-                  navigateRateSong({ rating: SongRatings.BAD });
+                  navigateRateSong({ rating: "bad" });
                 }}
                 style={styles.BadButton}
               >
@@ -226,6 +226,7 @@ export default function SearchSongScreen({ navigation }) {
     </View>
   );
 }
+<<<<<<< HEAD:melo/components/SearchSongScreen.tsx
 
 
 //Surface, Segmented Buttons, List.Accordian, Progress Bar?
@@ -235,3 +236,5 @@ export default function SearchSongScreen({ navigation }) {
 
 // Dialog for rating popup
 // Segmented Buttons for rating
+=======
+>>>>>>> a4e3bf55 (linked get songs and add song):melo/components/SearchSongScreen.jsx

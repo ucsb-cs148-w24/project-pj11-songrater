@@ -9,6 +9,7 @@ export default function ProfileScreen({ navigation }) {
       <View style={styles.titleContainer}>
         <Text style={typography.title}>Your Profile</Text>
       </View>
+      <Pressable></Pressable>
     </View>
   );
 }
