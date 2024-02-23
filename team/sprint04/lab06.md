@@ -22,8 +22,8 @@ Katya:
 
 Amy:
 
-1. 
-2. 
+1. since wednesday, i looked into beli a ton for inspiration on how the app is formatted. i have more of an idea of how each screen is designed and connected to each other, and i see it being similar to beli HOWEVER i really dislike the feed page on beli and how the screens are connected to each other (the lists tab is unnecessary and should just be with profile, etc.) so there is a lot of design work i need to do in the future. but for now i implemented a draft search bar with paper and i just have a couple issues before i fully integrate it
+2. ui is hard. i might need to switch from paper
 
 Emily:
 
