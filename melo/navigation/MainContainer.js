@@ -55,11 +55,36 @@ function MainContainer() {
 
             return <Ionicons name={iconName} size={size} color={color} />;
           },
+          tabBarActiveTintColor: "black",
+          tabBarInactiveTintColor: "grey",
+          tabBarLabelStyle: {
+            paddingBottom: 5,
+            fontSize: 10,
+          },
+          tabBarStyle: [
+            {
+              display: "flex",
+            },
+            null,
+          ],
+          tabBarBackgroundColor: "red",
         })}
       >
-        <Tab.Screen name={homeName} component={LandingScreen} options={{ headerShown: false }} />
-        <Tab.Screen name={searchName} component={SongStack} options={{ headerShown: false }} />
-        <Tab.Screen name={profileName} component={ProfileScreen} options={{ headerShown: false }} />
+        <Tab.Screen
+          name={homeName}
+          component={LandingScreen}
+          options={{ headerShown: false }}
+        />
+        <Tab.Screen
+          name={searchName}
+          component={SongStack}
+          options={{ headerShown: false }}
+        />
+        <Tab.Screen
+          name={profileName}
+          component={ProfileScreen}
+          options={{ headerShown: false }}
+        />
       </Tab.Navigator>
     </NavigationContainer>
   );

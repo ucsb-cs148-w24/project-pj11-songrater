@@ -1,7 +1,8 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { typography } from "./helper/Typography";
 // import { styles } from "./helper/Styles";
-import { useCallback, useState } from "react";
+import { useCallback, useState, useEffect } from "react";
+import { objectToUrlParams } from "./helper/functions";
 
 const mockData = [
   {
@@ -93,6 +94,50 @@ export default function RateSongScreen({ route }) {
     currentIndex: Math.floor((mockData.length - 1) / 2),
   });
   const [doneRanking, setDoneRanking] = useState(false);
+  const [userSongs, setUserSongs] = useState({});
+
+  useEffect(() => {
+    console.log(`rating: ${rating}`);
+    fetchUserSongs({ rating });
+  }, []);
+
+  useEffect(() => {
+    if (doneRanking) {
+      console.log(`user song has been added.`);
+      addUserSong();
+    }
+  }, [doneRanking]);
+
+  const addUserSong = async () => {
+    const addUserSongParams = {
+      user_id: 1, // TODO : change once we get valid user IDs
+      song_id: mbid,
+      rank: 1,
+      review: review,
+      type: rating,
+    };
+
+    const response = await fetch(
+      "http://127.0.0.1:5000/api/add_song?" +
+        objectToUrlParams(addUserSongParams),
+      {
+        method: "POST",
+      }
+    ).then((response) => console.log(response));
+  };
+
+  const fetchUserSongs = async ({ rating }) => {
+    const fetchUserSongParams = {
+      type: rating,
+      user_id: 1, // TODO : change once we get valid user IDs
+    };
+
+    const response = await fetch(
+      `http://127.0.0.1:5000/api/get_user_songs?user_id=1&type=${rating}`
+    ).then((response) => response.json());
+
+    console.log(response);
+  };
 
   const updateIndices = useCallback((status) => {
     setIndices((prevState) => {
@@ -147,8 +192,6 @@ export default function RateSongScreen({ route }) {
       </Pressable>
     );
   };
-
-  const fetchUserSongs = ({ rating }) => {};
 
   return (
     <View style={styles.mainContainer}>
