@@ -25,10 +25,11 @@
 * If you find anything useful online for learning a particular backend/frontend framework, put that link to the resource on our discord channel so that everyone can learn/benefit from it
 
 ## Retro Assessment
+* We used the "start/stop/continue" template, allowing all team members to contribute to discussions on what to start, stop, and continue doing.
+   
+* The retro went well, with active participation and effective introspection, leading to a better understanding of team dynamics and areas for improvement.
 
-* We used the start/stop/continue retro template to frame our retrospective discussion, where everyone was given a chance to elaborate on the start/stop/continue points
-* It went pretty well. Everyone got a chance to participate in the discussion and overall we were able to do a deep introspection into ourselves in terms of what we have been doing well as a team and what we can do to improve/enhance the work+learning experience
-* One advice I would give is in order to make the retrospective substantial (in terms of quality of discussion and length of time), you should encourage each and every member in the team to speak their mind out so that there can be a fruitful discussion about various things, which will inevitably result in some sort of introspection taking place and thus help us as a team going forward. Also there is no need to change the retro template: start/stop/continue works just fine!
+* Encourage every team member to express their thoughts openly quality discussion.
 
 ## Retro Records
 
