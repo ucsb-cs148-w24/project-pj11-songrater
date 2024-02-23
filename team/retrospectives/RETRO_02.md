@@ -6,13 +6,10 @@
 
 ## Action items
 
-* a goal: Work more on the project outside of class
-* a change: Establish a time for working together outside of class. Doesn't have to be together in person, but just a time where everyone is working.
-* a measurement: We can be in a discord call together for easier communication but also a lot of freedom to do whatever is individually necessary.
+* a goal: Improve the efficiency when working during class time 
+* a change: Setting up the templates documents on git before scrum/or sprint to reduce the time cost; Assigning roles before each scrum/retro
+* a measurement: We can apply these methods before next class and see how long the next scrum takes 
   
-* a goal: Manage absences effectively.
-* a change: When people are absent, they will be able to catch up more easily, and work still gets done.
-* a measurement: When people are absent, they should write a blurb about what they did, as well as read meeting notes.
 
 * a goal: Stop distributing the class time inefficiently 
 * a change: During class time, assign tasks for the week and set up meeting time in subgroups; 
@@ -49,9 +46,9 @@
 
 
 ## Experiment/Change
-Updated Jan 31
+Updated Feb 23
 
-* Putting lab checklist in issues for organization
-* We believe the first retro was successful because it helped us save time and start the development of the project because we could assign each other issues to tackle individually
+* Started working on the template for scrum meetings 
+* We believe the second retro was successful because it helped us save time during class (and lab); Scrum went well and took less time 
 * We will keep the change
 
