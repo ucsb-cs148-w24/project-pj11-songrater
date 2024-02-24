@@ -38,6 +38,15 @@ The tests for the Flask application are written using the pytest framework. This
 - **Mocked Components**: Database connection and cursor.
 - **Test Scenario**: The test mocks the database delete operation to simulate the deletion of a song from the user's list and verifies the operation's success through the response status code and message.
 
-## Conclusion
+## Unit Testing Implementation
 
-These tests are designed to cover the core functionalities related to managing a user's song list in the application, ensuring that songs can be added, retrieved, updated, and deleted correctly. By mocking database operations, these tests can run independently of an actual database, allowing for more efficient and isolated testing of the application logic.
+1. **Unit Test Implementation**: We implemented unit tests using the pytest library, focusing on the core functionalities of our Flask application, such as adding, retrieving, updating, and deleting songs from a user's list. These tests are located in `melo/server/test/test_app.py`.
+2. **Plans for Unit Testing**: We plan to continue using pytest for unit testing, focusing on critical areas of the application. While we see the value in comprehensive unit testing, we aim to balance it with development speed, focusing on high-impact areas.
+
+## Component/Integration/End-to-End Testing
+
+1. **Higher-Level Testing Implementation**: For component, integration, and end-to-end testing, we utilized the Lettuce framework to write behavior-driven development (BDD) tests, specifically targeting the `get_user_songs` and `create_user` endpoints in `app.py`. These tests are defined in `melo/server/test/features/steps.py`.
+2. **Plans for Higher-Level Testing**: Moving forward, we plan to expand our BDD tests with Lettuce to cover more scenarios and endpoints, ensuring that the application behaves as expected from an end-user perspective.
+
+## Conclusion
+These testing strategies are designed to ensure the reliability and correctness of our Flask application, from individual units to the entire system's behavior. By using pytest for unit testing and Lettuce for higher-level BDD tests, we aim to maintain a high-quality application while efficiently managing our development resources.
