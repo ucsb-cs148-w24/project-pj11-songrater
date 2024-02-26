@@ -2,6 +2,34 @@ import { useFonts } from "expo-font";
 import { StyleSheet, View } from "react-native";
 import MainContainer from "./navigation/MainContainer";
 import { Register } from "./components/Register/Register";
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+import { getAuth } from "firebase/auth"; // Corrected import
+import { getDatabase } from "firebase/database"; // Add this if you're using Firebase Realtime Database
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyALVYo9xSLBgrJ3w6NXnYCe6PDFj2_LOow",
+  authDomain: "melo-c42ea.firebaseapp.com",
+  databaseURL: "https://melo-c42ea-default-rtdb.firebaseio.com",
+  projectId: "melo-c42ea",
+  storageBucket: "melo-c42ea.appspot.com",
+  messagingSenderId: "948219294613",
+  appId: "1:948219294613:web:d6190054fbfd44983cfc9c",
+  measurementId: "G-7QFZJD1QMV"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+const auth = getAuth(app);
+const db = getDatabase(app);
+
+
 
 export default function App() {
   const [fontsLoaded] = useFonts({
