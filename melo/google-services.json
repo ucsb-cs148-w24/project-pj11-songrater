@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "948219294613",
+    "project_id": "melo-c42ea",
+    "storage_bucket": "melo-c42ea.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:948219294613:android:fc8a78b72e66998b3cfc9c",
+        "android_client_info": {
+          "package_name": "com.ucsb.melo"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBczN9oPHG2xrBDpq_B9-bRrusgfuDq9to"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

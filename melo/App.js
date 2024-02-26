@@ -1,6 +1,7 @@
 import { useFonts } from "expo-font";
 import { StyleSheet, View } from "react-native";
 import MainContainer from "./navigation/MainContainer";
+import { Register } from "./components/Register/Register";
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -12,7 +13,7 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <MainContainer />
+      <Register />
     </View>
   );
 }
