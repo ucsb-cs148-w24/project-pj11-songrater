@@ -1,0 +1,48 @@
+.contentView {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background-color: white;
+  }
+  
+  .container {
+    margin: 0 50px;
+    padding-top: 20px;
+  }
+  
+  .titleContainer {
+    display: flex;
+    justify-content: center;
+    flex-grow: 1.2;
+  }
+  
+  .titleText {
+    font-size: 45px;
+    text-align: center;
+    font-weight: 200;
+  }
+  
+  .loginTextField {
+    border-bottom: 1px solid #000;
+    height: 60px;
+    font-size: 30px;
+    margin: 10px 0;
+    font-weight: 300;
+  }
+  
+  .mainContent {
+    flex-grow: 6;
+  }
+  
+  .ctaButton {
+    /* Define your button styles here */
+  }
+  
+  .primary {
+    /* Primary button styles */
+  }
+  
+  .secondary {
+    /* Secondary button styles */
+  }
+  
