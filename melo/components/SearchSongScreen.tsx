@@ -1,6 +1,6 @@
 import { useState } from "react";
+import * as React from 'react';
 import {
-  Button,
   FlatList,
   Pressable,
   StyleSheet,
@@ -8,10 +8,26 @@ import {
   TextInput,
   View,
   Modal,
+  Keyboard,
+  // Stylesheet
 } from "react-native";
+
+import {
+  Searchbar,
+  Avatar,
+  Button,
+  Card,
+  Chip,
+  IconButton,
+  Paragraph,
+  Divider,
+} from 'react-native-paper';
+
 import { typography } from "./helper/Typography";
 import { styles } from "./helper/Styles";
 import { PlusIcon } from "./helper/SVGIcons";
+// import Ionicons from "react-native-vector-icons/Ionicons";
+import ScreenWrapper from './helper/ScreenWrapper';
 
 export default function SearchSongScreen({ navigation }) {
   const [title, setTitle] = useState("");
@@ -44,7 +60,7 @@ export default function SearchSongScreen({ navigation }) {
       >
         <View style={styles.songValueContainer}>
           <Text style={typography.default_bold}>{songTitle}</Text>
-          <Text style={typography.default}>{songArtist}</Text>
+          <Text style={typography.default_d}>{songArtist}</Text>
         </View>
       </Pressable>
     );
@@ -67,13 +83,17 @@ export default function SearchSongScreen({ navigation }) {
     });
   };
 
+  const [isLoading, setIsLoading] = useState(false);
+
   const fetchSong = async () => {
     try {
-      if (title != "" && artist != "") {
+      setIsLoading(true);
+      if (!(title == "" && artist == "")) {
         await fetch(
           `http://127.0.0.1:5000/title?title=${title}&artist=${artist}`
         )
           .then((data) => {
+            setIsLoading(false);
             return data.json();
           })
           .then((data) => {
@@ -81,34 +101,67 @@ export default function SearchSongScreen({ navigation }) {
           });
       }
     } catch (error) {
+      setIsLoading(false);
       console.error("Error fetching data: ", error);
     }
   };
 
+  const [isVisible, setIsVisible] = React.useState(false);
+  const [searchQueries, setSearchQuery] = React.useState({
+    searchBarMode: '',
+    traileringIcon: '',
+    traileringIconWithRightItem: '',
+    rightItem: '',
+    loadingBarMode: '',
+    searchViewMode: '',
+    searchWithoutBottomLine: '',
+    loadingViewMode: '',
+    clickableBack: '',
+    clickableDrawer: '',
+    clickableLoading: '',
+  });
+
   return (
     <View style={styles.container}>
+      <View style={styles.preference}>
+        <View style={styles.titleContainer}>
+          <Text style={typography.title}>Melo</Text>
+        </View>
+      </View>
+
+      <View style={styles.preference}>
+        <Searchbar
+          placeholder="Rank a Song..."
+          onChangeText={(query) => setSearchQuery({ ...searchQueries, searchBarMode: query, })}
+          loading={isLoading}
+          value={searchQueries.searchBarMode}
+          style={styles.searchbar}
+          mode="bar"
+        />
+      </View>
+
+      <Divider style={{ height: 1.5, marginTop: 17, marginHorizontal: 17, backgroundColor : "#3187D8" }} />
+      
+      
       <View style={styles.searchContainer}>
         <TextInput
           value={title}
           onChangeText={setTitle}
           placeholder="Enter a Title"
           onSubmitEditing={fetchSong}
-          style={[typography.default, styles.textInput]}
+          style={[typography.default_d, styles.textInput]}
         />
         <TextInput
           value={artist}
           onChangeText={setArtist}
           placeholder="Enter an Artist"
           onSubmitEditing={fetchSong}
-          style={[typography.default, styles.textInput]}
+          style={[typography.default_d, styles.textInput]}
         />
       </View>
-      <Pressable
-        title="Search Song"
-        onPress={fetchSong}
-      >
-        <Text style={styles.enterButton}>Search</Text>
-      </Pressable>
+      <View style={styles.buttonContainer}><Button style={styles.button} labelStyle={typography.default_w} onPress={fetchSong}>
+        Search
+      </Button></View>
       <Modal
         transparent={true}
         visible={modalVisible}
@@ -128,7 +181,7 @@ export default function SearchSongScreen({ navigation }) {
                   value={review}
                   onChangeText={setReview}
                   placeholder="Leave your review..."
-                  style={[typography.default, styles.reviewInput]}
+                  style={[typography.default_d, styles.reviewInput]}
                   multiline={true}
                   numberOfLines={5}
                 ></TextInput>
@@ -144,7 +197,7 @@ export default function SearchSongScreen({ navigation }) {
                 }}
                 style={styles.GoodButton}
               >
-                <Text style={typography.default}>Great</Text>
+                <Text style={typography.default_d}>Great</Text>
               </Pressable>
               <Pressable
                 onPress={() => {
@@ -152,7 +205,7 @@ export default function SearchSongScreen({ navigation }) {
                 }}
                 style={styles.OkayButton}
               >
-                <Text style={typography.default}>Okay</Text>
+                <Text style={typography.default_d}>Okay</Text>
               </Pressable>
               <Pressable
                 onPress={() => {
@@ -160,7 +213,7 @@ export default function SearchSongScreen({ navigation }) {
                 }}
                 style={styles.BadButton}
               >
-                <Text style={typography.default}>Bad</Text>
+                <Text style={typography.default_d}>Bad</Text>
               </Pressable>
             </View>
           </View>
@@ -183,3 +236,11 @@ export default function SearchSongScreen({ navigation }) {
   );
 }
 
+
+//Surface, Segmented Buttons, List.Accordian, Progress Bar?
+
+// List.Item for showing results, Divider if needed
+// OR Music Player (Inside Segmented Buttons) for listing songs
+
+// Dialog for rating popup
+// Segmented Buttons for rating

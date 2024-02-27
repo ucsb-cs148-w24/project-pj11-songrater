@@ -10,7 +10,7 @@ import SearchSongScreen from "../components/SearchSongScreen";
 import RateSongScreen from "../components/RateSongScreen";
 import LandingScreen from "../components/LandingScreen";
 
-//Screen names
+// Screen names
 const homeName = "Home";
 const profileName = "Profile";
 const searchName = "Search";
@@ -41,38 +41,25 @@ function MainContainer() {
       <Tab.Navigator
         initialRouteName={homeName}
         screenOptions={({ route }) => ({
-          tabBarIcon: ({ focused, color, size }) => {
+          tabBarIcon: ({ focused, size }) => {
             let iconName;
-            let rn = route.name;
+            let color = focused ? "#3187D8" : "#BBCDE5";
 
-            if (rn === homeName) {
+            if (route.name === homeName) {
               iconName = focused ? "home" : "home-outline";
-            } else if (rn === searchName) {
+            } else if (route.name === searchName) {
               iconName = focused ? "search" : "search-outline";
-            } else if (rn === profileName) {
+            } else if (route.name === profileName) {
               iconName = focused ? "person-circle" : "person-circle-outline";
             }
 
             return <Ionicons name={iconName} size={size} color={color} />;
           },
-          tabBarActiveTintColor: "black",
-          tabBarInactiveTintColor: "grey",
-          tabBarLabelStyle: {
-            "paddingBottom": 5,
-            "fontSize": 10
-          },
-          tabBarStyle: [
-            {
-              "display": "flex"
-            },
-            null
-          ],
-          tabBarBackgroundColor: "red",
         })}
       >
-        <Tab.Screen name={homeName} component={LandingScreen} />
-        <Tab.Screen name={searchName} component={SongStack} />
-        <Tab.Screen name={profileName} component={ProfileScreen} />
+        <Tab.Screen name={homeName} component={LandingScreen} options={{ headerShown: false }} />
+        <Tab.Screen name={searchName} component={SongStack} options={{ headerShown: false }} />
+        <Tab.Screen name={profileName} component={ProfileScreen} options={{ headerShown: false }} />
       </Tab.Navigator>
     </NavigationContainer>
   );

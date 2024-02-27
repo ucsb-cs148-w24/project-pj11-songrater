@@ -5,14 +5,14 @@ export const typography = StyleSheet.create({
     // marginTop: 16,
     // paddingVertical: 8,
     color: '#3187D8',
-    textAlign: 'center',
+    textAlign: 'left',
     fontSize: 48,
     fontWeight: 'bold',
     fontFamily: "Poppins",
   },
   header: {
-    color: '#3187D8',
-    textAlign: 'center',
+    color: '#00120B',
+    textAlign: 'left',
     fontSize: 32,
     fontWeight: 'bold',
     fontFamily: "Poppins",
@@ -21,7 +21,13 @@ export const typography = StyleSheet.create({
     fontSize: 26,
     fontFamily: "Poppins-Bold",
   },
-  default: {
+  default_w: {
+    color: '#FFFBFA',
+    fontSize: 16,
+    fontFamily: "AnonymousPro-Regular",
+  },
+  default_d: {
+    color: '#3187D8',
     fontSize: 16,
     fontFamily: "AnonymousPro-Regular",
   },
