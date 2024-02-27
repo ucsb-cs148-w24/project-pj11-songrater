@@ -6,7 +6,7 @@ import { styles } from './helper/Styles';
 import { typography } from './helper/Typography';
 import { useExampleTheme } from './helper/Themes';
 
-const YourListComponent = ({ navigation }) => {
+const LandingScreen = ({ navigation }) => {
   const { colors, isV3 } = useExampleTheme();
   const [selectedCard, setSelectedCard] = useState(null);
   const [selectedHearts, setSelectedHearts] = useState({});
@@ -155,6 +155,6 @@ const YourListComponent = ({ navigation }) => {
   );
 };
 
-YourListComponent.title = 'Your List';
+LandingScreen.title = 'Landing Screen';
 
-export default YourListComponent;
+export default LandingScreen;
