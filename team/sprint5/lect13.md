@@ -10,35 +10,36 @@ Present: Emily, Aryaman, Katya, Leyang, Jeffrey, Collin
 Absent: Amy
 
 ### 2 Questions:
-
+1. What are you excited about for this weekend?
+2. How are you feeling about our current progress in this project?
 
 
 ### Team Responses:
 
 Katya:
-1. Energy level 4-5
-2. Needs to work with Collin on integrating authentication (frontend) with backend
+1. Catch up on sleep, prepare for midterm
+2. Working on add user and search for users endpoints
 
 Amy:
-1. Feeling alright, energy level 6.5-7
-2. Draft of landing page, no blockers, facing some challenges with UI design
+1. N/A
+2. N/A
 
 Emily:
-1. Energy level 5
-2. Finalize profile page
+1. Tired this week, wants to catch up on sleep this weekend
+2. Got the trigger stuff done, tested it locally now will test it on AWS
 
 Aryaman:
-1. Energy level 8, can go higher by getting some work done today
-2. Need to work on populating song info database + a few more backend endpoints
+1. Catch up on some sleep + catch up on some work for this project (been busy with other hw)
+2. Project is tracking well, and feel if we get a solid MVP by next week, then there won't be a lot we need to do during dead week
 
 Leyang:
-1. Energy level 4-5
-2. Working on friends feature of our app + helping out others in team
+1. Catch up on some sleep
+2. Make sure we get a second version of our MVP sorted before other teams start using our product (for week 9)
 
 Jeffery:
-1. Energy level 8, energy level can go higher by taking nap and working on cs148 project + other hw
-2. Worked on integrating song exists endpoint (backend) with frontend, trying to see if the album cover photo for each song can show up (frontend)
+1. Wants to get a haircut soon
+2. Finished up system architecture diagram (lab07), needs to catch up on project a bit
 
 Collin:
-1. Energy level 2-3
-2. Working on a way to deploy app into production (expo go not recommended)
+1. Catch up on sleep
+2. Work with Leyang on some frontend stuff
