@@ -1,10 +1,21 @@
 # System Architecture
-![image](https://github.com/ucsb-cs148-w24/project-pj11-songrater/assets/61306390/fe832dd5-4eee-49e4-a4fb-2c7708d6d704)
+## Diagram
+![image](https://github.com/ucsb-cs148-w24/project-pj11-songrater/assets/61306390/de91a55c-bb5f-469d-baf6-2bc5bb2fbaaa)
 
-**Explanation**
+## Explanation
+Within our program, there are a lot of moving parts to make everything work. 
+
+### Frontend (Expo Go)
+
+### Backend (Python Flask)
+
+#### Database (PostgreSQL)
+
+#### External Libraries / Sources (MusicBrainz, Firebase)
 
 # Important Team Decisions
 
 # UX Considerations
 ## High Level Task / Flow
 
+**Explanation**
