@@ -13,8 +13,23 @@ CREATE TABLE IF NOT EXISTS public."User"
 
 TABLESPACE pg_default;
 
-ALTER TABLE IF EXISTS public."User"
-    OWNER to adas16;
+
+-- Table: public.Song_Info
+
+-- DROP TABLE IF EXISTS public."Song_Info";
+
+CREATE TABLE IF NOT EXISTS public."Song_Info"
+(
+    song_id character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    song_name character varying(255) COLLATE pg_catalog."default",
+    artist_name character varying(255) COLLATE pg_catalog."default",
+    album_name character varying(255) COLLATE pg_catalog."default",
+    year integer,
+    genre character varying(255) COLLATE pg_catalog."default",
+    CONSTRAINT "Song_Info_pkey" PRIMARY KEY (song_id)
+)
+
+TABLESPACE pg_default;
 
 
 -- Table: public.User_Lists_Good
@@ -24,19 +39,25 @@ ALTER TABLE IF EXISTS public."User"
 CREATE TABLE IF NOT EXISTS public."User_Lists_Good"
 (
     user_id INT NOT NULL,
-    song_id integer NOT NULL,
+    song_id character varying(255) COLLATE pg_catalog."default" NOT NULL,
     rank integer,
     review character varying(1023) COLLATE pg_catalog."default",
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    CONSTRAINT song_id FOREIGN KEY (song_id)
+        REFERENCES public."Song_Info" (song_id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
     CONSTRAINT user_id FOREIGN KEY (user_id)
         REFERENCES public."User" (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
+
 )
 
 TABLESPACE pg_default;
 
-ALTER TABLE IF EXISTS public."User_Lists_Good"
-    OWNER to adas16;
+
 CREATE INDEX b_tree_idx ON public."User_Lists_Good" USING btree (rank, user_id);
 
 -- Table: public.User_Lists_Ok
@@ -46,9 +67,15 @@ CREATE INDEX b_tree_idx ON public."User_Lists_Good" USING btree (rank, user_id);
 CREATE TABLE IF NOT EXISTS public."User_Lists_Ok"
 (
     user_id INT NOT NULL,
-    song_id integer NOT NULL,
+    song_id character varying(255) COLLATE pg_catalog."default" NOT NULL,
     rank integer,
     review character varying(1023) COLLATE pg_catalog."default",
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    CONSTRAINT song_id FOREIGN KEY (song_id)
+        REFERENCES public."Song_Info" (song_id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
     CONSTRAINT user_id FOREIGN KEY (user_id)
         REFERENCES public."User" (id) MATCH SIMPLE
         ON UPDATE NO ACTION
@@ -57,8 +84,6 @@ CREATE TABLE IF NOT EXISTS public."User_Lists_Ok"
 
 TABLESPACE pg_default;
 
-ALTER TABLE IF EXISTS public."User_Lists_Ok"
-    OWNER to adas16;
 CREATE INDEX b_tree_idx2 ON public."User_Lists_Ok" USING btree (rank, user_id);
 
 -- Table: public.User_Lists_Bad
@@ -68,9 +93,15 @@ CREATE INDEX b_tree_idx2 ON public."User_Lists_Ok" USING btree (rank, user_id);
 CREATE TABLE IF NOT EXISTS public."User_Lists_Bad"
 (
     user_id INT NOT NULL,
-    song_id integer NOT NULL,
+    song_id character varying(255) COLLATE pg_catalog."default" NOT NULL,
     rank integer,
     review character varying(1023) COLLATE pg_catalog."default",
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    CONSTRAINT song_id FOREIGN KEY (song_id)
+        REFERENCES public."Song_Info" (song_id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
     CONSTRAINT user_id FOREIGN KEY (user_id)
         REFERENCES public."User" (id) MATCH SIMPLE
         ON UPDATE NO ACTION
@@ -79,8 +110,6 @@ CREATE TABLE IF NOT EXISTS public."User_Lists_Bad"
 
 TABLESPACE pg_default;
 
-ALTER TABLE IF EXISTS public."User_Lists_Bad"
-    OWNER to adas16;
 CREATE INDEX b_tree_idx3 ON public."User_Lists_Bad" USING btree (rank, user_id);
 
 -- Table: public.Friend
@@ -103,5 +132,27 @@ CREATE TABLE IF NOT EXISTS public."Friend"
 
 TABLESPACE pg_default;
 
-ALTER TABLE IF EXISTS public."Friend"
-    OWNER to adas16;
+
+
+CREATE OR REPLACE FUNCTION trigger_set_timestamp()
+RETURNS TRIGGER AS $$
+BEGIN
+  NEW.updated_at = NOW();
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER set_timestamp
+BEFORE UPDATE ON public."User_Lists_Bad"
+FOR EACH ROW
+EXECUTE PROCEDURE trigger_set_timestamp();
+
+CREATE TRIGGER set_timestamp
+BEFORE UPDATE ON public."User_Lists_Good"
+FOR EACH ROW
+EXECUTE PROCEDURE trigger_set_timestamp();
+
+CREATE TRIGGER set_timestamp
+BEFORE UPDATE ON public."User_Lists_Ok"
+FOR EACH ROW
+EXECUTE PROCEDURE trigger_set_timestamp();
