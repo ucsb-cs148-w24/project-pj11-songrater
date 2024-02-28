@@ -13,6 +13,7 @@ CREATE TABLE IF NOT EXISTS public."User"
 
 TABLESPACE pg_default;
 
+
 -- Table: public.Song_Info
 
 -- DROP TABLE IF EXISTS public."Song_Info";
@@ -30,6 +31,7 @@ CREATE TABLE IF NOT EXISTS public."Song_Info"
 
 TABLESPACE pg_default;
 
+
 -- Table: public.User_Lists_Good
 
 -- DROP TABLE IF EXISTS public."User_Lists_Good";
@@ -40,6 +42,8 @@ CREATE TABLE IF NOT EXISTS public."User_Lists_Good"
     song_id character varying(255) COLLATE pg_catalog."default" NOT NULL,
     rank integer,
     review character varying(1023) COLLATE pg_catalog."default",
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     CONSTRAINT song_id FOREIGN KEY (song_id)
         REFERENCES public."Song_Info" (song_id) MATCH SIMPLE
         ON UPDATE NO ACTION
@@ -48,6 +52,7 @@ CREATE TABLE IF NOT EXISTS public."User_Lists_Good"
         REFERENCES public."User" (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
+
 )
 
 TABLESPACE pg_default;
@@ -65,6 +70,8 @@ CREATE TABLE IF NOT EXISTS public."User_Lists_Ok"
     song_id character varying(255) COLLATE pg_catalog."default" NOT NULL,
     rank integer,
     review character varying(1023) COLLATE pg_catalog."default",
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     CONSTRAINT song_id FOREIGN KEY (song_id)
         REFERENCES public."Song_Info" (song_id) MATCH SIMPLE
         ON UPDATE NO ACTION
@@ -89,6 +96,8 @@ CREATE TABLE IF NOT EXISTS public."User_Lists_Bad"
     song_id character varying(255) COLLATE pg_catalog."default" NOT NULL,
     rank integer,
     review character varying(1023) COLLATE pg_catalog."default",
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     CONSTRAINT song_id FOREIGN KEY (song_id)
         REFERENCES public."Song_Info" (song_id) MATCH SIMPLE
         ON UPDATE NO ACTION
@@ -122,3 +131,28 @@ CREATE TABLE IF NOT EXISTS public."Friend"
 )
 
 TABLESPACE pg_default;
+
+
+
+CREATE OR REPLACE FUNCTION trigger_set_timestamp()
+RETURNS TRIGGER AS $$
+BEGIN
+  NEW.updated_at = NOW();
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER set_timestamp
+BEFORE UPDATE ON public."User_Lists_Bad"
+FOR EACH ROW
+EXECUTE PROCEDURE trigger_set_timestamp();
+
+CREATE TRIGGER set_timestamp
+BEFORE UPDATE ON public."User_Lists_Good"
+FOR EACH ROW
+EXECUTE PROCEDURE trigger_set_timestamp();
+
+CREATE TRIGGER set_timestamp
+BEFORE UPDATE ON public."User_Lists_Ok"
+FOR EACH ROW
+EXECUTE PROCEDURE trigger_set_timestamp();

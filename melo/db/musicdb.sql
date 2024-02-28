@@ -2,7 +2,7 @@
 
 -- DROP DATABASE IF EXISTS musicdb;
 
-CREATE DATABASE musicdb
+CREATE DATABASE melo-db
     WITH
     TEMPLATE 'template0'
     ENCODING = 'UTF8'
