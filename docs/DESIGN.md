@@ -17,5 +17,7 @@ Within our program, there are a lot of moving parts to make everything work.
 
 # UX Considerations
 ## High Level Task / Flow
+![image](https://github.com/ucsb-cs148-w24/project-pj11-songrater/assets/61306390/bb7a37c8-f2fc-4d46-b708-7eca5495ea37)
+
 
 **Explanation**
