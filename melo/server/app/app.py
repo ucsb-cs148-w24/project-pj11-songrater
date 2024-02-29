@@ -76,6 +76,7 @@ def fetch_image_url(recording):
 def find_by_title():
    response = {}
    try:
+<<<<<<< HEAD
       title = request.args.get("title")
       artist = request.args.get("artist")
 
@@ -160,6 +161,59 @@ def find_by_title():
 
    return jsonify(response)
   
+=======
+      title = request.args.get("title", "")
+      artist = request.args.get("artist", "")
+      artist_encoded = requests.utils.quote(artist)
+      title_encoded = requests.utils.quote(title)
+      query_url = f"{music_brainz_url}/recording/?query=recording:\"{title_encoded}\" AND artist:\"{artist_encoded}\"&fmt=json"
+      recordings_response = requests.get(query_url)
+      recordings_response.raise_for_status()  # Ensure we got a successful response
+      recordings_data = recordings_response.json()
+      # Use ThreadPoolExecutor to fetch image URLs in parallel
+      with ThreadPoolExecutor() as executor:
+          future_to_recording = {executor.submit(fetch_image_url, recording): recording for recording in recordings_data.get("recordings", [])}
+          for future in future_to_recording:
+              recording = future_to_recording[future]
+              try:
+                  image_url = future.result()
+                  recording['image_url'] = image_url  # Add image URL directly to the recording dict
+              except Exception as e:
+                  print(f"Error fetching image URL: {e}")
+      compiled_data = []
+      unique_tracks = {}
+      for recording in recordings_data.get("recordings", []):
+          artist_name = recording["artist-credit"][0]["name"]
+          title = recording["title"]
+          mbid = recording["id"]
+          unique_key = f"{artist_name}-{title}"
+          if allowed_recording(recording):
+              release_date = parse_date(recording['first-release-date'])
+              if unique_key not in unique_tracks:
+                  compiled_data.append({
+                      "artist": artist_name,
+                      "title": title,
+                      "mbid": mbid,
+                      "image": recording['image_url'],
+                      "release_date": release_date,
+                  })
+                  unique_tracks[unique_key] = release_date
+              else:
+                  # Check if this release date is earlier, and update if it is
+                  if release_date < unique_tracks[unique_key]:
+                      for item in compiled_data:
+                          if item["artist"] == artist_name and item["title"] == title:
+                              item["image"] = recording['image_url']
+                              item["release_date"] = release_date
+                              unique_tracks[unique_key] = release_date
+                              break
+      response["results"] = compiled_data
+   except Exception as e:
+      response["MESSAGE"] = f"EXCEPTION: /title {e}"
+      print(response["MESSAGE"])
+
+   return jsonify(response)
+>>>>>>> ed6f4648 (added cover art)
 
 
 # Creates a new user 
