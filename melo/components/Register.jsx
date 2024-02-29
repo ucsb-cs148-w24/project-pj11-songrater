@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
-export const Register = () => {
+export const Register = ({navigation}) => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -25,6 +27,15 @@ export const Register = () => {
       }
     }
   };
+
+  const navigateLogin = async() => {
+    try {
+      navigation.navigate("Login");
+    }
+    catch (error) {
+      console.error(error);
+    }
+  }
 
   return (
     <View style={styles.contentView} onStartShouldSetResponder={() => true}>
@@ -57,6 +68,9 @@ export const Register = () => {
         </View>
         <TouchableOpacity style={styles.button} onPress={registerAndGoToMainFlow}>
           <Text style={styles.buttonText}>Sign Up</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={navigateLogin}>
+          <Text style={styles.buttonText}>Login</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -92,6 +106,7 @@ const styles = StyleSheet.create({
     padding: 15, // Adds padding inside the button for spacing
     borderRadius: 5, // Rounds the corners of the button
     alignItems: 'center', // Centers the button text
+    margin: 5,
   },
   buttonText: {
     color: '#fff', // Sets the button text color to white

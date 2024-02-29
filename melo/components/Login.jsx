@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
-export const Login = () => {
+export const Login = ({navigation}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -15,6 +17,15 @@ export const Login = () => {
       console.error('Login error:', error);
     }
   };
+
+  const navigateRegister = async () => {
+    try {
+        navigation.navigate("Register");
+    }
+    catch (error) {
+        console.error("Register: ", error);
+    }
+  }
 
   return (
     <View style={styles.contentView}>
@@ -37,6 +48,9 @@ export const Login = () => {
         />
         <TouchableOpacity style={styles.button} onPress={handleLogin}>
           <Text style={styles.buttonText}>Login</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={navigateRegister}>
+          <Text style={styles.buttonText}>Register</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -71,6 +85,7 @@ const styles = StyleSheet.create({
     padding: 15,
     borderRadius: 5,
     alignItems: 'center',
+    margin: 5,
   },
   buttonText: {
     color: '#fff',
