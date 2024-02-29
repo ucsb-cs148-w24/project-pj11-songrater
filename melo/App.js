@@ -1,7 +1,8 @@
 import { useFonts } from "expo-font";
 import { StyleSheet, View } from "react-native";
 import MainContainer from "./navigation/MainContainer";
-import { Register } from "./components/Register/Register";
+import { Register } from "./components/Register";
+import { Login } from "./components/Login";
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
@@ -29,8 +30,6 @@ const analytics = getAnalytics(app);
 const auth = getAuth(app);
 const db = getDatabase(app);
 
-
-
 export default function App() {
   const [fontsLoaded] = useFonts({
     "Poppins-Bold": require("./assets/fonts/Poppins-Bold.ttf"),
@@ -41,7 +40,7 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <Register />
+      <MainContainer />
     </View>
   );
 }

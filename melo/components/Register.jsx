@@ -18,6 +18,7 @@ export const Register = () => {
         const response = await createUserWithEmailAndPassword(auth, email, password);
         if (response.user) {
           await createProfile(response);
+          
         }
       } catch (error) {
         console.log(error);
@@ -33,13 +34,13 @@ export const Register = () => {
         </View>
         <View style={styles.mainContent}>
           <TextInput
-            style={styles.loginTextField}
+            style={styles.inputField}
             placeholder="Name"
             value={name}
             onChangeText={setName}
           />
           <TextInput
-            style={styles.loginTextField}
+            style={styles.inputField}
             placeholder="Email"
             value={email}
             onChangeText={setEmail}
@@ -47,15 +48,15 @@ export const Register = () => {
             keyboardType="email-address"
           />
           <TextInput
-            style={styles.loginTextField}
+            style={styles.inputField}
             placeholder="Password"
             value={password}
             onChangeText={setPassword}
             secureTextEntry={true}
           />
         </View>
-        <TouchableOpacity style={styles.ctaButton} onPress={registerAndGoToMainFlow}>
-          <Text>Sign Up</Text>
+        <TouchableOpacity style={styles.button} onPress={registerAndGoToMainFlow}>
+          <Text style={styles.buttonText}>Sign Up</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -65,48 +66,36 @@ export const Register = () => {
 
 const styles = StyleSheet.create({
   contentView: {
-    flex: 1, // This makes it take the entire height of the screen
-    backgroundColor: 'white',
-  },
-  container: {
-    marginHorizontal: 50,
-    paddingTop: 20,
-  },
-  titleContainer: {
-    justifyContent: 'center',
-    flexGrow: 1.2,
-  },
-  titleText: {
-    fontSize: 45,
-    textAlign: 'center',
-    fontWeight: '200',
-  },
-  loginTextField: {
-    borderBottomWidth: 1,
-    borderBottomColor: '#000',
-    height: 60,
-    fontSize: 30,
-    marginVertical: 10,
-    fontWeight: '300',
-  },
-  mainContent: {
-    flexGrow: 6,
-  },
-  ctaButton: {
-    // Assuming you want some basic button styles here, you'd adjust as needed
-    paddingVertical: 10,
-    paddingHorizontal: 15,
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'blue', // Placeholder color
-    borderRadius: 5,
+    backgroundColor: '#fff', // Sets background color to white
   },
-  primary: {
-    // If you have specific styles for primary buttons, add them here
-    backgroundColor: 'blue', // Example primary button color
+  container: {
+    width: '80%', // Sets the width to 80% of the parent container
   },
-  secondary: {
-    // Secondary button styles
-    backgroundColor: 'gray', // Example secondary button color
+  titleText: {
+    fontSize: 24, // Sets a standard font size for the title
+    fontWeight: 'bold', // Makes the title text bold
+    marginBottom: 20, // Adds a margin below the title for spacing
+    textAlign: 'center', // Centers the title text
+  },
+  inputField: {
+    borderWidth: 1, // Adds a border with 1px width
+    borderColor: '#ddd', // Sets the border color
+    padding: 10, // Adds padding inside the text fields for spacing
+    marginBottom: 10, // Adds a margin below each text field for spacing
+    borderRadius: 5, // Rounds the corners of the text fields
+  },
+  button: {
+    backgroundColor: 'blue', // Sets the button background color
+    padding: 15, // Adds padding inside the button for spacing
+    borderRadius: 5, // Rounds the corners of the button
+    alignItems: 'center', // Centers the button text
+  },
+  buttonText: {
+    color: '#fff', // Sets the button text color to white
+    fontSize: 16, // Sets the font size for the button text
   },
 });
+
