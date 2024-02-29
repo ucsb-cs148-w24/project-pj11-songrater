@@ -1,11 +1,22 @@
 import { StyleSheet } from "react-native";
 
+const colors = {
+    primary: '#3187D8',
+    background: '#F3F6F7',
+    white: "#FFFBFA",
+    good: '#B1E59F',
+    okay: '#FFEFB4',
+    bad: '#E59F9F',
+    text: '#00120B',
+    border: '#00120B',
+};
+
 export const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignContent: "left",
         justifyContent: "center",
-        backgroundColor: "#FFFBFA",
+        backgroundColor: colors.background,
         padding: 20,
     },
     searchContainer: {
@@ -14,7 +25,7 @@ export const styles = StyleSheet.create({
     },
     textInput: {
         padding: 10,
-        borderBottomColor: "#3187D8",
+        borderBottomColor: "#colors.primary",
         borderBottomWidth: StyleSheet.hairlineWidth,
         margin: 10,
     },
@@ -34,7 +45,7 @@ export const styles = StyleSheet.create({
         justifyContent: "center",
     },
     enterButton: {
-        color: '#3187D8',
+        color: '#colors.primary',
         textAlign: 'center',
         fontSize: 20,
         fontWeight: 'bold',
@@ -90,7 +101,7 @@ export const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         alignContent: "center",
-        backgroundColor: "#B1E59F",
+        backgroundColor: colors.good,
         borderRadius: 50,
         height: 80,
         width: 80,
@@ -99,7 +110,7 @@ export const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         alignContent: "center",
-        backgroundColor: "#FFEFB4",
+        backgroundColor: colors.okay,
         height: 80,
         width: 80,
         borderRadius: 80,
@@ -108,7 +119,7 @@ export const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         alignContent: "center",
-        backgroundColor: "#E59F9F",
+        backgroundColor: colors.bad,
         borderRadius: 50,
         height: 80,
         width: 80,
@@ -135,7 +146,7 @@ export const styles = StyleSheet.create({
         justifyContent: "center",
     },
     enterButton: {
-        color: '#3187D8',
+        color: '#colors.primary',
         textAlign: 'center',
         fontSize: 20,
         fontWeight: 'bold',
@@ -144,15 +155,15 @@ export const styles = StyleSheet.create({
 
     container: {
         flex: 1,
-        backgroundColor: '#BBCDE5',
+        backgroundColor: colors.background,
     },
     content: {
         padding: 4,
-        backgroundColor: '#BBCDE5',
+        backgroundColor: colors.background,
     },
     card: {
         margin: 6,
-        backgroundColor: '#FFFBFA',
+        backgroundColor: colors.white,
     },
     chip: {
         margin: 4,
@@ -165,7 +176,7 @@ export const styles = StyleSheet.create({
     },
     button: {
         borderRadius: 12,
-        backgroundColor: '#3187D8',
+        backgroundColor: '#colors.primary',
     },
     customCardRadius: {
         borderTopLeftRadius: 24,
@@ -187,7 +198,7 @@ export const styles = StyleSheet.create({
     },
     searchbar: {
         margin: 4,
-        backgroundColor: '#FFFBFA',
+        backgroundColor: colors.white,
         flex: 1,
     },
     iconContainer: {
@@ -202,4 +213,10 @@ export const styles = StyleSheet.create({
         borderRadius: 50,
         padding: 5,
     },
+    divider: {
+        height: 1.5,
+        marginTop: 17,
+        marginHorizontal: 17,
+        backgroundColor : "#3187D8" 
+    }
 });
