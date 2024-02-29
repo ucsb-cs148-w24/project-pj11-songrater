@@ -12,6 +12,7 @@ import ProfileScreen from "../components/ProfileScreen";
 import SearchSongScreen from "../components/SearchSongScreen";
 import RateSongScreen from "../components/RateSongScreen";
 import LandingScreen from "../components/LandingScreen";
+import { registerVersion } from "firebase/app";
 import FriendsScreen from "../components/FriendsScreen";
 
 // Screen names
@@ -22,6 +23,7 @@ const friendName = "Friend"
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
+const Stack2 = createNativeStackNavigator();
 
 function SongStack() {
   return (
@@ -36,9 +38,19 @@ function SongStack() {
         component={RateSongScreen}
         options={{ headerShown: false }}
       />
-      <Stack.Screen name="Login" component={Login} />
-      <Stack.Screen name="Register" component={Register} />
     </Stack.Navigator>
+  );
+}
+
+function HomeStack() {
+  return (
+    
+    <Stack2.Navigator initialRouteName={"LandingScreen"}>
+      <Stack2.Screen name="LandingScreen" component={LandingScreen} options={{ headerShown: false }}  />
+      <Stack2.Screen name="Login" component={Login} options={{ headerShown: false }} />
+      <Stack2.Screen name="Register" component={Register} options={{ headerShown: false }} />
+  
+    </Stack2.Navigator>
   );
 }
 
@@ -77,21 +89,10 @@ function MainContainer() {
           tabBarBackgroundColor: "red",
         })}
       >
-        <Tab.Screen
-          name={homeName}
-          component={LandingScreen}
-          options={{ headerShown: false }}
-        />
-        <Tab.Screen
-          name={searchName}
-          component={SongStack}
-          options={{ headerShown: false }}
-        />
-        <Tab.Screen
-          name={profileName}
-          component={ProfileScreen}
-          options={{ headerShown: false }}
-        />
+        <Tab.Screen name={homeName} component={HomeStack} />
+        <Tab.Screen name={searchName} component={SongStack} />
+        <Tab.Screen name={profileName} component={ProfileScreen} />
+        <Tab.Screen name={friendName} component={FriendsScreen} options={{ headerShown: false }} />
       </Tab.Navigator>
     </NavigationContainer>
   );
