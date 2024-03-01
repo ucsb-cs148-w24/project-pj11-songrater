@@ -9,8 +9,24 @@ export const Register = ({navigation}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const createProfile = async (response) => {
-    // Create Profile Query Here
+  const createProfile = async (uid, email) => {
+
+    try {
+      const response = await fetch `http://127.0.0.1:5000/api/signup?email=${email}&uid=${uid}`;
+
+      if (!reponse.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      const jsonResponse = await fetchResponse.json();
+      console.log(jsonResponse); // Handle or display the response as needed
+      return jsonResponse;
+    }
+    catch (error) {
+      console.error('Error creating profile:', error);
+      response["MESSAGE"] = `Error creating profile: ${error}`;
+      return response; // Return or handle error response as needed
+    }
   };
 
   const registerAndGoToMainFlow = async () => {
@@ -19,8 +35,8 @@ export const Register = ({navigation}) => {
         const auth = await getAuth();
         const response = await createUserWithEmailAndPassword(auth, email, password);
         if (response.user) {
-          await createProfile(response);
-          
+          await createProfile(response.user.uid, response.user.email);
+          navigation.navigate("LandingScreen");
         }
       } catch (error) {
         console.log(error);
