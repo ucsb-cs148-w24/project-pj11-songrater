@@ -34,6 +34,7 @@
 | Wed 02/21 | Katya      | Scrum Master
 | Wed 02/21 | Leyang       | Scribe
 | Fri 02/23 | Katya      | Scrum Master
+| Fri 02/23 | Katya     | Retro 2 Leader
 | Fri 02/23 | Leyang       | Scribe
 | Mon 02/26 | Leyang       | Product Owner
 | Mon 02/26 | Jeffrey    | Scrum Master
