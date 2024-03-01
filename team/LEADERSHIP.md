@@ -42,3 +42,15 @@
 | Wed 02/28 | Aryaman       | Scribe
 | Fri 03/01 | Jeffrey    | Scrum Master
 | Fri 03/01 | Aryaman       | Scribe
+| Mon 03/04 | Amy      | Product Owner
+| Mon 03/04 | Leyang   | Scrum Master
+| Mon 03/04 | Emily       | Scribe
+| Wed 03/06 | Leyang   | Scrum Master
+| Wed 03/06 | Emily       | Scribe
+| Fri 03/08 | Leyang   | Scrum Master
+| Fri 03/08 | Emily       | Scribe
+| Mon 03/11 | Katya    | Product Owner
+| Mon 03/11 | Collin   | Scrum Master
+| Mon 03/11 | Jeffrey      | Scribe
+| Wed 03/13 | Collin   | Scrum Master
+| Wed 03/13 | Jeffrey      | Scribe
