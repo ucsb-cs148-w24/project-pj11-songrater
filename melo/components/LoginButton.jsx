@@ -22,6 +22,13 @@ export const LoginButton = ({ navigation }) => {
 const styles = StyleSheet.create({
   loginButton: {
     marginRight: 10,
+    backgroundColor: 'transparent', // Clear background
+    border: '2px solid black', // Black border
+    color: 'black', // Text color
+    padding: '10px 20px', // Inner space of the button
+    fontSize: '16px', // Text size
+    cursor: 'pointer', // Cursor appearance on hover
+    borderRadius: '5px', // Rounded corners
   },
   loginButtonText: {
     color: 'blue',

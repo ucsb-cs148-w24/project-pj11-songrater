@@ -10,11 +10,16 @@ export const Login = ({navigation}) => {
 
   const handleLogin = async () => {
     try {
-      const auth = getAuth();
-      const response = await signInWithEmailAndPassword(auth, email, password);
-      console.log('User logged in:', response.user);
+        const auth = getAuth();
+        const response = await signInWithEmailAndPassword(auth, email, password);
+        console.log('User logged in:', response.user);
+
+        if (response.user) {
+            navigation.navigate("LandingScreen");
+        }
+
     } catch (error) {
-      console.error('Login error:', error);
+        console.error('Login error:', error);
     }
   };
 
