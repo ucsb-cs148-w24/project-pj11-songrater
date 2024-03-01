@@ -1,4 +1,4 @@
-# Lab05
+# Lab07
 
 Assigned: Friday, 2/23/2024
 Due: Friday, 3/01/2024
@@ -16,35 +16,35 @@ Absent: N/A
 
 Katya:
 
-1. Updated retro file
-2. After class: finish high level testing before tonight; connect authentication to the backend 
+1. Ask for feedback about UI and user flow. Feedback about if the profile and saving songs are confusing.
+2. Excited about preparing for 291 final :)
 
 Amy:
 
-1. since wednesday, i looked into beli a ton for inspiration on how the app is formatted. i have more of an idea of how each screen is designed and connected to each other, and i see it being similar to beli HOWEVER i really dislike the feed page on beli and how the screens are connected to each other (the lists tab is unnecessary and should just be with profile, etc.) so there is a lot of design work i need to do in the future. but for now i implemented a draft search bar with paper and i just have a couple issues before i fully integrate it
-2. ui is hard. i might need to switch from paper
+1. Feedback about UI and user flow
+2. No concrete plans yet
 
 Emily:
 
-1. Same as Leyang
-2. Decide what's on the profile page 
+1. Feedback about search and relevency ranking.
+2. Not much planned yet, working on this project
 
 Aryaman:
 
-1. Worked with Jeffery yesterday to implement frontend backend features; Being able to implement addition function 
-2. Testing remote db
+1. Feedback and suggestions about how the UI looks. Feedback about the ranking system: if they like the UI display and ranking algorithm.
+2. Continuing with this project over the weekend.
 
 Leyang:
 
-1. Updated database with Emily; designed a figma page for profile and edit 
-2. Starting working on the profile page and friends features
+1. Feedback about overall features and UX UI improvements. Specifically suggestions that cna be implemented in a week or two.
+2. Work on things before peer evaluation and other homework.
 
 Collin:
 
-1. The user login and authentication is done
-2. Meetup and connecting to the backend 
+1. Want feedback about other featuers that they want us to add on, even though there's not much time.
+2. Busy with midterm monday and people visiting. Finishing up a few things for this project.
 
 Jefferey:
 
-1. Finished add song and get song; working on other connections 
-2. doing more on the weekend, majority is on frontend now 
+1. Feedback about if they think that the ranking system is intuitive.
+2. Chem midterm coming up, so studying for that, and working on this project. Won't be too busy, and have people coming over.
