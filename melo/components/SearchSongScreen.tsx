@@ -128,40 +128,31 @@ export default function SearchSongScreen({ navigation }) {
           <Text style={typography.title}>Melo</Text>
         </View>
       </View>
-
+      
       <View style={styles.preference}>
         <Searchbar
-          placeholder="Rank a Song..."
-          onChangeText={(query) => setSearchQuery({ ...searchQueries, searchBarMode: query, })}
-          loading={isLoading}
-          value={searchQueries.searchBarMode}
-          style={styles.searchbar}
-          mode="bar"
-        />
-      </View>
-
-      <Divider style={{ height: 1.5, marginTop: 17, marginHorizontal: 17, backgroundColor : "#3187D8" }} />
-      
-      
-      <View style={styles.searchContainer}>
-        <TextInput
           value={title}
           onChangeText={setTitle}
-          placeholder="Enter a Title"
+          loading={isLoading}
+          placeholder="Enter a Title..."
           onSubmitEditing={fetchSong}
-          style={[typography.default_d, styles.textInput]}
-        />
-        <TextInput
-          value={artist}
-          onChangeText={setArtist}
-          placeholder="Enter an Artist"
-          onSubmitEditing={fetchSong}
-          style={[typography.default_d, styles.textInput]}
+          style={styles.searchbar}
         />
       </View>
-      <View style={styles.buttonContainer}><Button style={styles.button} labelStyle={typography.default_w} onPress={fetchSong}>
-        Search
-      </Button></View>
+      <View style={styles.preference}>
+        <Searchbar
+          value={artist}
+          onChangeText={setArtist}
+          loading={isLoading}
+          placeholder="Enter an Artist..."
+          onSubmitEditing={fetchSong}
+          style={styles.searchbar}
+        />
+        <Button style={styles.button} labelStyle={typography.default_w} onPress={fetchSong}>
+          Search
+        </Button>
+      </View>
+
       <Modal
         transparent={true}
         visible={modalVisible}

@@ -12,13 +12,6 @@ const colors = {
 };
 
 export const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        alignContent: "left",
-        justifyContent: "center",
-        backgroundColor: colors.background,
-        padding: 20,
-    },
     searchContainer: {
         flex: 1,
         justifyContent: "center",
@@ -43,6 +36,7 @@ export const styles = StyleSheet.create({
         flex: 0.5,
         alignItems: "center",
         justifyContent: "center",
+        color: '#colors.primary',
     },
     enterButton: {
         color: '#colors.primary',
@@ -140,6 +134,10 @@ export const styles = StyleSheet.create({
         alignItems: "left",
         justifyContent: "left",
     },
+    container: {
+        flex: 1,
+        backgroundColor: colors.background,
+    },
     content: {
         padding: 4,
         backgroundColor: colors.background,
@@ -154,12 +152,12 @@ export const styles = StyleSheet.create({
     preference: {
         alignItems: 'center',
         flexDirection: 'row',
-        paddingVertical: 12,
+        paddingVertical: 0,
         paddingHorizontal: 8,
     },
     button: {
         borderRadius: 12,
-        backgroundColor: '#colors.primary',
+        backgroundColor: colors.primary,
     },
     customCardRadius: {
         borderTopLeftRadius: 24,
