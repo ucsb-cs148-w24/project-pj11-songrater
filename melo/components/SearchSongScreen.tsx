@@ -88,7 +88,7 @@ export default function SearchSongScreen({ navigation }) {
   const fetchSong = async () => {
     try {
       setIsLoading(true);
-      if (!(title == "" && artist == "")) {
+      if (title != "" && artist != "") {
         await fetch(
           `http://127.0.0.1:5000/title?title=${title}&artist=${artist}`
         )

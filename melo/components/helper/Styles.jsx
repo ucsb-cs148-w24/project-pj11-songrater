@@ -140,23 +140,6 @@ export const styles = StyleSheet.create({
         alignItems: "left",
         justifyContent: "left",
     },
-    buttonContainer: {
-        flex: 0.5,
-        alignItems: "center",
-        justifyContent: "center",
-    },
-    enterButton: {
-        color: '#colors.primary',
-        textAlign: 'center',
-        fontSize: 20,
-        fontWeight: 'bold',
-        fontFamily: 'Poppins',
-    },
-
-    container: {
-        flex: 1,
-        backgroundColor: colors.background,
-    },
     content: {
         padding: 4,
         backgroundColor: colors.background,
