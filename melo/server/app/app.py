@@ -261,7 +261,7 @@ def get_user_songs_by_type():
      cur = conn.cursor()
 
      if type == "good":
-        sql_query = f"SELECT * FROM \"User_Lists_Good\" WHERE user_id = {user_id} ORDER BY rank;"
+        sql_query = f"SELECT \"User_Lists_Good\".rank,\"User_Lists_Good\".review,\"Song_Info\".song_name,\"Song_Info\".artist_name FROM \"User_Lists_Good\" INNER JOIN \"Song_Info\" on \"User_Lists_Good\".song_id=\"Song_Info\".song_id and \"User_Lists_Good\".user_id = {user_id} ORDER BY rank;"
         cur.execute(sql_query)
         good_songs = cur.fetchall()
         num_rows = int(cur.rowcount)
@@ -276,7 +276,7 @@ def get_user_songs_by_type():
         idx = rating_list.size-1
 
         for song in good_songs:
-           data = {'user_id': song[0], 'song_id': song[1], 'rank': song[2], 'review': song[3], 'rating': rating_list[idx]}
+           data = {'rank': song[0], 'review': song[1], 'song_name': song[2], 'artist_name': song[3],'rating': rating_list[idx]}
            final_result.append(data)
            idx = idx-1
         
@@ -284,7 +284,7 @@ def get_user_songs_by_type():
            
       
      elif type == "ok":
-        sql_query = f"SELECT * FROM \"User_Lists_Ok\" WHERE user_id = {user_id} ORDER BY rank;"
+        sql_query = f"SELECT \"User_Lists_Ok\".rank,\"User_Lists_Ok\".review,\"Song_Info\".song_name,\"Song_Info\".artist_name FROM \"User_Lists_Ok\" INNER JOIN \"Song_Info\" on \"User_Lists_Ok\".song_id=\"Song_Info\".song_id and \"User_Lists_Ok\".user_id = {user_id} ORDER BY rank;"
         cur.execute(sql_query)
         ok_songs = cur.fetchall()
         num_rows = int(cur.rowcount)
@@ -299,14 +299,14 @@ def get_user_songs_by_type():
         idx = rating_list.size-1
 
         for song in ok_songs:
-           data = {'user_id': song[0], 'song_id': song[1], 'rank': song[2], 'review': song[3], 'rating': rating_list[idx]}
+           data = {'rank': song[0], 'review': song[1], 'song_name': song[2], 'artist_name': song[3],'rating': rating_list[idx]}
            final_result.append(data)
            idx = idx-1
 
         response["results"] = final_result
 
      else:
-        sql_query = f"SELECT * FROM \"User_Lists_Bad\" WHERE user_id = {user_id} ORDER BY rank;"
+        sql_query = f"SELECT \"User_Lists_Bad\".rank,\"User_Lists_Bad\".review,\"Song_Info\".song_name,\"Song_Info\".artist_name FROM \"User_Lists_Bad\" INNER JOIN \"Song_Info\" on \"User_Lists_Bad\".song_id=\"Song_Info\".song_id and \"User_Lists_Bad\".user_id = {user_id} ORDER BY rank;"
         cur.execute(sql_query)
         bad_songs = cur.fetchall()
         num_rows = int(cur.rowcount)
@@ -321,7 +321,7 @@ def get_user_songs_by_type():
         idx = rating_list.size-1
 
         for song in bad_songs:
-           data = {'user_id': song[0], 'song_id': song[1], 'rank': song[2], 'review': song[3], 'rating': rating_list[idx]}
+           data = {'rank': song[0], 'review': song[1], 'song_name': song[2], 'artist_name': song[3],'rating': rating_list[idx]}
            final_result.append(data)
            idx = idx-1
 
@@ -371,7 +371,6 @@ def delete_song():
         response["MESSAGE"] = f"EXCEPTION: /api/delete_song {e}"
         print(response["MESSAGE"])
   return jsonify(response)
-
 
 if __name__ == '__main__':
     app.run(debug=True)
