@@ -10,6 +10,8 @@ __Jeffrey__ -- Used ChatGPT and Midjourney to critique / redesign frontend UI qu
 
 __Aryaman__ -- Used ChatGPT to explore how the syntax for basic SQL queries like SELECT, INSERT, UPDATE, and DELETE look like, as well as how you can integrate such kind of queries in Python code using the psycopg2 library (for making client calls to the postgres db)
 
+__Amy__ -- Used ChatGPT to generate ideas for UI design, such as logo design ideas or a description of an optimal color palette. Also used ChatGPT to recommend options for component libraries.
+
 __Katya__ -- Used ChatGPT for:
 - **Test Scenario Generation**: Crafting comprehensive test scenarios for song management endpoints.
 - **Documentation**: Generating testing documentation and in-code comments.
@@ -26,6 +28,8 @@ __Emily__ -- ChatGPT confirmed that the structure we came up with for the databa
 __Jeffrey__ -- ChatGPT was super helpful in pointing me to the right direction with using specific react hooks (callback), but was a little lacking on the design aspect.
 
 __Aryaman__ -- ChatGPT gave me exactly the sort of information that I was looking for, which saved a lot of time for me personally as I didn't have to scour the Internet so much for specific documentation regarding the psycopg2 library
+
+__Amy__ -- Using ChatGPT, I was able to gather a sense of what an ideal color palette would look like and why. I was able to generate an example that I could use as a reference for when I devised for my own. ChatGPT also provided inspiration for the app UI design and a potential logo. I was also provided with a large selection of useful component libraries from ChatGPT that I could look into integrating within the app.
 
 __Katya__ -- Benefits observed:
 - **Efficiency**: Accelerated test writing and documentation processes.
@@ -47,6 +51,8 @@ __Jeffrey__ -- I've been a big fan of ChatGPT for a long time in speeding up my 
 
 __Aryaman__ -- I never used ChatGPT to such an extent as I have thus far in this project, and now that I have, I have gotten a better sense of the full potential that this AI tool has to offer, and I hope to keeping using this tool to make the overall coding process more efficient (and of course in the process foster my learning and coding/software development skills). As for this project, I could learn from ChatGPT how to integrate psycopg2 library with Flask from a CRUD point of view, and I may use this tool in the future for writing unit tests and/or other kinds of tests concerning the backend.
 
+__Amy__ -- I believe that ChatGPT is very strong in providing inspiration for a user for ideas. Although the output is generally robotic and uncreative, it can provide a solid starting ground for a user to think of ideas, and can help a user visualize the whole picture and remember things that they might've forgotten about. ChatGPT is also strong at providing examples for existing things to help educate the user. Both of these benefits help substantially in my UI designing and coding.
+
 __Katya__ -- Using ChatGPT proved to be highly beneficial, boosting efficiency and quality in testing and documentation. 
 
 ### What steps you needed to (or couldn’t) take to ensure that the AI output was correct, understandable, and fair use
@@ -60,6 +66,8 @@ __Jeffrey__ -- For simple debugging errors, I would usually use a combination of
 __Aryaman__ -- What I did (and would do for the future) is not to just blindly copy the code that ChatGPT generates, but to also read through the syntax/logic and understand what each line of code is doing to bring about the intended functionality. If I end up copying large chunks of code (which I haven't thus far but if I had to in the future), then for fair use purposes, I would give credit to ChatGPT as a source for assisting me through the coding process. To validate that the AI coding output generated for the psycopg2 library is correct, what I did was I rigorously tested the Flask endpoints that I implemented to ensure that they were working as expected - in other words, I put some seed data into the database for testing, and I called the get_user_songs and add_song endpoints to retrieve rows and insert rows into the db, and I tried with all kinds of input as test cases. Luckily for me, they worked beautifully as expected, and I didn't have to go through a lot of trial and error. Then I went back to my source code to read it line by line so that I knew what was going on (like why I would need a cursor variable, why I would need to call conn.commit() after each db modification, etc.) 
 
 __Emily__ -- When looking at databases, I went to the service's actual website to confirm costs and packages, which ChatGPT was sometimes outdated about. A way to potentially keep the usage of ChatGPT fair use is to not copy large chunks of code, and instead just read it to understand the logic/syntax that it's using so that we can write our own code.
+
+__Amy__ -- First, I used my best judgement in writing efficient and ethical prompts in ChatGPT. I try to write longer and more detailed prompts rather than shorter ones in quick succession. This is so ChatGPT can generate more detailed and personalized answers to my question. If I'm not satisfied with the initial output, I tend to carefully refine my prompts or to have a conversation with ChatGPT to clarify areas of concern.
 
 __Katya__ -- To ensure that the AI output was correct, I refined prompts with detailed context and iteratively debugged based on AI suggestions, always cross-verifying solutions against trusted sources for accuracy. 
 

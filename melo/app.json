@@ -30,7 +30,7 @@
         {
           "fonts": [
             "./assets/fonts/Poppins-Bold.ttf",
-            "./assets/fonts/Poppins-Regular.ttf",
+            "./assets/fonts/-Regular.ttf",
             "./assets/fonts/AnonymousPro-Bold.ttf",
             "./assets/fonts/AnonymousPro-Bold.ttf"
           ]

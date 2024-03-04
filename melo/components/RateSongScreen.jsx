@@ -1,5 +1,6 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { typography } from "./helper/Typography";
+// import { styles } from "./helper/Styles";
 import { useCallback, useState } from "react";
 
 const mockData = [
@@ -197,7 +198,7 @@ export default function RateSongScreen({ route }) {
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
-    backgroundColor: "#FFFAEA",
+    backgroundColor: "#FFFBFA",
     padding: 20,
     display: "flex",
     flexDirection: "column",
