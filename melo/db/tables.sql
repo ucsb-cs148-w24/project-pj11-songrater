@@ -27,10 +27,8 @@ CREATE TABLE IF NOT EXISTS public."Song_Info"
     song_id character varying(255) COLLATE pg_catalog."default" NOT NULL,
     song_name character varying(255) COLLATE pg_catalog."default",
     artist_name character varying(255) COLLATE pg_catalog."default",
-    album_name character varying(255) COLLATE pg_catalog."default",
-    year integer,
-    genre character varying(255) COLLATE pg_catalog."default",
     cover character varying(255) COLLATE pg_catalog."default",
+    release_date date,
     CONSTRAINT "Song_Info_pkey" PRIMARY KEY (song_id)
 )
 

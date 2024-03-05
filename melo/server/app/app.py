@@ -4,59 +4,161 @@ import os
 import psycopg2
 import numpy as np
 import requests
+from concurrent.futures import ThreadPoolExecutor
+import datetime
 
 app = Flask(__name__)
 
-CORS(app)
+CORS(app, resources={r"/*": {"origins" : "http://localhost:8081"}})
 music_brainz_url = "https://musicbrainz.org/ws/2"
+cover_art_url = "http://coverartarchive.org/release"
 
 #To make the connection, you have to export your personal postgres username and password
 #export DB_USERNAME="postgres"
 #export DB_PASSWORD="your_passwork"
 
 def get_db_connection():
-  conn = psycopg2.connect(host='localhost',
-                          database='musicdb',
-                          user=os.environ['DB_USERNAME'],
-                          password=os.environ['DB_PASSWORD'])
+  conn = psycopg2.connect(host='melo-db.cl42gyco25t3.us-east-2.rds.amazonaws.com',
+                          database='melo-db',
+                          user='postgres',
+                          password='wi2ceITIK4Boa08XgQyU')
   return conn
+
+def parse_date(date_str):
+    """
+    Parses a date string that may not always be in the same format.
+    Most are in %Y-%m-%d, but some may be just %Y.
+    """
+    for fmt in ('%Y-%m-%d', '%Y', '%Y-%m'):
+        try:
+            return datetime.datetime.strptime(date_str, fmt)
+        except ValueError:
+            pass
+    raise ValueError(f"Date format for '{date_str}' is not supported.")
+
+def allowed_recording(recording):
+   if 'disambiguation' in recording:
+      if recording['disambiguation'] == 'explicit':
+         return True
+      elif recording['disambiguation'] == 'acoustic':
+         return True
+      return False
+   if 'first-release-date' not in recording:
+      return False
+   return True
+
+def find_image_url(release_mbid):
+    """
+    Fetches the image URL for a given MusicBrainz release MBID.
+    """
+    try:
+        response = requests.get(f"{cover_art_url}/{release_mbid}")
+        if response.status_code != 200:  # Raises an error for 4XX/5XX responses
+           return ''
+        cover_art_data = response.json()
+        if 'images' in cover_art_data and len(cover_art_data['images']) > 0:
+            return cover_art_data['images'][0]['image']
+    except Exception as e:
+        print(f"Error fetching cover art for MBID {release_mbid}: {e}")
+    return ""
+
+def fetch_image_url(recording):
+    """
+    Wrapper function for find_image_url to use with ThreadPoolExecutor.
+    Expects a recording dict, extracts the release MBID, and fetches the image URL.
+    """
+    if 'releases' in recording and allowed_recording(recording):
+        release_mbid = recording['releases'][0]['id']
+        return find_image_url(release_mbid)
+    return ""
 
 @app.route("/title", methods=["GET"])
 def find_by_title():
-  response = {}
+   response = {}
+   try:
+      title = request.args.get("title")
+      artist = request.args.get("artist")
 
-  # This function expects the following parameters: title
-  # This GET request receives the Discogs_API information for a requested title
+      if (title is None and artist is not None) or (title is not None and artist is None) or (title is None and artist is None):
+         response["MESSAGE"] = "artist name and title both need to be specified"
+         return jsonify(response)
+      
+      conn = get_db_connection()
+      cur = conn.cursor()
 
-  try:
-    title = request.args.get("title", "")
-    artist = request.args.get("artist", "")
-    artist_encoded = requests.utils.quote(artist)
-    title_encoded = requests.utils.quote(title)
-    query_url = f"{music_brainz_url}/recording/?query=recording:\"{title_encoded}\" AND artist:\"{artist_encoded}\"&fmt=json"
-    response = {}
-    query = requests.get(query_url).json()
-    unique_tracks = {}
-    compiled_data = []
+      sql_query = f"SELECT * FROM \"Song_Info\" WHERE artist_name ILIKE '%{artist}%' AND song_name ILIKE '%{title}%';"
+      cur.execute(sql_query)
+      search_results = cur.fetchall()
+      num_rows = int(cur.rowcount)
 
-    for index, recording in enumerate(query["recordings"]):
-       artist_name = recording["artist-credit"][0]["name"]
-       title = recording["title"]
-       mbid = recording["id"]
+      if num_rows > 0:
+         final_result = []
 
-       unique_key = f"{artist_name}-{title}"
-       if unique_key not in unique_tracks:
-          unique_tracks[unique_key] = True
-          compiled_data.append({
-             "artist": artist_name,
-             "title": title,
-             "mbid": mbid,
-          })
-    response["results"] = compiled_data
-  except Exception as e:
-    response["MESSAGE"] = f"EXCEPTION: /title {e}"
-    print(response["MESSAGE"])
-  return jsonify(response)
+         for res in search_results:
+            data = {'artist': res[2], 'title': res[1], 'mbid': res[0], 'image': res[3], 'release_date': res[4]}
+            final_result.append(data)
+        
+         response["results"] = final_result
+         return jsonify(response)
+      
+      artist_encoded = requests.utils.quote(artist)
+      title_encoded = requests.utils.quote(title)
+      query_url = f"{music_brainz_url}/recording/?query=recording:\"{title_encoded}\" AND artist:\"{artist_encoded}\"&fmt=json"
+      recordings_response = requests.get(query_url)
+      recordings_response.raise_for_status()  # Ensure we got a successful response
+      recordings_data = recordings_response.json()
+      # Use ThreadPoolExecutor to fetch image URLs in parallel
+      with ThreadPoolExecutor() as executor:
+          future_to_recording = {executor.submit(fetch_image_url, recording): recording for recording in recordings_data.get("recordings", [])}
+          for future in future_to_recording:
+              recording = future_to_recording[future]
+              try:
+                  image_url = future.result()
+                  recording['image_url'] = image_url  # Add image URL directly to the recording dict
+              except Exception as e:
+                  print(f"Error fetching image URL: {e}")
+      compiled_data = []
+      unique_tracks = {}
+      for recording in recordings_data.get("recordings", []):
+          artist_name = recording["artist-credit"][0]["name"]
+          title = recording["title"]
+          mbid = recording["id"]
+          unique_key = f"{artist_name}-{title}"
+          if allowed_recording(recording):
+              release_date = parse_date(recording['first-release-date'])
+              if unique_key not in unique_tracks:
+                  compiled_data.append({
+                      "artist": artist_name,
+                      "title": title,
+                      "mbid": mbid,
+                      "image": recording['image_url'],
+                      "release_date": release_date,
+                  })
+                  unique_tracks[unique_key] = release_date
+              else:
+                  # Check if this release date is earlier, and update if it is
+                  if release_date < unique_tracks[unique_key]:
+                      for item in compiled_data:
+                          if item["artist"] == artist_name and item["title"] == title:
+                              item["image"] = recording['image_url']
+                              item["release_date"] = release_date
+                              unique_tracks[unique_key] = release_date
+                              break
+      
+      for item in compiled_data:
+         cur.execute("INSERT INTO \"Song_Info\" (song_id, song_name, artist_name, cover, release_date) VALUES (%s, %s, %s, %s, %s)", 
+                       (item["mbid"], item["title"], item["artist"], item["image"], item["release_date"]))
+         conn.commit()
+      
+      cur.close()
+      conn.close()
+
+      response["results"] = compiled_data
+   except Exception as e:
+      response["MESSAGE"] = f"EXCEPTION: /title {e}"
+      print(response["MESSAGE"])
+
+   return jsonify(response)
   
 
 
