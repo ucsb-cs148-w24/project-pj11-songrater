@@ -194,6 +194,7 @@ def create_user():
      conn.close()     
 
      response["MESSAGE"] = "Successfully created new user and added to db"
+     print(uname,email)
   except Exception as e:
         response["MESSAGE"] = f"EXCEPTION: /api/signup {e}"
         print(response["MESSAGE"])

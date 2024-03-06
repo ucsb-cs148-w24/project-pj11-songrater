@@ -40,7 +40,7 @@ export default function LandingScreen({ navigation }) {
           console.log(user.uid);
           setIsLoggedIn(true);
         }
-      }, 1000);
+      }, 10);
     });
 
     return sub;
