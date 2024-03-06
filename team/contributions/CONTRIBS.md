@@ -5,7 +5,7 @@ This file documents the roles and GitHub contributions of each team member for o
 ## Team Roles
 
 ### Katya
-- Role: 
+- Role: Backend developer and tester.
 
 ### Jeffrey
 - Role: 
@@ -28,7 +28,8 @@ This file documents the roles and GitHub contributions of each team member for o
 ## GitHub Contributions
 
 ### Katya
-
+- Developed Flask endpoints responsible for editing the user song list, getting user song list, adding songs, etc.
+- Developed low-level tests for our Flask endpoints as well as higher-level BDD tests
 
 ### Jeffrey
 
