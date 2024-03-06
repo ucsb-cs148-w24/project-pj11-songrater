@@ -14,6 +14,6 @@ Overall, the other team thought that our product was mainly:
 The other team definitely struggled a bit in the deployment, and the lack of clarity was definitely on us. We could / should make our DEPLOYMENT.md file a lot more clear and hash out the deployment steps to reduce the number of user actions. There were a lot of keys and packages the user had to change / install which could have been solved with a simple requirements.txt file.
 
 # Closing Thoughts: 
-1) Like:
-2) Most Impactful:
-3) Good:
+1) Like: Clean UI! Good designs.
+2) Most Impactful: Better UX -- unclear instructions for certain features
+3) Good: Ranking system was innovative and cool!
