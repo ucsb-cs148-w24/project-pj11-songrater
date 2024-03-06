@@ -12,17 +12,14 @@ This app is designed for music enthusiasts of all ages who enjoy discovering and
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus. Suspendisse lectus tortor, dignissim sit amet, adipiscing nec, ultricies sed, dolor. Cras elementum ultrices diam.
 
-### Creating Song Matchups
-
-Placeholder text for creating song matchups feature documentation.
 
 ### Ranking Songs
 
 Placeholder text for ranking songs feature documentation.
 
-### Viewing Song Ratings
+### Song Ratings
 
-Placeholder text for viewing song ratings feature documentation.
+Placeholder text for song ratings feature documentation.
 
 ### Social Interactions
 
