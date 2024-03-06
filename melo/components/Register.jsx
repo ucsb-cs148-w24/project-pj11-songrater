@@ -10,24 +10,33 @@ export const Register = ({navigation}) => {
   const [password, setPassword] = useState('');
 
   const createProfile = async (uid, email) => {
-
     try {
-      const response = await fetch `http://127.0.0.1:5000/api/signup?email=${email}&uid=${uid}`;
-
-      if (!reponse.ok) {
+      const formData = new FormData();
+      formData.append('uid', uid);
+      formData.append('email', email);
+      // Assuming username and description are required by your Flask API.
+      // You'll need to add these fields or modify as necessary.
+      formData.append('description', ""); // Update this with actual description
+  
+      const response = await fetch('http://127.0.0.1:5000/api/signup', {
+        method: 'POST',
+        body: formData,
+      });
+  
+      if (!response.ok) {
         throw new Error('Network response was not ok');
       }
-
-      const jsonResponse = await fetchResponse.json();
+  
+      const jsonResponse = await response.json();
+      console.log("Received jsonResponse");
       console.log(jsonResponse); // Handle or display the response as needed
       return jsonResponse;
-    }
-    catch (error) {
+    } catch (error) {
       console.error('Error creating profile:', error);
-      response["MESSAGE"] = `Error creating profile: ${error}`;
-      return response; // Return or handle error response as needed
+      return { "MESSAGE": `Error creating profile: ${error}` }; // Return or handle error response as needed
     }
   };
+  
 
   const registerAndGoToMainFlow = async () => {
     if (email && password) {
@@ -35,8 +44,8 @@ export const Register = ({navigation}) => {
         const auth = await getAuth();
         const response = await createUserWithEmailAndPassword(auth, email, password);
         if (response.user) {
-          await createProfile(response.user.uid, response.user.email);
           navigation.navigate("LandingScreen");
+          await createProfile(response.user.uid, response.user.email);
         }
       } catch (error) {
         console.log(error);
