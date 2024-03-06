@@ -45,6 +45,7 @@ export const Register = ({navigation}) => {
         const response = await createUserWithEmailAndPassword(auth, email, password);
         if (response.user) {
           navigation.navigate("LandingScreen");
+          console.log(response.user.email)
           await createProfile(response.user.uid, response.user.email);
         }
       } catch (error) {
