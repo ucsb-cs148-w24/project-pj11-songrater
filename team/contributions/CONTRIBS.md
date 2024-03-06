@@ -36,6 +36,12 @@ This file documents the roles and GitHub contributions of each team member for o
 
 ### Katya
 
+<<<<<<< HEAD
+
+=======
+
+> > > > > > > 31f59960 (Update CONTRIBS.md)
+
 - Developed Flask endpoints responsible for editing the user song list, getting user song list, adding songs, etc.
 - Developed low-level tests for our Flask endpoints as well as higher-level BDD tests
 
