@@ -1,1 +1,44 @@
-Hello
+# Lect13
+
+Assigned: Friday, 3/1/2024
+Due: Friday, 3/8/2024
+
+## Scrum
+
+Lead: Emily
+Present: Amy, Aryaman, Katya, Leyang, Jeffrey, Collin
+Absent: 
+
+### 2 Questions:
+1. What have you been up to, for this project and otherwise?
+2. What are you planning to get done for the rest of the week?
+
+### Team Responses:
+
+Katya:
+1. Busy with other classes
+2. Can work on the other endpoint; Will work on the add user and search user endpoints
+
+Amy:
+1. Was able to suppress warnings for Poppins. There was a bug in the code which prevented us from loading fonts. Also worked on the errors for virtualize-list; cannot use it with our containers.
+2. Finalize the flow of the app -- UI changes are very subjective and thinks it's more important to work on the app structure. Want to also work on small things on the search page.
+
+Emily:
+1. Got the main functionality of the profile page; doesn't know how to get the user, but it's correctly updated with the backend data.
+2. Wants to finish the CRUD operations for user profiles. 
+
+Aryaman:
+1. Just finishing the endpoint for users and user list; making sure he's testing it and everything works as expected.
+2. Same as above ^, continuing and finishing.
+
+Leyang:
+1. Updated the Figma with a friend's page and a workflow to click with a friend's profile
+2. Working on the friends feature and that implementation
+
+Jeffery:
+1. Also modified the api endpoints to store song information, and got the data to show up properly on the full-stack side
+2. Fixing up the state management with the algorithm
+
+Collin:
+1. Finished auth on the frontend and connected it with the flask endpoint. Also added sign in with Google. 
+2. Needs to connect login pages with Amy's web API 
