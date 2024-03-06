@@ -37,7 +37,7 @@ export default function LandingScreen({ navigation }) {
           setIsLoggedIn(false);
         }
         else {
-          console.log(user.uid);
+          navigation.navigate("LandingScreen");
           setIsLoggedIn(true);
         }
       }, 10);

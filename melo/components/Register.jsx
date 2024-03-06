@@ -62,6 +62,8 @@ export const Register = ({navigation}) => {
     }
   }
 
+  
+
   return (
     <View style={styles.contentView} onStartShouldSetResponder={() => true}>
       <View style={styles.container}>

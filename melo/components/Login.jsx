@@ -1,12 +1,44 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { getAuth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 export const Login = ({navigation}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+  const handleGoogleLogin = async() => {
+    const auth = getAuth();
+    const provider = new GoogleAuthProvider();
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        // This gives you a Google Access Token. You can use it to access the Google API.
+        const credential = GoogleAuthProvider.credentialFromResult(result);
+        const token = credential.accessToken;
+        // The signed-in user info.
+        const user = result.user;
+
+        console.log('User logged in:', response.user);
+
+        if (response.user) {
+          navigation.navigate("LandingScreen");
+      }
+
+        // IdP data available using getAdditionalUserInfo(result)
+        // ...
+      }).catch((error) => {
+        // Handle Errors here.
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        // The email of the user's account used.
+        const email = error.customData.email;
+        // The AuthCredential type that was used.
+        const credential = GoogleAuthProvider.credentialFromError(error);
+        // ...
+      });
+  }
 
   const handleLogin = async () => {
     try {
@@ -32,6 +64,7 @@ export const Login = ({navigation}) => {
     }
   }
 
+
   return (
     <View style={styles.contentView}>
       <View style={styles.container}>
@@ -53,6 +86,9 @@ export const Login = ({navigation}) => {
         />
         <TouchableOpacity style={styles.button} onPress={handleLogin}>
           <Text style={styles.buttonText}>Login</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={handleGoogleLogin}>
+          <Text style={styles.buttonText}>Sign in With Google</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.button} onPress={navigateRegister}>
           <Text style={styles.buttonText}>Register</Text>

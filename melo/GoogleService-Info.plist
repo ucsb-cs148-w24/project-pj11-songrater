@@ -2,6 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>CLIENT_ID</key>
+	<string>948219294613-e2q81hj2f05uufqe8r8njvhsv2qkcci2.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.948219294613-e2q81hj2f05uufqe8r8njvhsv2qkcci2</string>
 	<key>API_KEY</key>
 	<string>AIzaSyBV4_hVt1tLRdxOAR-eeThk42pkr3xDifw</string>
 	<key>GCM_SENDER_ID</key>
@@ -26,5 +30,7 @@
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
 	<string>1:948219294613:ios:717c8878832a04453cfc9c</string>
+	<key>DATABASE_URL</key>
+	<string>https://melo-c42ea-default-rtdb.firebaseio.com</string>
 </dict>
 </plist>

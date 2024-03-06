@@ -74,5 +74,7 @@
 	<string>Light</string>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>Cross-Origin-Opener-Policy</key>
+	<string>same-origin</string>
 </dict>
 </plist>
