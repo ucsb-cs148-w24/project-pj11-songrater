@@ -5,6 +5,9 @@ import ScreenWrapper from './helper/ScreenWrapper';
 import { styles } from './helper/Styles';
 import { typography } from './helper/Typography';
 import { useExampleTheme } from './helper/Themes';
+import { buttons } from './helper/Buttons';
+import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
+import { useEffect } from 'react';
 
 const LandingScreen = ({ navigation }) => {
   const { colors, isV3 } = useExampleTheme();
@@ -116,12 +119,55 @@ const LandingScreen = ({ navigation }) => {
     </Pressable>
   );
 
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const auth = getAuth();
+    const sub = onAuthStateChanged(auth, (user) => {
+      setTimeout(() => {
+        if (!user) {
+          setIsLoggedIn(false);
+        }
+        else {
+          setIsLoggedIn(true);
+        }
+      }, );
+    });
+
+    return sub;
+    }, [navigation]);
+  
+  const navigateToSearch = () => {
+    navigation.navigate("Search");
+  };
+
+  const navigateToLogin = () => {
+    navigation.navigate("Login");
+  }
+
+  const Logout = () => {
+    const auth = getAuth();
+    signOut(auth).then(() => {
+      setIsLoggedIn(false);
+    }).catch((error) => {
+      console.error("Log Out Failed")
+    });
+  }
+
   return (
     <ScreenWrapper contentContainerStyle={styles.content}>
       <ScrollView>
         <View style={styles.preference}>
           <View style={styles.titleContainer}>
             <Text style={typography.title}>Melo</Text>
+          </View>
+          <View style={buttons.primary}>
+            {!isLoggedIn && <Pressable style={buttons.outline} onPress={navigateToLogin}>
+              <Text>Login</Text>
+            </Pressable>}
+            {isLoggedIn && <Pressable style={buttons.outline} onPress={Logout}>
+              <Text>Logout</Text>
+            </Pressable>}
           </View>
         </View>
 
