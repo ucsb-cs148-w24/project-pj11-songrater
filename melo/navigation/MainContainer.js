@@ -9,11 +9,13 @@ import ProfileScreen from "../components/ProfileScreen";
 import SearchSongScreen from "../components/SearchSongScreen";
 import RateSongScreen from "../components/RateSongScreen";
 import LandingScreen from "../components/LandingScreen";
+import FriendsScreen from "../components/FriendsScreen";
 
 // Screen names
 const homeName = "Home";
 const profileName = "Profile";
 const searchName = "Search";
+const friendName = "Friend"
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
