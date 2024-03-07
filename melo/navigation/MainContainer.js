@@ -9,11 +9,13 @@ import ProfileScreen from "../components/ProfileScreen";
 import SearchSongScreen from "../components/SearchSongScreen";
 import RateSongScreen from "../components/RateSongScreen";
 import LandingScreen from "../components/LandingScreen";
+import FriendsScreen from "../components/FriendsScreen";
 
 // Screen names
 const homeName = "Home";
 const profileName = "Profile";
 const searchName = "Search";
+const friendName = "Friend"
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -60,6 +62,7 @@ function MainContainer() {
         <Tab.Screen name={homeName} component={LandingScreen} options={{ headerShown: false }} />
         <Tab.Screen name={searchName} component={SongStack} options={{ headerShown: false }} />
         <Tab.Screen name={profileName} component={ProfileScreen} options={{ headerShown: false }} />
+        <Tab.Screen name={friendName} component={FriendsScreen} options={{ headerShown: false }} />
       </Tab.Navigator>
     </NavigationContainer>
   );
