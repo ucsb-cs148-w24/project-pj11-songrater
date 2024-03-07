@@ -9,6 +9,7 @@ const colors = {
     bad: '#E59F9F',
     text: '#00120B',
     border: '#00120B',
+    gray: '#EFEFEF'
 };
 
 export const styles = StyleSheet.create({
@@ -143,8 +144,9 @@ export const styles = StyleSheet.create({
         backgroundColor: colors.background,
     },
     card: {
-        margin: 6,
-        backgroundColor: colors.white,
+        marginTop: 24,
+        marginHorizontal: 24,
+        backgroundColor: colors.gray,
     },
     chip: {
         margin: 4,
