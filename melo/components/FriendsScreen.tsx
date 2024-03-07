@@ -38,6 +38,12 @@ export default function FriendsScreen({ navigation }){
     {id:'1', mockname: 'Friend1', avatar: require('../assets/default-avatar.jpeg')},
     {id:'2', mockname: 'Friend2', avatar: require('../assets/default-avatar.jpeg')},
     {id:'3', mockname: 'Friend3', avatar: require('../assets/default-avatar.jpeg')},
+    {id:'4', mockname: 'Friend4', avatar: require('../assets/default-avatar.jpeg')},
+    {id:'5', mockname: 'Friend5', avatar: require('../assets/default-avatar.jpeg')},
+    {id:'6', mockname: 'Friend6', avatar: require('../assets/default-avatar.jpeg')},
+    {id:'7', mockname: 'Friend7', avatar: require('../assets/default-avatar.jpeg')},
+    {id:'8', mockname: 'Friend8', avatar: require('../assets/default-avatar.jpeg')},
+    {id:'9', mockname: 'Friend9', avatar: require('../assets/default-avatar.jpeg')},
   ]);
 
   const [newname, setName] = useState("");
