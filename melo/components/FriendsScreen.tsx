@@ -93,7 +93,7 @@ export default function FriendsScreen({ navigation }){
         <Searchbar
           onChangeText={setName}
           loading={isLoading}
-          placeholder="Enter a Friend..."
+          placeholder="Find a new Friend..."
           onSubmitEditing={fetchFriend}
           style={styles.searchbar}
           value={newname}
