@@ -46,30 +46,66 @@ export default function FriendsScreen({ navigation }){
     {id:'9', mockname: 'Friend9', avatar: require('../assets/default-avatar.jpeg')},
   ]);
 
+  const [searchFriendsData, setSearchFriendsData] = useState({id:'1', mockname: 'Friend1', avatar: require('../assets/default-avatar.jpeg')});
+
   const [newname, setName] = useState("");
 
   const renderCard= ({ item }) => (
     <Card style={styles.card} mode={'elevated'}>
         <Card.Content>
-          <View style={{flex:1, flexDirection:'row'}}>
-            {/* Avatar on the left */}
-            <Avatar.Image size={40} source={item.avatar} />
-            <Text style={{flex:1,marginLeft: 10 }}>
-              <Text style={{fontWeight:'bold'}}>{item.mockname}</Text>
-            </Text>
-          </View>
+          {/* onPress -- friends profile popup */}
+          <Pressable>
+            <View style={{flex:1, flexDirection:'row', alignItems: 'center'}}>
+              <Avatar.Image size={40} source={item.avatar} />
+              <Text style={{flex:1, marginLeft: 40 }}>
+                <Text style={{fontSize: 20, fontWeight:'bold'}}>{item.mockname}</Text>
+              </Text>
+              <Text style={{fontWeight:'bold', marginRight: 16}}>
+                {'>'}
+              </Text>
+            </View>
+          </Pressable>
         </Card.Content>
-      </Card>
+    </Card>
   );
 
   const [isLoading, setIsLoading] = useState(false);
+  const [searchFriendsState, setSearchFriendsState] = useState(false);
 
   const fetchFriend = async () => {
+    // try {
+    //   if (!(newname == "")) {
+    //     await fetch(
+    //       // need a function to finds users with the username of...
+    //       `http://127.0.0.1:5000/title?title=${newname}}`
+    //     )
+    //       .then((data) => {
+    //         return data.json();
+    //       })
+    //       .then((data) => {
+    //         setSearchFriendsData(data.results);
+    //         setSearchFriendsState(true);
+    //       });
+    //   }
+    // }catch (error) {
+    //   setSearchFriendsState(false);
+    //   console.error("Error fetching data: ", error);
+    // }
+    try {
+      setSearchFriendsData({id:'10', mockname: 'Bob', avatar: require('../assets/default-avatar.jpeg')});
+      setSearchFriendsState(true);
+    }
+    catch (error) {
+      console.error(error);
+    }
+  };
+
+  const fetchFriendsList = async () => {
     try {
       setIsLoading(true);
       if (!(newname == "")) {
         await fetch(
-          // need a function to fetch uid2 in friend table
+          // need a function to fetch the friends of the current user
           `http://127.0.0.1:5000/title?title=${newname}}`
         )
           .then((data) => {
@@ -86,11 +122,15 @@ export default function FriendsScreen({ navigation }){
     }
   };
 
+  useEffect(() => {
+    fetchFriendsList();
+  }, [])
+
   return (
     <View style={{display:'flex',flex:1,backgroundColor: "#BBCDE5"}}>
 
        <View style={styles.preference}>
-        <View style={styles.titleContainer}>
+        <View style={styles.title}>
           <Text style={typography.title}>Melo</Text>
         </View>
       </View>
@@ -108,6 +148,31 @@ export default function FriendsScreen({ navigation }){
           Search
         </Button></View>
       </View>
+
+      {searchFriendsState && <View>
+        <View style={styles.preference}>
+          <View style={styles.titleContainer}>
+            <Text style={typography.header}>New Friend</Text>
+          </View>
+        </View>  
+        <Card style={styles.card} mode={'elevated'}>
+          <Card.Content>
+            {/* onPress -- add user */}
+            <Pressable>
+              <View style={{flex:1, flexDirection:'row', alignItems: 'center'}}>
+                <Avatar.Image size={40} source={searchFriendsData.avatar} />
+                <Text style={{flex:1, marginLeft: 40 }}>
+                  <Text style={{fontSize: 20, fontWeight:'bold'}}>{searchFriendsData.mockname}</Text>
+                </Text>
+                <Text style={{fontWeight:'bold', marginRight: 16}}>
+                  {'+'}
+                </Text>
+              </View>
+            </Pressable>
+          </Card.Content>
+        </Card>
+      </View>
+      }
      
       <View style={styles.preference}>
         <View style={styles.titleContainer}>
