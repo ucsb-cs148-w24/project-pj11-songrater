@@ -25,6 +25,8 @@
 
 - If I were to give advice for the next person leading a retro, I would emphasize the importance of carefully listening to the discussion and making sure each team member is heard and appreciated.
 
+* If I were to give advice for the next person leading a retro, I would emphasize the importance of carefully listening to the discussion and making sure each team member is heard and appreciated.
+
 ## Retro Records
 
 Liked:
