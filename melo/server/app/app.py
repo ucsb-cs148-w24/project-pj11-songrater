@@ -695,13 +695,14 @@ def search_friends_all():
 def search_friends_specific():
   response = {}
   
-  # For friend search criteria (all): should display all Users
+  # For friend search criteria (specific): should only display User profile that was searched up
   
   try:
      user_id = request.args.get("user_id")
      uname = request.args.get("uname")
      conn = get_db_connection()
      cur = conn.cursor()
+     uid = int(user_id)
 
      sql_query = f"SELECT * FROM \"User\" WHERE username = '{uname}';"
      cur.execute(sql_query)
@@ -715,7 +716,7 @@ def search_friends_specific():
      final_result = []
 
      for user_info in users_info:
-        if user_id == int(user_info[0]):
+        if uid == int(user_info[0]):
            response["MESSAGE"] = "You can't add yourself as a friend. Please choose a different username."
            return jsonify(response)
         else:
