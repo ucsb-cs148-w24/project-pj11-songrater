@@ -49,26 +49,11 @@ export default function RateSongScreen({ route }) {
       type: rating,
     };
 
-    const songInfoParams = {
-      song_name: title,
-      artist_name: artist,
-      album_name: "album",
-      year: date,
-      genre: "mock",
-      cover: cover,
-    };
-
-    console.log(`adding user songs: ${addUserSongParams}, ${songInfoParams}`);
-
     const response = await fetch(
       "http://127.0.0.1:5000/api/add_song?" +
         objectToUrlParams(addUserSongParams),
       {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(songInfoParams),
       }
     ).then((response) => console.log(response));
   };
@@ -93,10 +78,11 @@ export default function RateSongScreen({ route }) {
           console.log(data);
           setUserSongs(data.results);
           setIndices({
-            leftIndex: 0,
-            rightIndex: data.results.length - 1,
-            currentIndex: Math.floor(data.results.length - 1) / 2,
+            leftIndex: 1,
+            rightIndex: data.results.length,
+            currentIndex: Math.floor(data.results.length / 2),
           });
+          console.log(indices);
           setReady(true);
         }
       });
@@ -171,6 +157,9 @@ export default function RateSongScreen({ route }) {
             review={review}
             status={"new"}
           />
+          {console.log(
+            `currentIndex: ${indices.currentIndex}, userSongs: ${userSongs}`
+          )}
           <RateSongComponent
             title={userSongs[indices.currentIndex].song_name}
             artist={userSongs[indices.currentIndex].artist}
@@ -185,7 +174,12 @@ export default function RateSongScreen({ route }) {
             </Text>
             <Text style={typography.header2}>
               Calibrated Rating:{" "}
-              {linspace(10.0, 7.0, userSongs.length + 1, indices.currentIndex)}
+              {linspace(
+                10.0,
+                7.0,
+                userSongs.length + 1,
+                indices.currentIndex - 1
+              )}
             </Text>
           </View>
         ) : (
@@ -210,7 +204,7 @@ export default function RateSongScreen({ route }) {
         {doneRanking ? (
           <View style={styles.resultContainer}>
             <Text style={typography.header2}>
-              New Rank: {indices.currentIndex + 1}
+              New Rank: {indices.currentIndex}
             </Text>
             <Text style={typography.header2}>
               Calibrated Rating:{" "}
@@ -224,15 +218,6 @@ export default function RateSongScreen({ route }) {
     );
   }
 }
-
-/**
- * UseEffect to get all songs that the user has (future case, right now just MockData)
- *
- * When user selects a song, this should be inserted into the database with unique MBID
- * When getting all of a user's songs, backend should join this data
- *
- * Would be also nice to get 'last updated'
- */
 
 const styles = StyleSheet.create({
   mainContainer: {
