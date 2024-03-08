@@ -24,6 +24,8 @@
    
 * The retro went great! There was a lot of participation and the change in format made it seem new. This led to a better understanding of team dynamics and areas for improvement.
 
+* If I were to give advice for the next person leading a retro, I would emphasize the importance of carefully listening to the discussion and making sure each team member is heard and appreciated.
+
 ## Retro Records
 Liked:
 - All of the puzzle pieces are slowly coming together
