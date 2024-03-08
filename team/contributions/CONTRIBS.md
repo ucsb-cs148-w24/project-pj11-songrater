@@ -8,7 +8,7 @@ This file documents the roles and GitHub contributions of each team member for o
 - Role: Backend developer and tester.
 
 ### Jeffrey
-- Role: 
+- Role: Full-stack developer, mainly on frontend
 
 ### Emily
 - Role: 
@@ -32,7 +32,10 @@ This file documents the roles and GitHub contributions of each team member for o
 - Developed low-level tests for our Flask endpoints as well as higher-level BDD tests
 
 ### Jeffrey
-
+- Connected API to get titles from Musicbrainz
+- Created functions to fetch cover arts
+- Created Rate song and Search song screens
+- Created ranking algorithm
 
 ### Emily
 
