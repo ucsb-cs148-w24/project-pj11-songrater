@@ -4,79 +4,6 @@ import { typography } from "./helper/Typography";
 import { useCallback, useState, useEffect } from "react";
 import { objectToUrlParams } from "./helper/functions";
 
-const mockData = [
-  {
-    song_id: 7,
-    artist: "Megan Thee Stallion",
-    song_name: "Hiss",
-    rank: "1",
-    review: "An electrifying track with a powerful performance.",
-  },
-  {
-    song_id: 13,
-    artist: "Jack Harlow",
-    song_name: "Lovin On Me",
-    rank: "2",
-    review: "A catchy tune that's climbing the charts rapidly.",
-  },
-  {
-    song_id: 68,
-    artist: "Taylor Swift",
-    song_name: "Cruel Summer",
-    rank: "3",
-    review: "An emotional rollercoaster packed into a song.",
-  },
-  {
-    song_id: 45,
-    artist: "Teddy Swims",
-    song_name: "Lose Control",
-    rank: "4",
-    review: "A soulful ballad that resonates with many.",
-  },
-  {
-    song_id: 80,
-    artist: "Tate Mcrae",
-    song_name: "Greedy",
-    rank: "5",
-    review: "An energetic song that gets you moving.",
-  },
-  {
-    song_id: 36,
-    artist: "Zach Bryan and Kacey Musgraves",
-    song_name: "I Remember Everything",
-    rank: "6",
-    review: "A heartfelt story turned into a beautiful melody.",
-  },
-  {
-    song_id: 5,
-    artist: "Doja Cat",
-    song_name: "Agora Hills",
-    rank: "7",
-    review: "A dynamic hit with an unforgettable rhythm.",
-  },
-  {
-    song_id: 50,
-    artist: "Benson Boone",
-    song_name: "Beautiful Things",
-    rank: "8",
-    review: "A track that showcases true musical talent.",
-  },
-  {
-    song_id: 78,
-    artist: "21 Savage",
-    song_name: "Redrum",
-    rank: "9",
-    review: "A bold and raw piece that captivates listeners.",
-  },
-  {
-    song_id: 37,
-    artist: "SZA",
-    song_name: "Snooze",
-    rank: "10",
-    review: "A smooth and catchy number with a cool vibe.",
-  },
-];
-
 function linspace(startValue, endValue, num, index) {
   const arr = [];
   const step = (endValue - startValue) / (num - 1);
@@ -87,13 +14,14 @@ function linspace(startValue, endValue, num, index) {
 }
 
 export default function RateSongScreen({ route }) {
-  const { rating, title, artist, review, mbid } = route.params;
+  const { rating, title, artist, review, mbid, date, cover } = route.params;
   const [indices, setIndices] = useState({
     leftIndex: 0,
-    rightIndex: mockData.length - 1,
-    currentIndex: Math.floor((mockData.length - 1) / 2),
+    rightIndex: 1,
+    currentIndex: 1,
   });
   const [doneRanking, setDoneRanking] = useState(false);
+  const [ready, setReady] = useState(false);
   const [userSongs, setUserSongs] = useState({});
 
   useEffect(() => {
@@ -103,6 +31,9 @@ export default function RateSongScreen({ route }) {
   }, []);
 
   useEffect(() => {
+    console.log(
+      `indices: [${indices.leftIndex}, ${indices.rightIndex}, ${indices.currentIndex}], doneRanking: ${doneRanking}`
+    );
     if (doneRanking) {
       console.log(`user song has been added.`);
       addUserSong();
@@ -113,16 +44,31 @@ export default function RateSongScreen({ route }) {
     const addUserSongParams = {
       user_id: 1, // TODO : change once we get valid user IDs
       song_id: mbid,
-      rank: 1,
+      rank: indices.currentIndex,
       review: review,
       type: rating,
     };
+
+    const songInfoParams = {
+      song_name: title,
+      artist_name: artist,
+      album_name: "album",
+      year: date,
+      genre: "mock",
+      cover: cover,
+    };
+
+    console.log(`adding user songs: ${addUserSongParams}, ${songInfoParams}`);
 
     const response = await fetch(
       "http://127.0.0.1:5000/api/add_song?" +
         objectToUrlParams(addUserSongParams),
       {
         method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(songInfoParams),
       }
     ).then((response) => console.log(response));
   };
@@ -135,7 +81,25 @@ export default function RateSongScreen({ route }) {
 
     const response = await fetch(
       `http://127.0.0.1:5000/api/get_user_songs?user_id=1&type=${rating}`
-    ).then((response) => response.json());
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(`data.results: ${data.results}`);
+        if (!data?.results || data.results.length === 0) {
+          console.log("trigger 1");
+          setDoneRanking(true);
+        } else {
+          console.log("trigger 2");
+          console.log(data);
+          setUserSongs(data.results);
+          setIndices({
+            leftIndex: 0,
+            rightIndex: data.results.length - 1,
+            currentIndex: Math.floor(data.results.length - 1) / 2,
+          });
+          setReady(true);
+        }
+      });
 
     console.log(response);
   };
@@ -194,40 +158,71 @@ export default function RateSongScreen({ route }) {
     );
   };
 
-  return (
-    <View style={styles.mainContainer}>
-      <View style={styles.headerContainer}>
-        <Text style={typography.header}>Choose which song you prefer!</Text>
-      </View>
-      <View style={styles.rateSongContainer}>
-        <RateSongComponent
-          title={title}
-          artist={artist}
-          review={review}
-          status={"new"}
-        />
-        <RateSongComponent
-          title={mockData[indices.currentIndex].song_name}
-          artist={mockData[indices.currentIndex].artist}
-          review={mockData[indices.currentIndex].review}
-          status={"old"}
-        />
-      </View>
-      {doneRanking ? (
-        <View style={styles.resultContainer}>
-          <Text style={typography.header2}>
-            New Rank: {indices.currentIndex + 1}
-          </Text>
-          <Text style={typography.header2}>
-            Calibrated Rating:{" "}
-            {linspace(10.0, 7.0, mockData.length + 1, indices.currentIndex)}
-          </Text>
+  if (userSongs.length > 0) {
+    return (
+      <View style={styles.mainContainer}>
+        <View style={styles.headerContainer}>
+          <Text style={typography.header}>Choose which song you prefer!</Text>
         </View>
-      ) : (
-        <View></View>
-      )}
-    </View>
-  );
+        <View style={styles.rateSongContainer}>
+          <RateSongComponent
+            title={title}
+            artist={artist}
+            review={review}
+            status={"new"}
+          />
+          <RateSongComponent
+            title={userSongs[indices.currentIndex].song_name}
+            artist={userSongs[indices.currentIndex].artist}
+            review={userSongs[indices.currentIndex].review}
+            status={"old"}
+          />
+        </View>
+        {doneRanking ? (
+          <View style={styles.resultContainer}>
+            <Text style={typography.header2}>
+              New Rank: {indices.currentIndex + 1}
+            </Text>
+            <Text style={typography.header2}>
+              Calibrated Rating:{" "}
+              {linspace(10.0, 7.0, userSongs.length + 1, indices.currentIndex)}
+            </Text>
+          </View>
+        ) : (
+          <View></View>
+        )}
+      </View>
+    );
+  } else {
+    return (
+      <View style={styles.mainContainer}>
+        <View style={styles.headerContainer}>
+          <Text style={typography.header}>Song has been added!</Text>
+        </View>
+        <View style={styles.rateSongContainer}>
+          <RateSongComponent
+            title={title}
+            artist={artist}
+            review={review}
+            status={"new"}
+          />
+        </View>
+        {doneRanking ? (
+          <View style={styles.resultContainer}>
+            <Text style={typography.header2}>
+              New Rank: {indices.currentIndex + 1}
+            </Text>
+            <Text style={typography.header2}>
+              Calibrated Rating:{" "}
+              {linspace(10.0, 7.0, userSongs.length + 1, indices.currentIndex)}
+            </Text>
+          </View>
+        ) : (
+          <View></View>
+        )}
+      </View>
+    );
+  }
 }
 
 /**
