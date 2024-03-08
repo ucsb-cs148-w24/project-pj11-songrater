@@ -167,11 +167,12 @@ def find_by_title():
 def create_user():
   response = {}
   
-  # This function takes email as a parameter and returns back to the frontend email, username (unique), and description
+  # This function takes uid and email as a parameters and returns back to the frontend the full profile information for newly created user
   # A new user will be added to db with these fields and the frontend should save this information as variables for currently
   # logged in user
 
   try:
+     uid = request.args.get("uid")
      email = request.args.get("email")
      conn = get_db_connection()
      cur = conn.cursor()
@@ -180,15 +181,18 @@ def create_user():
      username = email[:at_sign_idx]
      description = 'Hi my name is ' + username + '.'
 
-     cur.execute("INSERT INTO \"User\" (username, email, description) VALUES (%s, %s, %s)", 
-                       (username, email, description))
+     cur.execute("INSERT INTO \"User\" (username, email, description, uid) VALUES (%s, %s, %s, %s)", 
+                       (username, email, description, uid))
      conn.commit()
 
      final_result = []
-     new_user_profile = {'username': username, 'email': email, 'description': description}
+     new_user_profile = {'username': username, 'uid': uid, 'email': email, 'description': description}
      final_result.append(new_user_profile)
 
-     response["results"] = final_result     
+     response["results"] = final_result
+
+     cur.close()
+     conn.close()     
 
      response["MESSAGE"] = "Successfully created new user and added to db"
   except Exception as e:
@@ -215,7 +219,7 @@ def get_profile():
      final_result = []
 
      for profile in user_profile:
-        data = {'id': profile[0], 'username': profile[1], 'email': profile[2], 'description': profile[3]}
+        data = {'id': profile[0], 'username': profile[1], 'email': profile[2], 'description': profile[3], 'uid': profile[4]}
         final_result.append(data)
         
      response["results"] = final_result
@@ -234,14 +238,39 @@ def get_profile():
 def update_profile():
   response = {}
   
-  # This function should allow the user to change any part of his profile, including username
+  # This function should allow the user to change his username and/or his profile description
   # Note that this PUT method is boilerplate code to implement any UPDATE functionality
   try:
-     old_uname = request.args.get("old_name")
-     new_uname = request.args.get("new_name")
-     new_email = request.args.get("email")
+     user_id = request.args.get("user_id")
+     new_uname = request.args.get("uname")
      new_description = request.args.get("description")
-     # look up old_uname string in User postgres table for the correct User entry, then update that row
+
+     conn = get_db_connection()
+     cur = conn.cursor()
+
+     sql_query = f"SELECT * FROM \"User\" WHERE username = '{new_uname}';"
+     cur.execute(sql_query)
+     user_exists = cur.fetchall()
+     num_rows = int(cur.rowcount)
+
+     if num_rows > 0:
+        response["MESSAGE"] = "Sorry this username is already taken. Please try again."
+        return jsonify(response)
+     
+     update_query = f"UPDATE \"User\" SET username = '{new_uname}', description = '{new_description}' WHERE id = {user_id};"
+     cur.execute(update_query)
+     conn.commit()
+
+     final_result = []
+     data = {'id': int(user_id), 'username': new_uname, 'description': new_description}
+     final_result.append(data)
+        
+     response["results"] = final_result
+     
+     cur.close()
+     conn.close()
+     
+     response["MESSAGE"] = "Successfully updated profile of user"
   except Exception as e:
         response["MESSAGE"] = f"EXCEPTION: /api/update_profile {e}"
         print(response["MESSAGE"])
@@ -252,11 +281,47 @@ def update_profile():
 def delete_user():
   response = {}
   
-  # This function should delete user and his information from the app
+  # This function should delete user and his information from the app (user song list info and friend list info)
   # Note that this DELETE method is boilerplate code to implement any DELETE functionality
   try:
-     uname = request.args.get("username")
-     # look up uname string in User postgres table, then delete that row
+     user_id = request.args.get("user_id")
+     conn = get_db_connection()
+     cur = conn.cursor()
+
+     # Delete user information in Friend table
+     del_friend_query1 = f"DELETE FROM \"Friend\" WHERE uid1 = {user_id};"
+     cur.execute(del_friend_query1)
+     conn.commit()
+
+     del_friend_query2 = f"DELETE FROM \"Friend\" WHERE uid2 = {user_id};"
+     cur.execute(del_friend_query2)
+     conn.commit()
+
+     # Delete user information in all three user song list tables
+
+     del_song_list_query1 = f"DELETE FROM \"User_Lists_Good\" WHERE user_id = {user_id};"
+     cur.execute(del_song_list_query1)
+     conn.commit()
+
+     del_song_list_query2 = f"DELETE FROM \"User_Lists_Ok\" WHERE user_id = {user_id};"
+     cur.execute(del_song_list_query2)
+     conn.commit()
+
+     del_song_list_query3 = f"DELETE FROM \"User_Lists_Bad\" WHERE user_id = {user_id};"
+     cur.execute(del_song_list_query3)
+     conn.commit()
+
+     # And finally, delete user from User table!
+
+     del_user_query = f"DELETE FROM \"User\" WHERE id = {user_id};"
+     cur.execute(del_user_query)
+     conn.commit()
+     
+     cur.close()
+     conn.close()
+     
+     response["MESSAGE"] = "Successfully deleted user and his information from the app!"
+
   except Exception as e:
         response["MESSAGE"] = f"EXCEPTION: /api/delete_user {e}"
         print(response["MESSAGE"])
@@ -279,7 +344,6 @@ def add_song():
     
      rank_int = int(rank)
      uid = int(user_id)
-     s_id = int(song_id)
 
      conn = get_db_connection()
      cur = conn.cursor()
@@ -295,18 +359,18 @@ def add_song():
            return jsonify(response)
         elif rank_int == num_rows+1:
            cur.execute("INSERT INTO \"User_Lists_Good\" (user_id, song_id, rank, review) VALUES (%s, %s, %s, %s)", 
-                       (uid, s_id, rank_int, review))
+                       (uid, song_id, rank_int, review))
            conn.commit()
 
         elif rank_int >= 1 and rank_int <= num_rows:
            for i in range(num_rows):
               if (i+1) >= rank_int:
                  curr_rank = good_songs[i][2]
-                 update_query = f"UPDATE \"User_Lists_Good\" SET rank = {curr_rank+1} WHERE user_id = {good_songs[i][0]} AND song_id = {good_songs[i][1]};"
+                 update_query = f"UPDATE \"User_Lists_Good\" SET rank = {curr_rank+1} WHERE user_id = {good_songs[i][0]} AND song_id = '{good_songs[i][1]}';"
                  cur.execute(update_query)
                  conn.commit()
            cur.execute("INSERT INTO \"User_Lists_Good\" (user_id, song_id, rank, review) VALUES (%s, %s, %s, %s)", 
-                       (uid, s_id, rank_int, review))
+                       (uid, song_id, rank_int, review))
            conn.commit()
       
     
@@ -321,18 +385,18 @@ def add_song():
            return jsonify(response)
         elif rank_int == num_rows+1:
            cur.execute("INSERT INTO \"User_Lists_Ok\" (user_id, song_id, rank, review) VALUES (%s, %s, %s, %s)", 
-                       (uid, s_id, rank_int, review))
+                       (uid, song_id, rank_int, review))
            conn.commit()
 
         elif rank_int >= 1 and rank_int <= num_rows:
            for i in range(num_rows):
               if (i+1) >= rank_int:
                  curr_rank = ok_songs[i][2]
-                 update_query = f"UPDATE \"User_Lists_Ok\" SET rank = {curr_rank+1} WHERE user_id = {ok_songs[i][0]} AND song_id = {ok_songs[i][1]};"
+                 update_query = f"UPDATE \"User_Lists_Ok\" SET rank = {curr_rank+1} WHERE user_id = {ok_songs[i][0]} AND song_id = '{ok_songs[i][1]}';"
                  cur.execute(update_query)
                  conn.commit()
            cur.execute("INSERT INTO \"User_Lists_Ok\" (user_id, song_id, rank, review) VALUES (%s, %s, %s, %s)", 
-                       (uid, s_id, rank_int, review))
+                       (uid, song_id, rank_int, review))
            conn.commit()
       
 
@@ -347,18 +411,18 @@ def add_song():
            return jsonify(response)
         elif rank_int == num_rows+1:
            cur.execute("INSERT INTO \"User_Lists_Bad\" (user_id, song_id, rank, review) VALUES (%s, %s, %s, %s)", 
-                       (uid, s_id, rank_int, review))
+                       (uid, song_id, rank_int, review))
            conn.commit()
 
         elif rank_int >= 1 and rank_int <= num_rows:
            for i in range(num_rows):
               if (i+1) >= rank_int:
                  curr_rank = bad_songs[i][2]
-                 update_query = f"UPDATE \"User_Lists_Bad\" SET rank = {curr_rank+1} WHERE user_id = {bad_songs[i][0]} AND song_id = {bad_songs[i][1]};"
+                 update_query = f"UPDATE \"User_Lists_Bad\" SET rank = {curr_rank+1} WHERE user_id = {bad_songs[i][0]} AND song_id = '{bad_songs[i][1]}';"
                  cur.execute(update_query)
                  conn.commit()
            cur.execute("INSERT INTO \"User_Lists_Bad\" (user_id, song_id, rank, review) VALUES (%s, %s, %s, %s)", 
-                       (uid, s_id, rank_int, review))
+                       (uid, song_id, rank_int, review))
            conn.commit()
      
      cur.close()
@@ -395,7 +459,7 @@ def get_user_songs_by_type():
      cur = conn.cursor()
 
      if type == "good":
-        sql_query = f"SELECT * FROM \"User_Lists_Good\" WHERE user_id = {user_id} ORDER BY rank;"
+        sql_query = f"SELECT \"User_Lists_Good\".song_id,\"User_Lists_Good\".rank,\"User_Lists_Good\".review,\"Song_Info\".song_name,\"Song_Info\".artist_name,\"Song_Info\".release_date FROM \"User_Lists_Good\" INNER JOIN \"Song_Info\" ON \"User_Lists_Good\".song_id = \"Song_Info\".song_id WHERE \"User_Lists_Good\".user_id = {user_id} ORDER BY rank;"
         cur.execute(sql_query)
         good_songs = cur.fetchall()
         num_rows = int(cur.rowcount)
@@ -410,7 +474,7 @@ def get_user_songs_by_type():
         idx = rating_list.size-1
 
         for song in good_songs:
-           data = {'user_id': song[0], 'song_id': song[1], 'rank': song[2], 'review': song[3], 'rating': rating_list[idx]}
+           data = {'song_id': song[0], 'rank': song[1], 'review': song[2], 'song_name': song[3], 'artist_name': song[4], 'release_date': song[5], 'rating': rating_list[idx]}
            final_result.append(data)
            idx = idx-1
         
@@ -418,7 +482,7 @@ def get_user_songs_by_type():
            
       
      elif type == "ok":
-        sql_query = f"SELECT * FROM \"User_Lists_Ok\" WHERE user_id = {user_id} ORDER BY rank;"
+        sql_query = f"SELECT \"User_Lists_Ok\".song_id,\"User_Lists_Ok\".rank,\"User_Lists_Ok\".review,\"Song_Info\".song_name,\"Song_Info\".artist_name,\"Song_Info\".release_date FROM \"User_Lists_Ok\" INNER JOIN \"Song_Info\" ON \"User_Lists_Ok\".song_id = \"Song_Info\".song_id WHERE \"User_Lists_Ok\".user_id = {user_id} ORDER BY rank;"
         cur.execute(sql_query)
         ok_songs = cur.fetchall()
         num_rows = int(cur.rowcount)
@@ -433,14 +497,14 @@ def get_user_songs_by_type():
         idx = rating_list.size-1
 
         for song in ok_songs:
-           data = {'user_id': song[0], 'song_id': song[1], 'rank': song[2], 'review': song[3], 'rating': rating_list[idx]}
+           data = {'song_id': song[0], 'rank': song[1], 'review': song[2], 'song_name': song[3], 'artist_name': song[4], 'release_date': song[5], 'rating': rating_list[idx]}
            final_result.append(data)
            idx = idx-1
 
         response["results"] = final_result
 
      else:
-        sql_query = f"SELECT * FROM \"User_Lists_Bad\" WHERE user_id = {user_id} ORDER BY rank;"
+        sql_query = f"SELECT \"User_Lists_Bad\".song_id,\"User_Lists_Bad\".rank,\"User_Lists_Bad\".review,\"Song_Info\".song_name,\"Song_Info\".artist_name,\"Song_Info\".release_date FROM \"User_Lists_Bad\" INNER JOIN \"Song_Info\" ON \"User_Lists_Bad\".song_id = \"Song_Info\".song_id WHERE \"User_Lists_Bad\".user_id = {user_id} ORDER BY rank;"
         cur.execute(sql_query)
         bad_songs = cur.fetchall()
         num_rows = int(cur.rowcount)
@@ -455,7 +519,7 @@ def get_user_songs_by_type():
         idx = rating_list.size-1
 
         for song in bad_songs:
-           data = {'user_id': song[0], 'song_id': song[1], 'rank': song[2], 'review': song[3], 'rating': rating_list[idx]}
+           data = {'song_id': song[0], 'rank': song[1], 'review': song[2], 'song_name': song[3], 'artist_name': song[4], 'release_date': song[5], 'rating': rating_list[idx]}
            final_result.append(data)
            idx = idx-1
 
@@ -482,7 +546,7 @@ def song_exists():
      conn = get_db_connection()
      cur = conn.cursor()
 
-     check_good = f"SELECT * FROM \"User_Lists_Good\" WHERE user_id = {user_id} AND song_id = {song_id};"
+     check_good = f"SELECT * FROM \"User_Lists_Good\" WHERE user_id = {user_id} AND song_id = '{song_id}';"
      cur.execute(check_good)
      good_exists = cur.fetchall()
 
@@ -490,7 +554,7 @@ def song_exists():
         response["MESSAGE"] = "You have already ranked this song. Please choose a new song to rank."
         return jsonify(response)
 
-     check_ok = f"SELECT * FROM \"User_Lists_Ok\" WHERE user_id = {user_id} AND song_id = {song_id};"
+     check_ok = f"SELECT * FROM \"User_Lists_Ok\" WHERE user_id = {user_id} AND song_id = '{song_id}';"
      cur.execute(check_ok)
      ok_exists = cur.fetchall()
 
@@ -498,7 +562,7 @@ def song_exists():
         response["MESSAGE"] = "You have already ranked this song. Please choose a new song to rank."
         return jsonify(response)
      
-     check_bad = f"SELECT * FROM \"User_Lists_Bad\" WHERE user_id = {user_id} AND song_id = {song_id};"
+     check_bad = f"SELECT * FROM \"User_Lists_Bad\" WHERE user_id = {user_id} AND song_id = '{song_id}';"
      cur.execute(check_bad)
      bad_exists = cur.fetchall()
 
@@ -515,26 +579,6 @@ def song_exists():
         print(response["MESSAGE"])
   return jsonify(response)
 
-# Updates a song entry in a user's list.
-@app.route("/api/update_song", methods=['PUT'])
-def update_song():
-  response = {}
-  
-  try:
-     user_id = request.args.get("user_id")
-     song_id = request.args.get("song_id")
-     new_rank = request.args.get("new_rank")
-     new_review = request.args.get("new_review")
-     # look up user_id and song_id in user lists postgres table, then update the rank and review
-
-     # Add a success message to the response
-     response["MESSAGE"] = "Successfully updated song"
-  except Exception as e:
-        response["MESSAGE"] = f"EXCEPTION: /api/update_song {e}"
-        print(response["MESSAGE"])
-  return jsonify(response)
-
-
 #  Deletes a song from a user's list.
 @app.route("/api/delete_song", methods=['DELETE'])
 def delete_song():
@@ -547,22 +591,20 @@ def delete_song():
      conn = get_db_connection()
      cur = conn.cursor()
 
-     s_id = int(song_id)
-
      if type == "good":
         sql_query = f"SELECT * FROM \"User_Lists_Good\" WHERE user_id = {user_id} ORDER BY rank;"
         cur.execute(sql_query)
         good_songs = cur.fetchall()
         
         for song in reversed(good_songs):
-           if song[1] == s_id:
-              del_query = f"DELETE FROM \"User_Lists_Good\" WHERE user_id = {song[0]} AND song_id = {song[1]};"
+           if song[1] == song_id:
+              del_query = f"DELETE FROM \"User_Lists_Good\" WHERE user_id = {song[0]} AND song_id = '{song[1]}';"
               cur.execute(del_query)
               conn.commit()
               break
            
            curr_rank = song[2]
-           update_query = f"UPDATE \"User_Lists_Good\" SET rank = {curr_rank-1} WHERE user_id = {song[0]} AND song_id = {song[1]};"
+           update_query = f"UPDATE \"User_Lists_Good\" SET rank = {curr_rank-1} WHERE user_id = {song[0]} AND song_id = '{song[1]}';"
            cur.execute(update_query)
            conn.commit()
      
@@ -572,14 +614,14 @@ def delete_song():
         ok_songs = cur.fetchall()
         
         for song in reversed(ok_songs):
-           if song[1] == s_id:
-              del_query = f"DELETE FROM \"User_Lists_Ok\" WHERE user_id = {song[0]} AND song_id = {song[1]};"
+           if song[1] == song_id:
+              del_query = f"DELETE FROM \"User_Lists_Ok\" WHERE user_id = {song[0]} AND song_id = '{song[1]}';"
               cur.execute(del_query)
               conn.commit()
               break
            
            curr_rank = song[2]
-           update_query = f"UPDATE \"User_Lists_Ok\" SET rank = {curr_rank-1} WHERE user_id = {song[0]} AND song_id = {song[1]};"
+           update_query = f"UPDATE \"User_Lists_Ok\" SET rank = {curr_rank-1} WHERE user_id = {song[0]} AND song_id = '{song[1]}';"
            cur.execute(update_query)
            conn.commit()
      
@@ -589,14 +631,14 @@ def delete_song():
         bad_songs = cur.fetchall()
         
         for song in reversed(bad_songs):
-           if song[1] == s_id:
-              del_query = f"DELETE FROM \"User_Lists_Bad\" WHERE user_id = {song[0]} AND song_id = {song[1]};"
+           if song[1] == song_id:
+              del_query = f"DELETE FROM \"User_Lists_Bad\" WHERE user_id = {song[0]} AND song_id = '{song[1]}';"
               cur.execute(del_query)
               conn.commit()
               break
            
            curr_rank = song[2]
-           update_query = f"UPDATE \"User_Lists_Bad\" SET rank = {curr_rank-1} WHERE user_id = {song[0]} AND song_id = {song[1]};"
+           update_query = f"UPDATE \"User_Lists_Bad\" SET rank = {curr_rank-1} WHERE user_id = {song[0]} AND song_id = '{song[1]}';"
            cur.execute(update_query)
            conn.commit()
      
@@ -607,6 +649,213 @@ def delete_song():
      response["MESSAGE"] = "Successfully deleted song from user list"
   except Exception as e:
         response["MESSAGE"] = f"EXCEPTION: /api/delete_song {e}"
+        print(response["MESSAGE"])
+  return jsonify(response)
+
+
+# Endpoint to search for new friends
+@app.route("/api/friends_all", methods=['GET'])
+def search_friends_all():
+  response = {}
+  
+  # For friend search criteria (all): should display all Users
+  
+  try:
+     user_id = request.args.get("user_id")
+     conn = get_db_connection()
+     cur = conn.cursor()
+
+     sql_query = f"SELECT * FROM \"User\" WHERE id <> {user_id};"
+     cur.execute(sql_query)
+     users_info = cur.fetchall()
+     num_rows = int(cur.rowcount)
+
+     if num_rows == 0:
+        response["MESSAGE"] = "Sorry you can't add any friends at this time. Please try again later."
+        return jsonify(response)
+
+     final_result = []
+
+     for user_info in users_info:
+        data = {'id': user_info[0], 'username': user_info[1], 'email': user_info[2], 'description': user_info[3]}
+        final_result.append(data)
+        
+     response["results"] = final_result
+     
+     cur.close()
+     conn.close()
+     
+  except Exception as e:
+        response["MESSAGE"] = f"EXCEPTION: /api/friends_all {e}"
+        print(response["MESSAGE"])
+  return jsonify(response)
+
+# Endpoint to search for new friends (by username)
+@app.route("/api/friends_specific", methods=['GET'])
+def search_friends_specific():
+  response = {}
+  
+  # For friend search criteria (all): should display all Users
+  
+  try:
+     user_id = request.args.get("user_id")
+     uname = request.args.get("uname")
+     conn = get_db_connection()
+     cur = conn.cursor()
+
+     sql_query = f"SELECT * FROM \"User\" WHERE username = '{uname}';"
+     cur.execute(sql_query)
+     users_info = cur.fetchall()
+     num_rows = int(cur.rowcount)
+
+     if num_rows == 0:
+        response["MESSAGE"] = "Sorry this username doesn't exist. Please try again."
+        return jsonify(response)
+
+     final_result = []
+
+     for user_info in users_info:
+        if user_id == int(user_info[0]):
+           response["MESSAGE"] = "You can't add yourself as a friend. Please choose a different username."
+           return jsonify(response)
+        else:
+           data = {'id': user_info[0], 'username': user_info[1], 'email': user_info[2], 'description': user_info[3]}
+           final_result.append(data)
+        
+     response["results"] = final_result
+     
+     cur.close()
+     conn.close()
+     
+  except Exception as e:
+        response["MESSAGE"] = f"EXCEPTION: /api/friends_specific {e}"
+        print(response["MESSAGE"])
+  return jsonify(response)
+
+# Add a friend
+@app.route("/api/add_friend", methods=['POST'])
+def add_friend():
+  response = {}
+  
+  # This function should add a new friend to user friend list
+  
+  try:
+     user_id = request.args.get("user_id")
+     fid = request.args.get("fid")
+     conn = get_db_connection()
+     cur = conn.cursor()
+
+     cur.execute("INSERT INTO \"Friend\" (uid1, uid2) VALUES (%s, %s)", 
+                       (user_id, fid))
+     conn.commit()
+
+     # assuming friends are bidirectional relationships (like Facebook)
+
+     cur.execute("INSERT INTO \"Friend\" (uid1, uid2) VALUES (%s, %s)", 
+                       (fid, user_id))
+     conn.commit()
+     
+     cur.close()
+     conn.close()
+     
+     response["MESSAGE"] = "Successfully added friend to user friend list"
+  except Exception as e:
+        response["MESSAGE"] = f"EXCEPTION: /api/add_friend {e}"
+        print(response["MESSAGE"])
+  return jsonify(response)
+
+# This endpoint ensures that you avoid adding a friend twice in user friend list
+@app.route("/api/friend_exists", methods=['GET'])
+def friend_exists():
+  response = {}
+    
+  try:
+     user_id = request.args.get("user_id")
+     fid = request.args.get("fid")
+     conn = get_db_connection()
+     cur = conn.cursor()
+
+     friend_exists_query = f"SELECT * FROM \"Friend\" WHERE uid1 = {user_id} AND uid2 = {fid};"
+     cur.execute(friend_exists_query)
+     f_exists = cur.fetchall()
+
+     if len(f_exists) != 0:
+        response["MESSAGE"] = "You have already added him/her as friend in your list. Please try again."
+        return jsonify(response)
+     
+     cur.close()
+     conn.close()
+     
+     response["MESSAGE"] = "You can add him/her as a friend."
+  except Exception as e:
+        response["MESSAGE"] = f"EXCEPTION: /api/friend_exists {e}"
+        print(response["MESSAGE"])
+  return jsonify(response)
+
+# This endpoint retrieves a user's friend list
+@app.route("/api/get_friends", methods=['GET'])
+def get_friends():
+  response = {}
+    
+  try:
+     user_id = request.args.get("user_id")
+     conn = get_db_connection()
+     cur = conn.cursor()
+
+     friends_list_query = f"SELECT \"Friend\".uid2,\"User\".username,\"User\".email,\"User\".description FROM \"Friend\" INNER JOIN \"User\" ON \"Friend\".uid2 = \"User\".id WHERE \"Friend\".uid1 = {user_id};"
+     cur.execute(friends_list_query)
+     f_list = cur.fetchall()
+     num_rows = int(cur.rowcount)
+
+     if num_rows == 0:
+        response["MESSAGE"] = "No friends to display here"
+        return jsonify(response)
+        
+     final_result = []
+  
+     for friend in f_list:
+         data = {'id': friend[0], 'username': friend[1], 'email': friend[2], 'description': friend[3]}
+         final_result.append(data)
+        
+     response["results"] = final_result
+     
+     cur.close()
+     conn.close()
+     
+  except Exception as e:
+        response["MESSAGE"] = f"EXCEPTION: /api/get_friends {e}"
+        print(response["MESSAGE"])
+  return jsonify(response)
+
+# Delete a friend
+@app.route("/api/delete_friend", methods=['DELETE'])
+def delete_friend():
+  response = {}
+  
+  # This function should delete a friend from user friend list
+  
+  try:
+     user_id = request.args.get("user_id")
+     fid = request.args.get("fid")
+     conn = get_db_connection()
+     cur = conn.cursor()
+
+     del_query = f"DELETE FROM \"Friend\" WHERE uid1 = {user_id} AND uid2 = {fid};"
+     cur.execute(del_query)
+     conn.commit()
+
+     # delete friend the other way!
+
+     del_query2 = f"DELETE FROM \"Friend\" WHERE uid1 = {fid} AND uid2 = {user_id};"
+     cur.execute(del_query2)
+     conn.commit()
+     
+     cur.close()
+     conn.close()
+     
+     response["MESSAGE"] = "Successfully deleted friend from user friend list"
+  except Exception as e:
+        response["MESSAGE"] = f"EXCEPTION: /api/delete_friend {e}"
         print(response["MESSAGE"])
   return jsonify(response)
 
