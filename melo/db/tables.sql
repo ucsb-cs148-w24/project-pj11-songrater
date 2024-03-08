@@ -18,7 +18,7 @@ TABLESPACE pg_default;
 ALTER TABLE IF EXISTS public."User"
     OWNER to username;
 
--- DROP TABLE IF EXISTS public."Song_Info";
+DROP TABLE IF EXISTS public."Song_Info";
 
 
 CREATE TABLE IF NOT EXISTS public."Song_Info"
@@ -36,7 +36,7 @@ TABLESPACE pg_default;
 
 -- Table: public.User_Lists_Good
 
--- DROP TABLE IF EXISTS public."User_Lists_Good";
+DROP TABLE IF EXISTS public."User_Lists_Good";
 
 CREATE TABLE IF NOT EXISTS public."User_Lists_Good"
 (
@@ -65,7 +65,7 @@ CREATE INDEX b_tree_idx ON public."User_Lists_Good" USING btree (rank, user_id);
 
 -- Table: public.User_Lists_Ok
 
--- DROP TABLE IF EXISTS public."User_Lists_Ok";
+DROP TABLE IF EXISTS public."User_Lists_Ok";
 
 CREATE TABLE IF NOT EXISTS public."User_Lists_Ok"
 (
@@ -93,7 +93,7 @@ CREATE INDEX b_tree_idx2 ON public."User_Lists_Ok" USING btree (rank, user_id);
 
 -- Table: public.User_Lists_Bad
 
--- DROP TABLE IF EXISTS public."User_Lists_Bad";
+DROP TABLE IF EXISTS public."User_Lists_Bad";
 
 CREATE TABLE IF NOT EXISTS public."User_Lists_Bad"
 (
@@ -121,7 +121,7 @@ CREATE INDEX b_tree_idx3 ON public."User_Lists_Bad" USING btree (rank, user_id);
 
 -- Table: public.Friend
 
--- DROP TABLE IF EXISTS public."Friend";
+DROP TABLE IF EXISTS public."Friend";
 
 CREATE TABLE IF NOT EXISTS public."Friend"
 (
