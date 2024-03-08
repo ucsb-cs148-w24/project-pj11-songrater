@@ -47,6 +47,12 @@ This file documents the roles and GitHub contributions of each team member for o
 
 ### Jeffrey
 
+<<<<<<< HEAD
+
+=======
+
+> > > > > > > ebe80b8e (Update CONTRIBS.md)
+
 - Connected API to get titles from Musicbrainz
 - Created functions to fetch cover arts
 - Created Rate song and Search song screens
