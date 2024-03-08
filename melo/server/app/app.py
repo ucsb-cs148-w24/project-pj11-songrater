@@ -383,6 +383,36 @@ def delete_user():
 
 # Added new skeleton endpoints for user song list feature below - Katya 
 
+def add_song_to_info(song_id, song_name, artist_name, album_name, year, genre, cover):
+   response = {}
+   try:
+      conn = get_db_connection()
+      cur = conn.cursor()
+
+      # Checking if the song_id exists
+      cur.execute("SELECT * FROM public.\"Song_Info\" WHERE song_id = %s;", (song_id,))
+      song_exists = cur.fetchone()
+      if song_exists:
+         response["MESSAGE"] = "Song already exists in Song_Info table"
+      else:
+         insert_query = """INSERT INTO public."Song_Info" 
+                              (song_id, song_name, artist_name, album_name, year, genre) 
+                              VALUES (%s, %s, %s, %s, %s, %s);"""
+         from datetime import datetime
+         year_int = datetime.strptime(year, "%a, %d %b %Y %H:%M:%S GMT").year # TODO: ADD COVER
+         cur.execute(insert_query, (song_id, song_name, artist_name, album_name, year_int, genre))
+         conn.commit()
+         response["MESSAGE"] = "Successfully added new song to Song_Info table."
+
+      cur.close()
+   except Exception as e:
+      response["MESSAGE"] = f"EXCEPTION: {e}"
+   finally:
+      if conn:
+         conn.close()
+   return response
+      
+
 #  Adds a new song to a user's list
 @app.route("/api/add_song", methods=['POST'])
 def add_song():
@@ -395,6 +425,17 @@ def add_song():
      rank = request.args.get("rank")
      review = request.args.get("review")
      type = request.args.get("type")
+
+     song_info = request.json
+     song_name = song_info.get("song_name")
+     artist_name = song_info.get("artist_name")
+     album_name = song_info.get("album_name")
+     year = song_info.get("year")
+     genre = song_info.get("genre")
+     cover = song_info.get("cover")
+     print(f"song_id: {song_id}, song_name: {song_name}, artist_name: {artist_name}, album_name: {album_name}, year: {year}, genre: {genre}, cover: {cover}")
+     val = add_song_to_info(song_id, song_name, artist_name, album_name, year, genre, cover)
+     print(f"val: {val}")
     
      rank_int = int(rank)
      uid = int(user_id)
@@ -516,8 +557,17 @@ def get_user_songs_by_type():
      
 
      if type == "good":
+<<<<<<< HEAD
         sql_query = f"SELECT \"User_Lists_Good\".song_id,\"User_Lists_Good\".rank,\"User_Lists_Good\".review,\"Song_Info\".song_name,\"Song_Info\".artist_name,\"Song_Info\".release_date FROM \"User_Lists_Good\" INNER JOIN \"Song_Info\" ON \"User_Lists_Good\".song_id = \"Song_Info\".song_id WHERE \"User_Lists_Good\".user_id = {user_id} ORDER BY rank;"
         cur.execute(sql_query)
+=======
+        sql_query = f"""SELECT ul.user_id, ul.song_id, ul.rank, ul.review, si.song_name, si.artist_name, si.album_name, si.year, si.genre
+                        FROM "User_Lists_Good" ul
+                        JOIN "Song_Info" si ON ul.song_id = si.song_id
+                        WHERE ul.user_id = %s
+                        ORDER BY ul.rank;"""
+        cur.execute(sql_query, (user_id,))
+>>>>>>> 0ac89710 (fullstack working)
         good_songs = cur.fetchall()
         num_rows = int(cur.rowcount)
         print(f"good_songs: {good_songs}")
@@ -532,7 +582,11 @@ def get_user_songs_by_type():
         idx = rating_list.size-1
 
         for song in good_songs:
+<<<<<<< HEAD
            data = {'song_id': song[0], 'rank': song[1], 'review': song[2], 'song_name': song[3], 'artist_name': song[4], 'release_date': song[5], 'rating': rating_list[idx]}
+=======
+           data = {'user_id': song[0], 'song_id': song[1], 'rank': song[2], 'review': song[3], 'rating': rating_list[idx], 'song_name': song[4], 'artist_name': song[5], 'album_name': song[6], 'year': song[7], 'genre': song[8]}
+>>>>>>> 0ac89710 (fullstack working)
            final_result.append(data)
            idx = idx-1
         
