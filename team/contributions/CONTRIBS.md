@@ -21,7 +21,10 @@ This file documents the roles and GitHub contributions of each team member for o
 - Role:
 
 ### Aryaman
+<<<<<<< HEAD
 
+=======
+>>>>>>> 989688ff (Update CONTRIBS.md)
 - Role: Backend developer
 
 ### Colin
@@ -67,6 +70,10 @@ This file documents the roles and GitHub contributions of each team member for o
 ### Leyang
 
 ### Aryaman
+- Made most of my code contributions in app.py file, which basically contains code for our Flask endpoints
+- Brainstormed and implemented all the basic CRUD endpoints needed for our application, specifically concerning those for User, user song lists, and user friend lists. Example: signup (POST), get_user_songs (GET), delete_friend (DELETE), friends_specific (GET) are just some of the endpoints I worked on
+- Contributed to the /title endpoint, which basically returns a list of song search results queried by artist name and song title. Jeffrey worked on the part to fetch these results from Musicbrainz API, but I worked on the part to add these song results to the Song_Info db table so that for similar query searches we don't have to keep calling the API (basically caching the search results into db for faster retrieval in future queries)
+- Made some changes to tables.sql file to reflect some of the changes that I proposed should be made to our postgres db table schemas (like removing a few column field headers from Song_Info table or changing the type of some fields)
 
 - Made most of my code contributions in app.py file, which basically contains code for our Flask endpoints
 - Brainstormed and implemented all the basic CRUD endpoints needed for our application, specifically concerning those for User, user song lists, and user friend lists. Example: signup (POST), get_user_songs (GET), delete_friend (DELETE), friends_specific (GET) are just some of the endpoints I worked on. In all, I contributed to 15 endpoints
