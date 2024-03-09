@@ -13,7 +13,10 @@ This file documents the roles and GitHub contributions of each team member for o
 - Role: Full-stack developer, mainly on frontend
 
 ### Emily
+<<<<<<< HEAD
 
+=======
+>>>>>>> cb815911 (Update CONTRIBS.md)
 - Role: Frontend and database set up
 
 ### Leyang
@@ -62,7 +65,10 @@ This file documents the roles and GitHub contributions of each team member for o
 - Created ranking algorithm
 
 ### Emily
+<<<<<<< HEAD
 
+=======
+>>>>>>> cb815911 (Update CONTRIBS.md)
 - With Leyang, created the sql scripts for making our database and tables.
 - Also with Leyang, deployed the database to aws rds.
 - Created the profile page and the page to allow users to edit their information.
