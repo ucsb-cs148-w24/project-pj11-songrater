@@ -35,7 +35,10 @@ This file documents the roles and GitHub contributions of each team member for o
 - Role:
 
 ### Amy
+<<<<<<< HEAD
 
+=======
+>>>>>>> 2202f000 (Update CONTRIBS.md)
 - Role: Frontend developer
 
 ## GitHub Contributions
@@ -103,6 +106,10 @@ This file documents the roles and GitHub contributions of each team member for o
 ### Colin
 
 ### Amy
+- Implemented Navigation Bar
+- Implemented Landing Screen and modified Search Screen
+- Designed app color palette
+- Implemented and maintained app styling
 
 - Implemented Navigation Bar
 - Implemented Landing Screen and modified Search Screen
