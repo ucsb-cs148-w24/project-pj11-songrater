@@ -3,32 +3,31 @@ import { Pressable,
   StyleSheet, 
   Text, 
   View, 
-  Image,
-  Button,
-  TouchableOpacity,
   FlatList,
+  Image,
 } from "react-native";
 import { styles } from "./helper/Styles";
 import { typography } from "./helper/Typography";
-import { buttons } from "./helper/Buttons";
-import { Avatar, Divider, Card } from 'react-native-paper';
+import { Avatar, Divider, Card, Button } from 'react-native-paper';
 
 //<a href="https://www.flaticon.com/free-icons/panda" title="panda icons">Panda icons created by Freepik - Flaticon</a>
-
+//<a href="https://www.flaticon.com/free-icons/pencil" title="pencil icons">Pencil icons created by Pixel perfect - Flaticon</a>
 const mockUsername = "Username";
 const mockDescription = "This is a test description!"
 const mockFriendCount = 10;
-const snow = '#FFFBFA'
+const snow = '#FFFBFA';
 
-export default function ProfileScreen({ route }) {
+export default function ProfileScreen({ navigation }) {
   const [songData, setSongData] = useState([]);
-
+  const navigateEditUserScreen = ({}) => {
+    navigation.navigate("EditUserScreen");
+  };
   //const [songInfo, setSongInfo] = useState([]);
   //setSongInfo(songInfo.concat());
-
   useEffect(() => {
     fetchUserSongList({});
   }, []);
+
   const fetchUserSongList = async ({}) => {
     const fetchUserSongParams = {
       user_id: 1, // HARD CODED, CHANGE ONCE OATH IS IN
@@ -44,10 +43,6 @@ export default function ProfileScreen({ route }) {
     const responseBad = await fetch(
       `http://127.0.0.1:5000/api/get_user_songs?user_id=${fetchUserSongParams.user_id}&type=bad`
     ).then((responseBad) => responseBad.json());
-
-    console.log(responseGood.results);
-    console.log(responseOk.results);
-    console.log(responseBad.results);
 
     var newArr = responseGood.results.concat(responseOk.results,responseBad.results)
     newArr = newArr.filter(function( element ) {
@@ -76,14 +71,17 @@ export default function ProfileScreen({ route }) {
     <View style={{display:'flex',flex:1,backgroundColor: "#BBCDE5"}}>
       <View style={{flex:1,marginTop:40, marginLeft:17, marginRight:17, marginBottom:5,flexDirection:'row'}}>
         <Avatar.Image size={64} source={require('../assets/panda.png')} />
-        <Text style={{flex:1, textAlign:'left',padding:15,color: '#00120B', fontSize: 30, fontWeight: 'bold'}}>
+        <Text style={{flex:5, textAlign:'left',padding:15,color: '#00120B', fontSize: 30, fontWeight: 'bold'}}>
           {mockUsername}</Text>
+        <Pressable style={{height:30, width:30, marginRight:20}} onPress={navigateEditUserScreen}>
+          <Image style={{height:30, width:30,marginRight:20}} source={require('../assets/edit.png')}/>
+        </Pressable>
       </View>
       <View style={{flex:1,marginLeft:75,marginRight:17,marginTop:5,marginBottom:5,borderRadius:10}}>
         <Text style={{flex:1, textAlign:'left',padding:10,color: '#A09E9E', fontSize: 15,flexWrap: 'wrap-reverse'}}>
             {mockDescription}</Text>
       </View>
-         <TouchableOpacity style={{marginLeft:17,marginRight:17,marginTop:5,marginBottom:5, flex:1, borderRadius:10,justifyContent:'flex-start'}} onPress={() => handleButton()}>
+         <Pressable style={{marginLeft:17,marginRight:17,marginTop:5,marginBottom:5, flex:1, borderRadius:10,justifyContent:'flex-start'}} onPress={() => handleButton()}>
           <Divider style={{height: 1.5, marginTop: 17, marginHorizontal: 17, backgroundColor : "#3187D8" }} />
           <View style={{display:'flex', flex:1, flexDirection:'row'}}>
             <Text style={{fontSize:20,alignSelf:'center',marginLeft:17}}>
@@ -93,7 +91,7 @@ export default function ProfileScreen({ route }) {
             <Text style={{fontSize:20,alignSelf:'center',marginLeft:'auto',marginRight:17}}>{">"}</Text>
           </View>
           <Divider style={{height: 1.5,marginHorizontal: 17, backgroundColor : "#3187D8" }} />
-        </TouchableOpacity>
+        </Pressable>
       <View style={styles.preference}>
         <View style={styles.titleContainer}>
           <Text style={typography.header}>Your Songs</Text>

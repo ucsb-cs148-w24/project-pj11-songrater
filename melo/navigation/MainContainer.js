@@ -9,6 +9,7 @@ import ProfileScreen from "../components/ProfileScreen";
 import SearchSongScreen from "../components/SearchSongScreen";
 import RateSongScreen from "../components/RateSongScreen";
 import LandingScreen from "../components/LandingScreen";
+import EditUserScreen from "../components/EditUserScreen";
 
 // Screen names
 const homeName = "Home";
@@ -34,7 +35,21 @@ function SongStack() {
     </Stack.Navigator>
   );
 }
-
+function ProfileStack(){
+  return(
+    <Stack.Navigator initialRouteName={"ProfileScreen"}>
+      <Stack.Screen
+        name="ProfileScreen"
+        component={ProfileScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="EditUserScreen"
+        component={EditUserScreen}
+        options={{ headerShown: false }}
+      />
+    </Stack.Navigator>  )
+}
 function MainContainer() {
   return (
     <NavigationContainer>
@@ -59,7 +74,7 @@ function MainContainer() {
       >
         <Tab.Screen name={homeName} component={LandingScreen} options={{ headerShown: false }} />
         <Tab.Screen name={searchName} component={SongStack} options={{ headerShown: false }} />
-        <Tab.Screen name={profileName} component={ProfileScreen} options={{ headerShown: false }} />
+        <Tab.Screen name={profileName} component={ProfileStack} options={{ headerShown: false }} />
       </Tab.Navigator>
     </NavigationContainer>
   );

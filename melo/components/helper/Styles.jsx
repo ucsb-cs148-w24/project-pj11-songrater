@@ -202,4 +202,7 @@ export const styles = StyleSheet.create({
         borderRadius: 50,
         padding: 5,
     },
+    gridContainer:{
+        
+    },
 });
