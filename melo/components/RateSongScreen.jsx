@@ -33,7 +33,6 @@ export default function RateSongScreen({ route }) {
     currentIndex: 0,
   });
   const [doneRanking, setDoneRanking] = useState(false);
-  const [ready, setReady] = useState(false);
   const [userSongs, setUserSongs] = useState({});
   const [finish, setFinish] = useState(false);
 
@@ -43,11 +42,7 @@ export default function RateSongScreen({ route }) {
   }, []);
 
   useEffect(() => {
-    console.log(
-      `indices: [${indices.leftIndex}, ${indices.rightIndex}, ${indices.currentIndex}], doneRanking: ${doneRanking}`
-    );
     if (doneRanking) {
-      console.log(`user song has been added.`);
       addUserSong();
     }
   }, [doneRanking]);
@@ -67,7 +62,7 @@ export default function RateSongScreen({ route }) {
       {
         method: "POST",
       }
-    ).then((response) => console.log(response));
+    );
   };
 
   const fetchUserSongs = async ({ rating }) => {
@@ -90,12 +85,8 @@ export default function RateSongScreen({ route }) {
             rightIndex: data.results.length - 1,
             currentIndex: Math.floor((data.results.length - 1) / 2),
           });
-          console.log(indices);
-          setReady(true);
         }
       });
-
-    console.log(response);
   };
 
   const updateIndices = useCallback((status) => {
@@ -123,7 +114,6 @@ export default function RateSongScreen({ route }) {
       }
 
       // Logging for debugging
-      console.log(`left: ${newLeft}, right: ${newRight}, curr: ${newCurrent}`);
 
       if (newRight < newLeft || (userSongs.length < 2 && newRight <= newLeft)) {
         setDoneRanking(true);
@@ -173,9 +163,6 @@ export default function RateSongScreen({ route }) {
             review={review}
             status={"new"}
           />
-          {console.log(
-            `currentIndex: ${indices.currentIndex}, userSongs: ${userSongs}`
-          )}
           <RateSongComponent
             title={userSongs[indices.currentIndex].song_name}
             artist={userSongs[indices.currentIndex].artist}
