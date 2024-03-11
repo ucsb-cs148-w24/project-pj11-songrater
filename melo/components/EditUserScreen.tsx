@@ -2,18 +2,75 @@ import { Pressable, StyleSheet, Text, View } from "react-native";
 import { typography } from "./helper/Typography";
 // import { styles } from "./helper/Styles";
 import { useEffect, useState } from "react";
-import { Avatar, Divider, Modal, Portal, PaperProvider, TextInput} from 'react-native-paper';
+import { Avatar, Divider, Modal, Portal, PaperProvider, TextInput, HelperText} from 'react-native-paper';
 
 export function TextBox({title}){
     const [text, setText] = useState('');
-    const submitted = () => {console.log("AAA")}
+    const [error, setError] = useState(false);
+    const [success, setSuccess] = useState(false);
+
+    const submitted = () => {CallAPI(title,text)};
+
+    const CallAPI = async(title,text) => {
+        const user_id = 1
+        var uname;
+        var description;
+        const curr_info = await fetch(
+            `http://127.0.0.1:5000/api/get_profile?user_id=${user_id}`
+        ).then((curr_info) => curr_info.json())
+        
+        try{
+            uname = curr_info.results[0].username;
+            description = curr_info.results[0].description;
+        }
+        catch{}
+        if (description == undefined){
+            description=null;
+        }
+        var response;
+        console.log(title);
+        if(title=='Username'){
+            response = await fetch(
+                `http://127.0.0.1:5000/api/update_profile?user_id=${user_id}&uname=${text}&description=${description}`,
+              {method:'PUT'}).then((response) => response.json());
+        }
+        else if(title=='Description'){
+            response = await fetch(
+                `http://127.0.0.1:5000/api/update_profile?user_id=${user_id}&uname=${uname}&description=${text}`,
+              {method:'PUT'}).then((response) => response.json());
+        }
+        try{
+            console.log(response.MESSAGE)
+            if (response.MESSAGE!='Successfully updated profile of user'){
+                setError(true);
+                setSuccess(false);
+            }
+            else{
+                setError(false);
+                setSuccess(true);
+            }
+        }
+        catch{};
+    };
+
     return(
-        <TextInput
-            onSubmitEditing={submitted}
-            onChangeText={text=>setText(text)}
-            value={text}
-            placeholder={`New ${title}`}
-        />
+        <View>
+            <TextInput
+                onSubmitEditing={submitted}
+                onChangeText={text=>setText(text)}
+                value={text}
+                placeholder={`New ${title}`}
+            />
+            {error
+                ?<HelperText type="error" visible={error}>
+                    Username is already in use, please enter another one!
+                </HelperText>
+                :<HelperText type="info" visible={success}>
+                    Username has been changed!
+                </HelperText>
+            }
+        </View>
+
     );
 };
 
@@ -53,23 +110,18 @@ export default function EditUser({ route }) {
     };
 
     return(
-        <View style={{display:'flex',flex:1,backgroundColor: "#BBCDE5"}}>
+        <View style={{display:'flex',flex:1,backgroundColor: "#F3F6F7"}}>
             <PaperProvider>
-                <Avatar.Image size={150} source={require('../assets/panda.png')} style={{flex:1, marginTop:50,alignSelf:'center', backgroundColor:"#BBCDE5"}} />
+                <Avatar.Image size={150} source={require('../assets/panda.png')} style={{flex:2, marginTop:50,alignSelf:'center', backgroundColor:"#F3F6F7"}} />
                 <MyModal/>
                 <View style={{flex:1}}>
                     <Divider style={styles.divider} />
                     <SelectionButton title={'Username'}/>
                     <Divider style={styles.divider} />
-                    <SelectionButton title={'Email'}/>
-                    <Divider style={styles.divider} />
                     <SelectionButton title={'Description'}/>
                     <Divider style={styles.divider} />
-                    <SelectionButton title={'Password'}/>
-                    <Divider style={styles.divider} />
                 </View>
-
-                <View style={{flex:1}}/>
+                <View style={{flex:2}}/>
             </PaperProvider>
         </View>
     );

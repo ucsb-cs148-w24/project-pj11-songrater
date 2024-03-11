@@ -18,7 +18,10 @@ const mockFriendCount = 10;
 const snow = '#FFFBFA';
 
 export default function ProfileScreen({ navigation }) {
+  const [uname, setUname] = useState("");
+  const [description, setDescription] = useState("");
   const [songData, setSongData] = useState([]);
+
   const navigateEditUserScreen = ({}) => {
     navigation.navigate("EditUserScreen");
   };
@@ -26,25 +29,48 @@ export default function ProfileScreen({ navigation }) {
   //setSongInfo(songInfo.concat());
   useEffect(() => {
     fetchUserSongList({});
+    fetchUserInfo();
   }, []);
 
+  const fetchUserInfo = async () => {
+    console.log('aaaaaaa');
+    const user_id = 1
+    const curr_info = await fetch(
+      `http://127.0.0.1:5000/api/get_profile?user_id=${user_id}`
+    ).then((curr_info) => curr_info.json())
+    console.log(curr_info);
+    try{
+      setUname(curr_info.results[0].username);
+      setDescription(curr_info.results[0].description);
+    }
+    catch{
+      console.log('Error getting User Info');
+    }
+  }
+
   const fetchUserSongList = async ({}) => {
-    const fetchUserSongParams = {
-      user_id: 1, // HARD CODED, CHANGE ONCE OATH IS IN
-    };
+    const user_id = 1
     const responseGood = await fetch(
-      `http://127.0.0.1:5000/api/get_user_songs?user_id=${fetchUserSongParams.user_id}&type=good`
+      `http://127.0.0.1:5000/api/get_user_songs?user_id=${user_id}&type=good`
     ).then((responseGood) => responseGood.json());
 
     const responseOk = await fetch(
-      `http://127.0.0.1:5000/api/get_user_songs?user_id=${fetchUserSongParams.user_id}&type=ok`
+      `http://127.0.0.1:5000/api/get_user_songs?user_id=${user_id}&type=ok`
     ).then((responseOk) => responseOk.json());
 
     const responseBad = await fetch(
-      `http://127.0.0.1:5000/api/get_user_songs?user_id=${fetchUserSongParams.user_id}&type=bad`
+      `http://127.0.0.1:5000/api/get_user_songs?user_id=${user_id}&type=bad`
     ).then((responseBad) => responseBad.json());
-
-    var newArr = responseGood.results.concat(responseOk.results,responseBad.results)
+    var newArr = [];
+    try{
+      newArr = newArr.concat(responseGood.results)
+      newArr = newArr.concat(responseOk.results)
+      newArr = newArr.concat(responseBad.results)
+    }
+    catch{}
+    console.log(responseGood)
+    console.log(responseOk)
+    console.log(responseBad)
     newArr = newArr.filter(function( element ) {
       return element !== undefined;
    });
@@ -67,19 +93,20 @@ export default function ProfileScreen({ navigation }) {
       </Card.Content>
     </Card>
   );
+
   return (
-    <View style={{display:'flex',flex:1,backgroundColor: "#BBCDE5"}}>
+    <View style={{display:'flex',flex:1,backgroundColor: "#F3F6F7"}}>
       <View style={{flex:1,marginTop:40, marginLeft:17, marginRight:17, marginBottom:5,flexDirection:'row'}}>
         <Avatar.Image size={64} source={require('../assets/panda.png')} />
         <Text style={{flex:5, textAlign:'left',padding:15,color: '#00120B', fontSize: 30, fontWeight: 'bold'}}>
-          {mockUsername}</Text>
+          {uname}</Text>
         <Pressable style={{height:30, width:30, marginRight:20}} onPress={navigateEditUserScreen}>
           <Image style={{height:30, width:30,marginRight:20}} source={require('../assets/edit.png')}/>
         </Pressable>
       </View>
       <View style={{flex:1,marginLeft:75,marginRight:17,marginTop:5,marginBottom:5,borderRadius:10}}>
         <Text style={{flex:1, textAlign:'left',padding:10,color: '#A09E9E', fontSize: 15,flexWrap: 'wrap-reverse'}}>
-            {mockDescription}</Text>
+            {description}</Text>
       </View>
          <Pressable style={{marginLeft:17,marginRight:17,marginTop:5,marginBottom:5, flex:1, borderRadius:10,justifyContent:'flex-start'}} onPress={() => handleButton()}>
           <Divider style={{height: 1.5, marginTop: 17, marginHorizontal: 17, backgroundColor : "#3187D8" }} />

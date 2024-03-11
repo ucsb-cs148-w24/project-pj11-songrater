@@ -135,7 +135,7 @@ const LandingScreen = ({ navigation }) => {
           />
         </View>
 
-        <Divider style={{ height: 1.5, marginTop: 17, marginHorizontal: 17, backgroundColor : "#3187D8" }} />
+        <Divider style={styles.divider} />
 
         <View style={styles.preference}>
           <View style={styles.titleContainer}>

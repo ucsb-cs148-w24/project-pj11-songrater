@@ -2,9 +2,9 @@
 
 -- DROP DATABASE IF EXISTS musicdb;
 
-CREATE DATABASE musicdb
+CREATE DATABASE melo-db
     WITH
-    OWNER = adas16
+    TEMPLATE 'template0'
     ENCODING = 'UTF8'
     LC_COLLATE = 'en_US.UTF-8'
     LC_CTYPE = 'en_US.UTF-8'
