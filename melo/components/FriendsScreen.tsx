@@ -46,7 +46,7 @@ export default function FriendsScreen({ navigation }){
     {id:'9', mockname: 'Friend9', avatar: require('../assets/default-avatar.jpeg')},
   ]);
 
-  const [searchFriendsData, setSearchFriendsData] = useState({id:'1', mockname: 'Friend1', avatar: require('../assets/default-avatar.jpeg')});
+  const [searchFriendsData, setSearchFriendsData] = useState([{id:'1', mockname: 'Bob', avatar: require('../assets/default-avatar.jpeg')},]);
 
   const [newname, setName] = useState("");
 
@@ -68,6 +68,26 @@ export default function FriendsScreen({ navigation }){
         </Card.Content>
     </Card>
   );
+
+  const renderNewcard = ({ item }) => (
+    <Card style={styles.card} mode={'elevated'}>
+     <Card.Content>
+      <Pressable>
+        <View style={{flex:1, flexDirection:'row', alignItems: 'center'}}>
+          <Avatar.Image size={40} source={item.avatar} />
+           <Text style={{flex:1, marginLeft: 40}}>
+             <Text style={{fontSize: 20, fontWeight:'bold'}}>{item.mockname}</Text>
+           </Text>
+            <Text style={{fontWeight:'bold', marginRight: 16}}>
+              {'+'}
+            </Text>
+          </View>
+        </Pressable>
+      </Card.Content>
+    </Card>
+  );
+
+
 
   const [isLoading, setIsLoading] = useState(false);
   const [searchFriendsState, setSearchFriendsState] = useState(false);
@@ -92,10 +112,11 @@ export default function FriendsScreen({ navigation }){
     //   console.error("Error fetching data: ", error);
     // }
     try {
-      setSearchFriendsData({id:'10', mockname: 'Bob', avatar: require('../assets/default-avatar.jpeg')});
       setSearchFriendsState(true);
+      // setSearchFriendsData([{id:'10', mockname: 'Bob', avatar: require('../assets/default-avatar.jpeg')},]);
     }
     catch (error) {
+      setSearchFriendsState(false);
       console.error(error);
     }
   };
@@ -138,7 +159,7 @@ export default function FriendsScreen({ navigation }){
       <View style={styles.preference}>
         <Searchbar
           onChangeText={setName}
-          loading={isLoading}
+          loading={searchFriendsState}
           placeholder="Find a new Friend..."
           onSubmitEditing={fetchFriend}
           style={styles.searchbar}
@@ -149,19 +170,18 @@ export default function FriendsScreen({ navigation }){
         </Button></View>
       </View>
 
-      {searchFriendsState && <View>
+      {searchFriendsState && <View style={{flex:6}}>
         <View style={styles.preference}>
           <View style={styles.titleContainer}>
             <Text style={typography.header}>New Friend</Text>
           </View>
-        </View>  
-        <Card style={styles.card} mode={'elevated'}>
+        </View>
+        {/* <Card style={styles.card}>
           <Card.Content>
-            {/* onPress -- add user */}
             <Pressable>
               <View style={{flex:1, flexDirection:'row', alignItems: 'center'}}>
                 <Avatar.Image size={40} source={searchFriendsData.avatar} />
-                <Text style={{flex:1, marginLeft: 40 }}>
+                <Text style={{flex:1, marginLeft: 40}}>
                   <Text style={{fontSize: 20, fontWeight:'bold'}}>{searchFriendsData.mockname}</Text>
                 </Text>
                 <Text style={{fontWeight:'bold', marginRight: 16}}>
@@ -170,7 +190,16 @@ export default function FriendsScreen({ navigation }){
               </View>
             </Pressable>
           </Card.Content>
-        </Card>
+        </Card> */}
+        <View style={{flex:6}}>
+          <FlatList
+          data={searchFriendsData}
+          keyExtractor={(item) => item.id}
+          renderItem={renderNewcard}
+          style={[styles.container]}
+          contentContainerStyle={styles.content}
+          />
+        </View>  
       </View>
       }
      
