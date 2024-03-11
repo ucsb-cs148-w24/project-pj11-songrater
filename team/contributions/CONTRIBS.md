@@ -20,8 +20,12 @@ This file documents the roles and GitHub contributions of each team member for o
 - Role: Frontend and database set up
 
 ### Leyang
+<<<<<<< HEAD
 
 - Role:
+=======
+- Role: Database set up and Frontend
+>>>>>>> 960b00be (Update CONTRIBS.md)
 
 ### Aryaman
 <<<<<<< HEAD
@@ -77,6 +81,12 @@ This file documents the roles and GitHub contributions of each team member for o
 - Created the profile page and the page to allow users to edit their information.
 
 ### Leyang
+<<<<<<< HEAD
+=======
+- With Emily, created the sql scripts for making database and tables.
+- Deployed the database to aws rds with Emily
+- With Collin, created the friends page that allow users to add new friend and view their friends list. 
+>>>>>>> 960b00be (Update CONTRIBS.md)
 
 ### Aryaman
 - Made most of my code contributions in app.py file, which basically contains code for our Flask endpoints
