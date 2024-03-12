@@ -197,7 +197,7 @@ def create_user():
      print(uname,email)
   except Exception as e:
         response["MESSAGE"] = f"EXCEPTION: /api/signup {e}"
-        print(response["MESSAGE"])
+        print("ERROR: \n" + response["MESSAGE"] + "\n")
   return jsonify(response)
 
 # Retrieves a user's profile information.

@@ -1,22 +1,19 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { typography } from "./helper/Typography";
 import { buttons } from "./helper/Buttons";
-import { LoginButton } from "./LoginButton";
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { FirebaseAuthTypes } from "@react-native-firebase/auth";
-import { useEffect } from "react";
 import { useState } from "react";
+import { useLayoutEffect } from "react";
 
-export default function LandingScreen({ navigation }) {
+
+export default function SplashScreen({ navigation }) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const navigateToSearch = () => {
-    navigation.navigate("Search");
-  };
 
   const navigateToLogin = () => {
-    navigation.navigate("Login");
+    navigation.navigate('Login');
   }
 
   const Logout = () => {
@@ -28,24 +25,6 @@ export default function LandingScreen({ navigation }) {
     });
   }
 
-  useEffect(() => {
-    const auth = getAuth();
-    const sub = onAuthStateChanged(auth, (user) => {
-      setTimeout(() => {
-        if (!user) {
-          navigation.navigate("Login");
-          setIsLoggedIn(false);
-        }
-        else {
-          navigation.navigate("LandingScreen");
-          setIsLoggedIn(true);
-        }
-      }, 10);
-    });
-
-    return sub;
-    }, [navigation]);
-
   return (
     <View style={{ flex: 1, backgroundColor: "#FFFAEA", padding: 20 }}>
       <View style={styles.titleContainer}>
@@ -53,28 +32,12 @@ export default function LandingScreen({ navigation }) {
       </View>
       <View style={styles.buttonContainer}>
         <Pressable
-          title="Enter Melo"
-          onPress={navigateToSearch}
-          style={buttons.outline}
-        >
-          <Text style={typography.default_l}>Search Song</Text>
-        </Pressable>
-      </View>
-      <View style={styles.buttonContainer}>
-        { !isLoggedIn && <Pressable
           title="Login"
           onPress={navigateToLogin}
           style={buttons.outline}
         >
           <Text style={typography.default_l}>Login</Text>
-        </Pressable> }
-        { isLoggedIn && <Pressable
-          title="Logout"
-          onPress={Logout}
-          style={buttons.outline}
-        >
-          <Text style={typography.default_l}>Logout</Text>
-        </Pressable> }
+        </Pressable>
       </View>
     </View>
   );
