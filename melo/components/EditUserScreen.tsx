@@ -2,7 +2,7 @@ import { Pressable, StyleSheet, Text, View } from "react-native";
 import { typography } from "./helper/Typography";
 // import { styles } from "./helper/Styles";
 import { useEffect, useState } from "react";
-import { Avatar, Divider, Modal, Portal, PaperProvider, TextInput, HelperText} from 'react-native-paper';
+import { Avatar, Divider, Modal, Portal, PaperProvider, TextInput, HelperText, Button} from 'react-native-paper';
 
 export function TextBox({title}){
     const [text, setText] = useState('');
@@ -12,35 +12,25 @@ export function TextBox({title}){
     const submitted = () => {CallAPI(title,text)};
 
     const CallAPI = async(title,text) => {
-        const user_id = 1
-        var uname;
-        var description;
-        const curr_info = await fetch(
-            `http://127.0.0.1:5000/api/get_profile?user_id=${user_id}`
-        ).then((curr_info) => curr_info.json())
+        const user_id = 3
+        var response;
+        try{
+            if(title=='Username'){
+                response = await fetch(
+                    `http://127.0.0.1:5000/api/update_profile?user_id=${user_id}&uname=${text}`,
+                  {method:'PUT'}).then((response) => response.json());
+            }
+            else if(title=='Description'){
+                response = await fetch(
+                    `http://127.0.0.1:5000/api/update_profile?user_id=${user_id}&description=${text}`,
+                  {method:'PUT'}).then((response) => response.json());
+            }
+        }
+        catch{
+            console.log('Error updating user profile');
+        }
         
         try{
-            uname = curr_info.results[0].username;
-            description = curr_info.results[0].description;
-        }
-        catch{}
-        if (description == undefined){
-            description=null;
-        }
-        var response;
-        console.log(title);
-        if(title=='Username'){
-            response = await fetch(
-                `http://127.0.0.1:5000/api/update_profile?user_id=${user_id}&uname=${text}&description=${description}`,
-              {method:'PUT'}).then((response) => response.json());
-        }
-        else if(title=='Description'){
-            response = await fetch(
-                `http://127.0.0.1:5000/api/update_profile?user_id=${user_id}&uname=${uname}&description=${text}`,
-              {method:'PUT'}).then((response) => response.json());
-        }
-        try{
-            console.log(response.MESSAGE)
             if (response.MESSAGE!='Successfully updated profile of user'){
                 setError(true);
                 setSuccess(false);
@@ -60,15 +50,21 @@ export function TextBox({title}){
                 onChangeText={text=>setText(text)}
                 value={text}
                 placeholder={`New ${title}`}
+                activeUnderlineColor = "#3187D8"
+                style ={{backgroundColor:"#F3F6F7"}}
             />
             {error
                 ?<HelperText type="error" visible={error}>
-                    Username is already in use, please enter another one!
+                    {title} is already in use, please enter another one!
                 </HelperText>
                 :<HelperText type="info" visible={success}>
-                    Username has been changed!
+                    {title} has been changed!
                 </HelperText>
             }
+            <Button mode="contained" onPress={submitted} style={{margin:10,backgroundColor:"#3187D8"}}>
+                Submit
+            </Button>
+            
         </View>
 
     );
@@ -86,7 +82,7 @@ export default function EditUser({ route }) {
         return(
             <Portal>
                 <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={styles.containerStyle}>
-                    <Text style={{fontSize:20,flexWrap: 'wrap-reverse',flex:1}}>Enter a new {pressedButton}</Text>
+                    <Text style={{fontSize:20,flexWrap: 'wrap-reverse',flex:1, marginBottom:20}}>Enter a new {pressedButton}</Text>
                     <TextBox title={pressedButton}/>
                 </Modal>
             </Portal>
@@ -112,7 +108,7 @@ export default function EditUser({ route }) {
     return(
         <View style={{display:'flex',flex:1,backgroundColor: "#F3F6F7"}}>
             <PaperProvider>
-                <Avatar.Image size={150} source={require('../assets/panda.png')} style={{flex:2, marginTop:50,alignSelf:'center', backgroundColor:"#F3F6F7"}} />
+                <Text style={styles.title}>Settings</Text>
                 <MyModal/>
                 <View style={{flex:1}}>
                     <Divider style={styles.divider} />
@@ -147,4 +143,14 @@ const styles = StyleSheet.create({
         padding: 20,
         margin:20
     },
+    title: {
+        marginTop: 16,
+        paddingVertical: 8,
+        color: '#3187D8',
+        textAlign: 'center',
+        fontSize: 48,
+        fontWeight: 'bold',
+        fontFamily: "Poppins",
+        flex: 1,
+      },
 })
