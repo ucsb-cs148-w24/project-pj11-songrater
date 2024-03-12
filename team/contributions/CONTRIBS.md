@@ -19,8 +19,8 @@ This file documents the roles and GitHub contributions of each team member for o
 ### Aryaman
 - Role: Backend developer
 
-### Colin
-- Role:
+### Collin
+- Role: Frontend Developer
 
 ### Amy
 - Role: Frontend developer
@@ -61,7 +61,11 @@ This file documents the roles and GitHub contributions of each team member for o
 - A note about the /graphs/contributors report: It only shows the commits that I made under the git config username "akdas16" specifically to main branch: it DOES NOT SHOW the commits I made under "Aryaman Das" username, which represents all the commits I made from my cloned repo. The "akdas16" commits were mostly .md file commits I made directly on Github under main branch, whereas the "Aryaman Das" commits were the coding commits (note the coding commits were pushed to my own "aryamandas" branch). Also, many weeks back I created a PR which was initially supposed to represent a few endpoints that I worked on, but since it was never officially merged to main branch, the PR eventually bloated up and housed most of my subsequent code commits I made, and instead of that PR getting merged the team members just did git pull origin aryamandas --rebase from my "aryamandas" branch to get their individual branches synced with mine. Basically long story short: whatever commit history that is generated in the report shows only a fraction of what I actually contributed to our repo.
 
 
-### Colin
+### Collin
+- Implemented user authentication
+- Developed Friends Page for friends list
+- Developed Splash Screen for user's first visit
+- Connected User Auth and Friends Lists to Flask Endpoints
 
 
 ### Amy
