@@ -12,7 +12,7 @@ export function TextBox({title}){
     const submitted = () => {CallAPI(title,text)};
 
     const CallAPI = async(title,text) => {
-        const user_id = 3
+        const user_id = 1
         var response;
         try{
             if(title=='Username'){
