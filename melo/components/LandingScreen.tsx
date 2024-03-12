@@ -8,6 +8,7 @@ import { useExampleTheme } from './helper/Themes';
 import { buttons } from './helper/Buttons';
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import { useEffect } from 'react';
+import SplashScreen from './SplashScreen';
 
 const LandingScreen = ({ navigation }) => {
   const { colors, isV3 } = useExampleTheme();
@@ -149,6 +150,7 @@ const LandingScreen = ({ navigation }) => {
     const auth = getAuth();
     signOut(auth).then(() => {
       setIsLoggedIn(false);
+      navigation.navigate("Splash");
     }).catch((error) => {
       console.error("Log Out Failed")
     });
@@ -157,17 +159,14 @@ const LandingScreen = ({ navigation }) => {
   return (
     <ScreenWrapper contentContainerStyle={styles.content}>
       <ScrollView>
-        <View style={styles.preference}>
+        <View style={[styles.preference, {flexDirection: 'row', justifyContent: 'space-between'}]}>
           <View style={styles.titleContainer}>
             <Text style={typography.title}>Melo</Text>
           </View>
-          <View style={buttons.primary}>
-            {!isLoggedIn && <Pressable style={buttons.outline} onPress={navigateToLogin}>
-              <Text>Login</Text>
-            </Pressable>}
-            {isLoggedIn && <Pressable style={buttons.outline} onPress={Logout}>
+          <View style={[buttons.primary, {width: 144, height: 48}]}>
+            <Pressable style={[buttons.outline, {width: 144, height: 48}]} onPress={Logout}>
               <Text>Logout</Text>
-            </Pressable>}
+            </Pressable>
           </View>
         </View>
 

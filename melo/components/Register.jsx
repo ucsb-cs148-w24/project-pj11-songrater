@@ -3,6 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-nativ
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { objectToUrlParams } from './helper/functions';
 
 export const Register = ({navigation}) => {
   const [name, setName] = useState('');
@@ -11,29 +12,31 @@ export const Register = ({navigation}) => {
 
   const createProfile = async (uid, email) => {
     try {
-      const formData = new FormData();
-      formData.append('uid', uid);
-      formData.append('email', email);
-      // Assuming username and description are required by your Flask API.
-      // You'll need to add these fields or modify as necessary.
-      formData.append('description', ""); // Update this with actual description
-  
-      const response = await fetch('http://127.0.0.1:5000/api/signup', {
-        method: 'POST',
-        body: formData,
-      });
+
+        const userProfileParams = {
+          uid: uid, // TODO : change once we get valid user IDs
+          email: email,
+        };  
+
+        const response = await fetch(
+        "http://127.0.0.1:5001/api/signup?" +
+          objectToUrlParams(userProfileParams),
+        {
+          method: "POST",
+        }
+      );
   
       if (!response.ok) {
-        throw new Error('Network response was not ok');
+        throw new Error('Network response was not ok ' + response.statusText);
       }
   
-      const jsonResponse = await response.json();
-      console.log("Received jsonResponse");
-      console.log(jsonResponse); // Handle or display the response as needed
-      return jsonResponse;
+      const responseData = await response.json(); // This parses the JSON content from the response
+
+      console.log("Received response data");
+      console.log(responseData); // Now you have the parsed data
+      return responseData;
     } catch (error) {
       console.error('Error creating profile:', error);
-      return { "MESSAGE": `Error creating profile: ${error}` }; // Return or handle error response as needed
     }
   };
   
@@ -44,7 +47,7 @@ export const Register = ({navigation}) => {
         const auth = await getAuth();
         const response = await createUserWithEmailAndPassword(auth, email, password);
         if (response.user) {
-          navigation.navigate("LandingScreen");
+          navigation.navigate("Landing");
           console.log(response.user.email)
           await createProfile(response.user.uid, response.user.email);
         }
