@@ -24,7 +24,7 @@ function SongStack() {
       <Stack.Screen
         name="SearchSong"
         component={SearchSongScreen}
-        options={{ headerShown: false }}
+        options={{ headerShown: false, unmountOnBlur: true }}
       />
       <Stack.Screen
         name="RateSong"
@@ -78,12 +78,12 @@ function MainContainer() {
         <Tab.Screen
           name={searchName}
           component={SongStack}
-          options={{ headerShown: false }}
+          options={{ headerShown: false, unmountOnBlur: true }}
         />
         <Tab.Screen
           name={profileName}
           component={ProfileScreen}
-          options={{ headerShown: false }}
+          options={{ headerShown: false, unmountOnBlur: true }}
         />
       </Tab.Navigator>
     </NavigationContainer>
