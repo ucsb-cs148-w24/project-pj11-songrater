@@ -9,8 +9,7 @@ import { LoginButton } from "../components/LoginButton";
 import { useState } from "react";
 import { useEffect } from "react";
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
-import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
-
+import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
 
 // Screens
 import ProfileScreen from "../components/ProfileScreen";
@@ -26,7 +25,7 @@ import SplashScreen from "../components/SplashScreen";
 const homeName = "Home";
 const profileName = "Profile";
 const searchName = "Search";
-const friendName = "Friend"
+const friendName = "Friend";
 const splashName = "Splash";
 const splashStackName = "SplashStack";
 
@@ -40,7 +39,7 @@ function SongStack() {
       <Stack.Screen
         name="SearchSong"
         component={SearchSongScreen}
-        options={{ headerShown: false }}
+        options={{ headerShown: false, unmountOnBlur: true }}
       />
       <Stack.Screen
         name="RateSong"
@@ -58,19 +57,18 @@ function SplashStack() {
     const auth = getAuth();
     const sub = onAuthStateChanged(auth, (user) => {
       if (!user) {
-        setInitialRouteName("Loading")
-      }
-      else {
-        console.log(user)
-        setInitialRouteName("Landing")
+        setInitialRouteName("Loading");
+      } else {
+        console.log(user);
+        setInitialRouteName("Landing");
       }
     });
 
     return sub;
-    }, []);
+  }, []);
 
   return (
-    <Stack2.Navigator initialRouteName={{initialRouteName}}>
+    <Stack2.Navigator initialRouteName={{ initialRouteName }}>
       <Stack2.Screen
         name={"Loading"}
         component={LoadingScreen}
@@ -109,13 +107,12 @@ function MainContainer() {
       setTimeout(() => {
         if (!user) {
           setIsLoggedIn(false);
-        }
-        else {
+        } else {
           setIsLoggedIn(true);
         }
-      }, );
+      });
     });
-    }, []);
+  }, []);
 
   return (
     <NavigationContainer>
@@ -145,12 +142,12 @@ function MainContainer() {
           tabBarStyle: [
             {
               display:
-              getFocusedRouteNameFromRoute(route) === 'Splash' || 
-              getFocusedRouteNameFromRoute(route) === 'Login' || 
-              getFocusedRouteNameFromRoute(route) === 'Register' ||
-              getFocusedRouteNameFromRoute(route) === 'Loading'
-              ? 'none'
-              : 'flex',
+                getFocusedRouteNameFromRoute(route) === "Splash" ||
+                getFocusedRouteNameFromRoute(route) === "Login" ||
+                getFocusedRouteNameFromRoute(route) === "Register" ||
+                getFocusedRouteNameFromRoute(route) === "Loading"
+                  ? "none"
+                  : "flex",
             },
             null,
           ],
@@ -162,18 +159,28 @@ function MainContainer() {
           component={SplashStack}
           options={({ route }) => ({
             headerShown:
-              getFocusedRouteNameFromRoute(route) !== 'Splash' &&
-              getFocusedRouteNameFromRoute(route) !== 'Login' &&
-              getFocusedRouteNameFromRoute(route) !== 'Register' &&
-              getFocusedRouteNameFromRoute(route) !== 'Loading'
+              getFocusedRouteNameFromRoute(route) !== "Splash" &&
+              getFocusedRouteNameFromRoute(route) !== "Login" &&
+              getFocusedRouteNameFromRoute(route) !== "Register" &&
+              getFocusedRouteNameFromRoute(route) !== "Loading",
           })}
           listeners={({ navigation, route }) => ({
-            tabPress: e => {
+            tabPress: (e) => {
               // Prevent default action
               e.preventDefault();
-              navigation.navigate('Landing');
+              navigation.navigate("Landing");
             },
           })}
+        />
+        <Tab.Screen
+          name={searchName}
+          component={SongStack}
+          options={{ headerShown: false, unmountOnBlur: true }}
+        />
+        <Tab.Screen
+          name={profileName}
+          component={ProfileScreen}
+          options={{ headerShown: false, unmountOnBlur: true }}
         />
         <Tab.Screen name={searchName} component={SongStack} />
         <Tab.Screen name={profileName} component={ProfileScreen} />
