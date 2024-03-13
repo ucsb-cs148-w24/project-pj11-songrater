@@ -22,8 +22,9 @@ import { styles } from "./helper/Styles";
 import { typography } from "./helper/Typography";
 import { buttons } from "./helper/Buttons";
 
+import {getAuth} from "firebase/auth";
 
-
+const UserId = 5
 const snow = '#FFFBFA'
 
 export default function FriendsScreen({ navigation }){
@@ -46,7 +47,7 @@ export default function FriendsScreen({ navigation }){
 
   const [newname, setName] = useState("");
 
-  const [fid, setFid] = useState(null);
+  const [fid, setFid] = useState(0);
   const [fexist, setFexist] = useState("");
 
   const renderCard= ({ item }) => (
@@ -77,6 +78,8 @@ export default function FriendsScreen({ navigation }){
            </Text>
            <Pressable
                 onPress={() => {
+                  // setFid(parseInt(item.id, 10));
+                  // console.log(fid);
                   AddFriend();
                 }}
               >
@@ -95,26 +98,27 @@ export default function FriendsScreen({ navigation }){
   const [searchFriendsState, setSearchFriendsState] = useState(false);
 
   const fetchFriend = async() => {
-    const UserId = 2;
+    
     setIsLoading(true);
     try{
-      if(newname!="")
-      await fetch(`http://127.0.0.1:5000/api/search_friends_specific?user_id=${UserId}&uname=${newname}`)
+      setIsLoading(true);
+      if(!(newname=="")){
+       await fetch(`http://127.0.0.1:5000//api/friends_specific?user_id=${UserId}&uname=${newname}`)
         .then((data) => {
           setIsLoading(false);
           return data.json();
         })
         .then((data) => {
+          setSearchFriendsState(true);
           setSearchFriendsData(data.results);
-        });
-    //   const response1 = await fetch(`http://127.0.0.1:5000/api/search_friends_specific?user_id=${UserId}&uname=${newname}`).
-    //   then((response1) => response1.json());
 
-    //   var newArr =  response1.results;
-    //   newArr = newArr.filter(function( element ) {
-    //     return element !== undefined;
-    //  });
-    //  setSearchFriendsData(newArr);
+          setFid(data["results"]["id"]);
+          console.log(fid);
+
+        });
+
+        
+      }
 
     }catch (error) {
     setIsLoading(false);
@@ -122,29 +126,47 @@ export default function FriendsScreen({ navigation }){
     }
   }
 
+  const findUserId = async() => {
+    const auth = getAuth();
+    const id = auth.currentUser.uid
+
+    return id
+  }
+
+  const findUserIntId = async(uid) => {
+
+    const response = fetch(`http://127.0.0.1:5000/api/get_profile\?uid=${uid}`)
+
+    const responseJson = (await response).json()
+
+    return responseJson["results"]["id"]
+  }
+
   const AddFriend = async() => {
-    const UserId = 2;
+    
     try{
-     await fetch(`http://127.0.0.1:5000/api/friends_exists?user_id=${UserId}&fid=${fid}`).
+     await fetch(`http://127.0.0.1:5000/api/friend_exists?user_id=${UserId}&fid=${fid}`).
       then((data) => {
       return data.json();
     }).then((data) =>{
-      setFexist(data.results);
+      setFexist(data.MESSAGE);
     })
+    console.log(fexist);
     }catch (error) {
       console.error("Error fetching data: ", error);
     }
 
     if(fexist == "You can add him/her as a friend."){
       // add friend
-      await fetch(`http://127.0.0.1:5000/api/add_friend?user_id=${UserId}&fid=${fid}`).then((data) => {
+      await fetch(`http://127.0.0.1:5000/api/add_friend?user_id=${UserId}&fid=${fid}`).
+      then((data) => {
         return data.json();
       });
     }
 };
 
   const fetchFriendsList = async () => {
-    const UserId = 2;
+    
     try {
     const Friends= await fetch(
       `http://127.0.0.1:5000/api/get_friends?user_id=${UserId}`
@@ -177,7 +199,7 @@ export default function FriendsScreen({ navigation }){
       <View style={styles.preference}>
         <Searchbar
           onChangeText={setName}
-          loading={searchFriendsState}
+          loading={isLoading}
           placeholder="Find a new Friend..."
           onSubmitEditing={fetchFriend}
           style={styles.searchbar}
