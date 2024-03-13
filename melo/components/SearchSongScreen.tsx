@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import * as React from "react";
 import {
   FlatList,
@@ -11,6 +11,7 @@ import {
   Keyboard,
   // Stylesheet
 } from "react-native";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 import {
   Searchbar,
@@ -38,9 +39,20 @@ export default function SearchSongScreen({ navigation }) {
   const [selectedMBID, setSelectedMBID] = useState("");
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedCover, setSelectedCover] = useState("");
-
+  const [uid, setUid] = useState("");
   const [songData, setSongData] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
+
+  useEffect(() => {
+    const auth = getAuth();
+    const sub = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUid(user.uid);
+      }
+    });
+
+    return sub;
+  }, [navigation]);
 
   const SongResult = ({ songTitle, songArtist, mbid, date, cover }) => {
     const updateSelectedStateVariables = () => {
@@ -80,6 +92,7 @@ export default function SearchSongScreen({ navigation }) {
       mbid: selectedMBID,
       date: selectedDate,
       cover: selectedCover,
+      uid: uid,
     });
   };
 

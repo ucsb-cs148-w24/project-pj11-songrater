@@ -26,7 +26,8 @@ function linspace(rating, num, index) {
 }
 
 export default function RateSongScreen({ route }) {
-  const { rating, title, artist, review, mbid, date, cover } = route.params;
+  const { rating, title, artist, review, mbid, date, cover, uid } =
+    route.params;
   const [indices, setIndices] = useState({
     leftIndex: 0,
     rightIndex: 0,
