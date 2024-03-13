@@ -6,10 +6,10 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import { Login } from "../components/Login";
 import { Register } from "../components/Register";
 import { LoginButton } from "../components/LoginButton";
-import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
 import { useState } from "react";
 import { useEffect } from "react";
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
+import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
 
 
 // Screens
@@ -19,7 +19,8 @@ import RateSongScreen from "../components/RateSongScreen";
 import LandingScreen from "../components/LandingScreen";
 import { registerVersion } from "firebase/app";
 import FriendsScreen from "../components/FriendsScreen";
-import { Default } from "../components/Default";
+import { LoadingScreen } from "../components/LoadingScreen";
+import SplashScreen from "../components/SplashScreen";
 
 // Screen names
 const homeName = "Home";
@@ -51,34 +52,38 @@ function SongStack() {
 }
 
 function SplashStack() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [initialRouteName, setInitialRouteName] = useState("");
+  const [initialRouteName, setInitialRouteName] = useState("Loading");
 
   useEffect(() => {
     const auth = getAuth();
     const sub = onAuthStateChanged(auth, (user) => {
-      setTimeout(() => {
-        if (!user) {
-          setIsLoggedIn(false);
-          setInitialRouteName(splashName);
-        } else {
-          setIsLoggedIn(true);
-          setInitialRouteName("Landing");
-        }
-      }, 5);
+      if (!user) {
+        setInitialRouteName("Loading")
+      }
+      else {
+        console.log(user)
+        setInitialRouteName("Landing")
+      }
     });
-  }, []);
+
+    return sub;
+    }, []);
 
   return (
-    <Stack2.Navigator initialRouteName={splashName}>
+    <Stack2.Navigator initialRouteName={{initialRouteName}}>
       <Stack2.Screen
-        name={splashName}
-        component={Default}
+        name={"Loading"}
+        component={LoadingScreen}
         options={{ headerShown: false }}
       />
       <Stack2.Screen
         name="Landing"
         component={LandingScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack2.Screen
+        name={splashName}
+        component={SplashScreen}
         options={{ headerShown: false }}
       />
       <Stack2.Screen
@@ -139,14 +144,37 @@ function MainContainer() {
           },
           tabBarStyle: [
             {
-              display: "flex",
+              display:
+              getFocusedRouteNameFromRoute(route) === 'Splash' || 
+              getFocusedRouteNameFromRoute(route) === 'Login' || 
+              getFocusedRouteNameFromRoute(route) === 'Register' ||
+              getFocusedRouteNameFromRoute(route) === 'Loading'
+              ? 'none'
+              : 'flex',
             },
             null,
           ],
           tabBarBackgroundColor: "red",
         })}
       >
-        <Tab.Screen name={"Home"} component={SplashStack} />
+        <Tab.Screen
+          name={"Home"}
+          component={SplashStack}
+          options={({ route }) => ({
+            headerShown:
+              getFocusedRouteNameFromRoute(route) !== 'Splash' &&
+              getFocusedRouteNameFromRoute(route) !== 'Login' &&
+              getFocusedRouteNameFromRoute(route) !== 'Register' &&
+              getFocusedRouteNameFromRoute(route) !== 'Loading'
+          })}
+          listeners={({ navigation, route }) => ({
+            tabPress: e => {
+              // Prevent default action
+              e.preventDefault();
+              navigation.navigate('Landing');
+            },
+          })}
+        />
         <Tab.Screen name={searchName} component={SongStack} />
         <Tab.Screen name={profileName} component={ProfileScreen} />
         <Tab.Screen name={friendName} component={FriendsScreen} />
