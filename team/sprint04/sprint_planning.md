@@ -1,5 +1,6 @@
 # Sprint Planning Meeting, 2/12/2024
-Team: Collin [x], Aryaman[], Emily[x], Amy[x], Jeffrey[x], Katya[], Leyang[x] 
+
+Team: Collin [x], Aryaman[], Emily[x], Amy[x], Jeffrey[x], Katya[], Leyang[x]
 
 # Sprint Ends: 2/TBD/24
 
@@ -16,6 +17,7 @@ Profiles and Authentication
     Social Media Features
 
 Assignments:
+<<<<<<< HEAD
 - Collin -> Auth + Connecting User Authentication data to database
 - Katya -> *** same as above ***
 - Emily -> Database, social media pages
@@ -23,3 +25,13 @@ Assignments:
 - Jeffrey -> Connecting frontend with backend
 - Aryaman -> *** same as above ***
 - Amy -> UI
+=======
+
+- Collin -> Auth + Connecting User Authentication data to database
+- Katya -> **_ same as above _**
+- Emily -> Database, social media pages
+- Leyang -> **_ same as above _**
+- Jeffrey -> Connecting frontend with backend
+- Aryaman -> **_ same as above _**
+- Amy -> UI
+>>>>>>> 5d86d5c6 (sprint4 documentation)

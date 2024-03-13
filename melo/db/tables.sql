@@ -15,11 +15,10 @@ CREATE TABLE IF NOT EXISTS public."User"
 
 TABLESPACE pg_default;
 
+ALTER TABLE IF EXISTS public."User"
+    OWNER to username;
 
-
--- Table: public.Song_Info
-
--- DROP TABLE IF EXISTS public."Song_Info";
+DROP TABLE IF EXISTS public."Song_Info";
 
 
 CREATE TABLE IF NOT EXISTS public."Song_Info"
@@ -27,10 +26,8 @@ CREATE TABLE IF NOT EXISTS public."Song_Info"
     song_id character varying(255) COLLATE pg_catalog."default" NOT NULL,
     song_name character varying(255) COLLATE pg_catalog."default",
     artist_name character varying(255) COLLATE pg_catalog."default",
-    album_name character varying(255) COLLATE pg_catalog."default",
-    year integer,
-    genre character varying(255) COLLATE pg_catalog."default",
     cover character varying(255) COLLATE pg_catalog."default",
+    release_date date,
     CONSTRAINT "Song_Info_pkey" PRIMARY KEY (song_id)
 )
 
@@ -39,7 +36,7 @@ TABLESPACE pg_default;
 
 -- Table: public.User_Lists_Good
 
--- DROP TABLE IF EXISTS public."User_Lists_Good";
+DROP TABLE IF EXISTS public."User_Lists_Good";
 
 CREATE TABLE IF NOT EXISTS public."User_Lists_Good"
 (
@@ -62,12 +59,13 @@ CREATE TABLE IF NOT EXISTS public."User_Lists_Good"
 
 TABLESPACE pg_default;
 
-
+ALTER TABLE IF EXISTS public."User_Lists_Good"
+    OWNER to username;
 CREATE INDEX b_tree_idx ON public."User_Lists_Good" USING btree (rank, user_id);
 
 -- Table: public.User_Lists_Ok
 
--- DROP TABLE IF EXISTS public."User_Lists_Ok";
+DROP TABLE IF EXISTS public."User_Lists_Ok";
 
 CREATE TABLE IF NOT EXISTS public."User_Lists_Ok"
 (
@@ -89,11 +87,13 @@ CREATE TABLE IF NOT EXISTS public."User_Lists_Ok"
 
 TABLESPACE pg_default;
 
+ALTER TABLE IF EXISTS public."User_Lists_Ok"
+    OWNER to username;
 CREATE INDEX b_tree_idx2 ON public."User_Lists_Ok" USING btree (rank, user_id);
 
 -- Table: public.User_Lists_Bad
 
--- DROP TABLE IF EXISTS public."User_Lists_Bad";
+DROP TABLE IF EXISTS public."User_Lists_Bad";
 
 CREATE TABLE IF NOT EXISTS public."User_Lists_Bad"
 (
@@ -115,11 +115,13 @@ CREATE TABLE IF NOT EXISTS public."User_Lists_Bad"
 
 TABLESPACE pg_default;
 
+ALTER TABLE IF EXISTS public."User_Lists_Bad"
+    OWNER to username;
 CREATE INDEX b_tree_idx3 ON public."User_Lists_Bad" USING btree (rank, user_id);
 
 -- Table: public.Friend
 
--- DROP TABLE IF EXISTS public."Friend";
+DROP TABLE IF EXISTS public."Friend";
 
 CREATE TABLE IF NOT EXISTS public."Friend"
 (
@@ -136,7 +138,6 @@ CREATE TABLE IF NOT EXISTS public."Friend"
 )
 
 TABLESPACE pg_default;
-
 
 
 CREATE OR REPLACE FUNCTION trigger_set_timestamp()
@@ -161,3 +162,6 @@ CREATE TRIGGER set_timestamp
 BEFORE UPDATE ON public."User_Lists_Ok"
 FOR EACH ROW
 EXECUTE PROCEDURE trigger_set_timestamp();
+
+ALTER TABLE IF EXISTS public."Friend"
+    OWNER to username;

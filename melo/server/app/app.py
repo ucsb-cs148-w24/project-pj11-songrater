@@ -16,7 +16,6 @@ cover_art_url = "http://coverartarchive.org/release"
 #To make the connection, you have to export your personal postgres username and password
 #export DB_USERNAME="postgres"
 #export DB_PASSWORD="your_passwork"
-
 def get_db_connection():
   conn = psycopg2.connect(host='melo-db.cl42gyco25t3.us-east-2.rds.amazonaws.com',
                           database='melo-db',
@@ -195,9 +194,10 @@ def create_user():
      conn.close()     
 
      response["MESSAGE"] = "Successfully created new user and added to db"
+     print(uname,email)
   except Exception as e:
         response["MESSAGE"] = f"EXCEPTION: /api/signup {e}"
-        print(response["MESSAGE"])
+        print("ERROR: \n" + response["MESSAGE"] + "\n")
   return jsonify(response)
 
 # Retrieves a user's profile information.
@@ -208,11 +208,19 @@ def get_profile():
   # This function should return back to the user his profile info
   
   try:
+<<<<<<< HEAD
      uname = request.args.get("uname")
      conn = get_db_connection()
      cur = conn.cursor()
 
      sql_query = f"SELECT * FROM \"User\" WHERE username = '{uname}';"
+=======
+     uid = request.args.get("uid")
+     conn = get_db_connection()
+     cur = conn.cursor()
+
+     sql_query = f"SELECT * FROM \"User\" WHERE uid = '{uid}';"
+>>>>>>> cccdd47560eb839ffd15d11a0cfc19d802ff92e0
      cur.execute(sql_query)
      user_profile = cur.fetchall()
 
@@ -456,13 +464,14 @@ def get_user_songs_by_type():
      user_id = request.args.get("user_id")
      type = request.args.get("type") 
      conn = get_db_connection()
-     cur = conn.cursor()
+     cur = conn.cursor()     
 
      if type == "good":
         sql_query = f"SELECT \"User_Lists_Good\".song_id,\"User_Lists_Good\".rank,\"User_Lists_Good\".review,\"Song_Info\".song_name,\"Song_Info\".artist_name,\"Song_Info\".release_date FROM \"User_Lists_Good\" INNER JOIN \"Song_Info\" ON \"User_Lists_Good\".song_id = \"Song_Info\".song_id WHERE \"User_Lists_Good\".user_id = {user_id} ORDER BY rank;"
         cur.execute(sql_query)
         good_songs = cur.fetchall()
         num_rows = int(cur.rowcount)
+        print(f"good_songs: {good_songs}")
 
         if num_rows == 0:
            response["MESSAGE"] = "No songs to display here"

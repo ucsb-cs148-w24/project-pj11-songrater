@@ -154,6 +154,7 @@ export const styles = StyleSheet.create({
     preference: {
         alignItems: 'center',
         flexDirection: 'row',
+        justifyContent: 'space-between',
         paddingVertical: 0,
         paddingHorizontal: 8,
     },
