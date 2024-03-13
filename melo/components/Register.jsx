@@ -19,12 +19,14 @@ export const Register = ({navigation}) => {
         };  
 
         const response = await fetch(
-        "http://127.0.0.1:5001/api/signup?" +
+        "http://127.0.0.1:5000/api/signup?" +
           objectToUrlParams(userProfileParams),
         {
           method: "POST",
         }
       );
+
+      console.log(response)
   
       if (!response.ok) {
         throw new Error('Network response was not ok ' + response.statusText);
@@ -48,7 +50,7 @@ export const Register = ({navigation}) => {
         const response = await createUserWithEmailAndPassword(auth, email, password);
         if (response.user) {
           navigation.navigate("Landing");
-          console.log(response.user.email)
+          console.log(response.user.uid, response.user.email)
           await createProfile(response.user.uid, response.user.email);
         }
       } catch (error) {
