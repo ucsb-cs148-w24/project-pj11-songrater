@@ -23,42 +23,40 @@ import { typography } from "./helper/Typography";
 import { buttons } from "./helper/Buttons";
 
 
-const mocknewfriendname = "New Friend";
-const mockfriend1 = "Friend1";
-const mockfriend2 = "Friend2";
-const mockfriend3 = "Friend3";
-const mockfriend4 = "Friend4";
-const mockDescription = "This is a test description!"
-const mockFriendCount = 10;
+
 const snow = '#FFFBFA'
 
 export default function FriendsScreen({ navigation }){
 
-  const [friendsdata, setFriendData] = useState([
-    {id:'1', mockname: 'Friend1', avatar: require('../assets/default-avatar.jpeg')},
-    {id:'2', mockname: 'Friend2', avatar: require('../assets/default-avatar.jpeg')},
-    {id:'3', mockname: 'Friend3', avatar: require('../assets/default-avatar.jpeg')},
-    {id:'4', mockname: 'Friend4', avatar: require('../assets/default-avatar.jpeg')},
-    {id:'5', mockname: 'Friend5', avatar: require('../assets/default-avatar.jpeg')},
-    {id:'6', mockname: 'Friend6', avatar: require('../assets/default-avatar.jpeg')},
-    {id:'7', mockname: 'Friend7', avatar: require('../assets/default-avatar.jpeg')},
-    {id:'8', mockname: 'Friend8', avatar: require('../assets/default-avatar.jpeg')},
-    {id:'9', mockname: 'Friend9', avatar: require('../assets/default-avatar.jpeg')},
-  ]);
+  const [friendsdata, setFriendsData] = useState([]);
 
-  const [searchFriendsData, setSearchFriendsData] = useState([{id:'1', mockname: 'Bob', avatar: require('../assets/default-avatar.jpeg')},]);
+  // const [friendsdata, setFriendData] = useState([
+  //   {id:'1', mockname: 'Friend1', avatar: require('../assets/default-avatar.jpeg')},
+  //   {id:'2', mockname: 'Friend2', avatar: require('../assets/default-avatar.jpeg')},
+  //   {id:'3', mockname: 'Friend3', avatar: require('../assets/default-avatar.jpeg')},
+  //   {id:'4', mockname: 'Friend4', avatar: require('../assets/default-avatar.jpeg')},
+  //   {id:'5', mockname: 'Friend5', avatar: require('../assets/default-avatar.jpeg')},
+  //   {id:'6', mockname: 'Friend6', avatar: require('../assets/default-avatar.jpeg')},
+  //   {id:'7', mockname: 'Friend7', avatar: require('../assets/default-avatar.jpeg')},
+  //   {id:'8', mockname: 'Friend8', avatar: require('../assets/default-avatar.jpeg')},
+  //   {id:'9', mockname: 'Friend9', avatar: require('../assets/default-avatar.jpeg')},
+  // ]);
+
+  const [searchFriendsData, setSearchFriendsData] = useState([]);
 
   const [newname, setName] = useState("");
+
+  const [fid, setFid] = useState(null);
+  const [fexist, setFexist] = useState("");
 
   const renderCard= ({ item }) => (
     <Card style={styles.card} mode={'elevated'}>
         <Card.Content>
-          {/* onPress -- friends profile popup */}
           <Pressable>
             <View style={{flex:1, flexDirection:'row', alignItems: 'center'}}>
               <Avatar.Image size={40} source={item.avatar} />
               <Text style={{flex:1, marginLeft: 40 }}>
-                <Text style={{fontSize: 20, fontWeight:'bold'}}>{item.mockname}</Text>
+                <Text style={{fontSize: 20, fontWeight:'bold'}}>{item.username}</Text>
               </Text>
               <Text style={{fontWeight:'bold', marginRight: 16}}>
                 {'>'}
@@ -72,17 +70,21 @@ export default function FriendsScreen({ navigation }){
   const renderNewcard = ({ item }) => (
     <Card style={styles.card} mode={'elevated'}>
      <Card.Content>
-      <Pressable>
         <View style={{flex:1, flexDirection:'row', alignItems: 'center'}}>
           <Avatar.Image size={40} source={item.avatar} />
            <Text style={{flex:1, marginLeft: 40}}>
-             <Text style={{fontSize: 20, fontWeight:'bold'}}>{item.mockname}</Text>
+             <Text style={{fontSize: 20, fontWeight:'bold'}}>{item.username}</Text>
            </Text>
-            <Text style={{fontWeight:'bold', marginRight: 16}}>
-              {'+'}
-            </Text>
+           <Pressable
+                onPress={() => {
+                  AddFriend();
+                }}
+              >
+                <Text style={{fontWeight:'bold', marginRight: 16}}>
+                {'+'}
+              </Text>
+              </Pressable>
           </View>
-        </Pressable>
       </Card.Content>
     </Card>
   );
@@ -92,53 +94,68 @@ export default function FriendsScreen({ navigation }){
   const [isLoading, setIsLoading] = useState(false);
   const [searchFriendsState, setSearchFriendsState] = useState(false);
 
-  const fetchFriend = async () => {
-    // try {
-    //   if (!(newname == "")) {
-    //     await fetch(
-    //       // need a function to finds users with the username of...
-    //       `http://127.0.0.1:5000/title?title=${newname}}`
-    //     )
-    //       .then((data) => {
-    //         return data.json();
-    //       })
-    //       .then((data) => {
-    //         setSearchFriendsData(data.results);
-    //         setSearchFriendsState(true);
-    //       });
-    //   }
-    // }catch (error) {
-    //   setSearchFriendsState(false);
-    //   console.error("Error fetching data: ", error);
-    // }
-    try {
-      setSearchFriendsState(true);
-      // setSearchFriendsData([{id:'10', mockname: 'Bob', avatar: require('../assets/default-avatar.jpeg')},]);
+  const fetchFriend = async() => {
+    const UserId = 2;
+    setIsLoading(true);
+    try{
+      if(newname!="")
+      await fetch(`http://127.0.0.1:5000/api/search_friends_specific?user_id=${UserId}&uname=${newname}`)
+        .then((data) => {
+          setIsLoading(false);
+          return data.json();
+        })
+        .then((data) => {
+          setSearchFriendsData(data.results);
+        });
+    //   const response1 = await fetch(`http://127.0.0.1:5000/api/search_friends_specific?user_id=${UserId}&uname=${newname}`).
+    //   then((response1) => response1.json());
+
+    //   var newArr =  response1.results;
+    //   newArr = newArr.filter(function( element ) {
+    //     return element !== undefined;
+    //  });
+    //  setSearchFriendsData(newArr);
+
+    }catch (error) {
+    setIsLoading(false);
+    console.error("Error fetching data: ", error);
     }
-    catch (error) {
-      setSearchFriendsState(false);
-      console.error(error);
+  }
+
+  const AddFriend = async() => {
+    const UserId = 2;
+    try{
+     await fetch(`http://127.0.0.1:5000/api/friends_exists?user_id=${UserId}&fid=${fid}`).
+      then((data) => {
+      return data.json();
+    }).then((data) =>{
+      setFexist(data.results);
+    })
+    }catch (error) {
+      console.error("Error fetching data: ", error);
     }
-  };
+
+    if(fexist == "You can add him/her as a friend."){
+      // add friend
+      await fetch(`http://127.0.0.1:5000/api/add_friend?user_id=${UserId}&fid=${fid}`).then((data) => {
+        return data.json();
+      });
+    }
+};
 
   const fetchFriendsList = async () => {
+    const UserId = 2;
     try {
-      setIsLoading(true);
-      if (!(newname == "")) {
-        await fetch(
-          // need a function to fetch the friends of the current user
-          `http://127.0.0.1:5000/title?title=${newname}}`
-        )
-          .then((data) => {
-            setIsLoading(false);
-            return data.json();
-          })
-          .then((data) => {
-            setFriendData(data.results);
-          });
-      }
+    const Friends= await fetch(
+      `http://127.0.0.1:5000/api/get_friends?user_id=${UserId}`
+      ).then((Friends) => Friends.json());
+
+    //   var newArr = Friends.results;
+    //   newArr = newArr.filter(function( element ) {
+    //     return element !== undefined;
+    //  });
+     setFriendsData(Friends.results);
     }catch (error) {
-      setIsLoading(false);
       console.error("Error fetching data: ", error);
     }
   };
@@ -147,11 +164,12 @@ export default function FriendsScreen({ navigation }){
     fetchFriendsList();
   }, [])
 
+
   return (
     <View style={{display:'flex',flex:1,backgroundColor: "#BBCDE5"}}>
 
        <View style={styles.preference}>
-        <View style={styles.title}>
+        <View style={styles.titleContainer}>
           <Text style={typography.title}>Melo</Text>
         </View>
       </View>
@@ -176,21 +194,6 @@ export default function FriendsScreen({ navigation }){
             <Text style={typography.header}>New Friend</Text>
           </View>
         </View>
-        {/* <Card style={styles.card}>
-          <Card.Content>
-            <Pressable>
-              <View style={{flex:1, flexDirection:'row', alignItems: 'center'}}>
-                <Avatar.Image size={40} source={searchFriendsData.avatar} />
-                <Text style={{flex:1, marginLeft: 40}}>
-                  <Text style={{fontSize: 20, fontWeight:'bold'}}>{searchFriendsData.mockname}</Text>
-                </Text>
-                <Text style={{fontWeight:'bold', marginRight: 16}}>
-                  {'+'}
-                </Text>
-              </View>
-            </Pressable>
-          </Card.Content>
-        </Card> */}
         <View style={{flex:6}}>
           <FlatList
           data={searchFriendsData}
