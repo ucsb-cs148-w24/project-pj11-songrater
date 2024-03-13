@@ -39,7 +39,7 @@ export default function SearchSongScreen({ navigation }) {
   const [selectedMBID, setSelectedMBID] = useState("");
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedCover, setSelectedCover] = useState("");
-  const [uid, setUid] = useState("");
+  const [user_id, setUserId] = useState(0);
   const [songData, setSongData] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -47,7 +47,14 @@ export default function SearchSongScreen({ navigation }) {
     const auth = getAuth();
     const sub = onAuthStateChanged(auth, (user) => {
       if (user) {
-        setUid(user.uid);
+        console.log(user.uid);
+        const response = fetch(
+          `http://127.0.0.1:5000/api/get_profile?uid=${user.uid}`
+        )
+          .then((response) => response.json())
+          .then((data) => {
+            setUserId(data?.results[0]?.id);
+          });
       }
     });
 
@@ -92,7 +99,7 @@ export default function SearchSongScreen({ navigation }) {
       mbid: selectedMBID,
       date: selectedDate,
       cover: selectedCover,
-      uid: uid,
+      user_id: user_id,
     });
   };
 

@@ -175,15 +175,13 @@ function MainContainer() {
         <Tab.Screen
           name={searchName}
           component={SongStack}
-          options={{ headerShown: false, unmountOnBlur: true }}
+          options={{ unmountOnBlur: true }}
         />
         <Tab.Screen
           name={profileName}
           component={ProfileScreen}
-          options={{ headerShown: false, unmountOnBlur: true }}
+          options={{ unmountOnBlur: true }}
         />
-        <Tab.Screen name={searchName} component={SongStack} />
-        <Tab.Screen name={profileName} component={ProfileScreen} />
         <Tab.Screen name={friendName} component={FriendsScreen} />
       </Tab.Navigator>
     </NavigationContainer>

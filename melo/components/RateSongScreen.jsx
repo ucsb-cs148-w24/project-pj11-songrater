@@ -18,7 +18,8 @@ function linspace(rating, num, index) {
     endValue = 4.0;
   }
   const arr = [];
-  const step = (endValue - startValue) / (num - 1);
+  const step = (endValue - startValue) / num;
+  console.log(`step: ${step}`);
   for (let i = 1; i <= num; i++) {
     arr.push(startValue + step * i);
   }
@@ -26,7 +27,7 @@ function linspace(rating, num, index) {
 }
 
 export default function RateSongScreen({ route }) {
-  const { rating, title, artist, review, mbid, date, cover, uid } =
+  const { rating, title, artist, review, mbid, date, cover, user_id } =
     route.params;
   const [indices, setIndices] = useState({
     leftIndex: 0,
@@ -50,7 +51,7 @@ export default function RateSongScreen({ route }) {
 
   const addUserSong = async () => {
     const addUserSongParams = {
-      user_id: 1, // TODO : change once we get valid user IDs
+      user_id: user_id, // TODO : change once we get valid user IDs
       song_id: mbid,
       rank: indices.currentIndex + 1,
       review: review,
@@ -73,7 +74,7 @@ export default function RateSongScreen({ route }) {
     };
 
     const response = await fetch(
-      `http://127.0.0.1:5000/api/get_user_songs?user_id=1&type=${rating}`
+      `http://127.0.0.1:5000/api/get_user_songs?user_id=${user_id}&type=${rating}`
     )
       .then((response) => response.json())
       .then((data) => {
