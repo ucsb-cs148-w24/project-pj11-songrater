@@ -2,11 +2,8 @@ import { Pressable, StyleSheet, Text, View } from "react-native";
 import { typography } from "./helper/Typography";
 import { buttons } from "./helper/Buttons";
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { FirebaseAuthTypes } from "@react-native-firebase/auth";
+import { useEffect } from "react";
 import { useState } from "react";
-import { useLayoutEffect } from "react";
 
 
 export default function SplashScreen({ navigation }) {
@@ -24,6 +21,17 @@ export default function SplashScreen({ navigation }) {
       console.error("Log Out Failed")
     });
   }
+
+  useEffect (() => {
+    const auth = getAuth();
+    const sub = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        navigation.navigate("Landing")
+      }
+    });
+
+    return sub;
+    }, [navigation]);
 
   return (
     <View style={{ flex: 1, backgroundColor: "#FFFAEA", padding: 20 }}>

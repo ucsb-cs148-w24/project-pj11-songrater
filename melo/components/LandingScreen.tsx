@@ -125,14 +125,13 @@ const LandingScreen = ({ navigation }) => {
   useEffect(() => {
     const auth = getAuth();
     const sub = onAuthStateChanged(auth, (user) => {
-      setTimeout(() => {
-        if (!user) {
-          setIsLoggedIn(false);
-        }
-        else {
-          setIsLoggedIn(true);
-        }
-      }, );
+      if (!user) {
+        setIsLoggedIn(false);
+        navigation.navigate("Splash")
+      }
+      else {
+        setIsLoggedIn(true);
+      }
     });
 
     return sub;
