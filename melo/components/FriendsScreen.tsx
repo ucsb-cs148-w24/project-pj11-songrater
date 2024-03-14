@@ -18,6 +18,7 @@ import {
   Paragraph,
   Divider,
 } from 'react-native-paper';
+import { useIsFocused } from '@react-navigation/native';
 import { styles } from "./helper/Styles";
 import { typography } from "./helper/Typography";
 import { buttons } from "./helper/Buttons";
@@ -36,11 +37,6 @@ export default function FriendsScreen({ navigation }){
   const [fexist, setFexist] = useState("");
 
   useEffect(() => {
-    console.log(fid);
-    console.log(UserId); // This will log the updated value of fid after the component re-renders
-  }, [fid]);
-
-  useEffect(() => {
     const auth = getAuth();
     const sub = onAuthStateChanged(auth, (user) => {
       console.log(user.uid);
@@ -56,23 +52,41 @@ export default function FriendsScreen({ navigation }){
       }
     });
     return sub;
-  }, []);
+  }, [navigation, useIsFocused()]);
+
+  useEffect(() => {
+    console.log(fid);
+    console.log(UserId); // This will log the updated value of fid after the component re-renders
+  }, [fid]);
+
+  useEffect(() => {
+    if(UserId!=0){
+    fetchFriendsList(UserId);
+    }
+  },[UserId])
 
 
   const renderCard= ({ item }) => (
     <Card style={styles.card} mode={'elevated'}>
         <Card.Content>
-          <Pressable>
             <View style={{flex:1, flexDirection:'row', alignItems: 'center'}}>
               <Avatar.Image size={40} source={item.avatar} />
               <Text style={{flex:1, marginLeft: 40 }}>
                 <Text style={{fontSize: 20, fontWeight:'bold'}}>{item.username}</Text>
               </Text>
+              <Pressable onPress={() => {
+                  DeleteFriend(item.id);
+                }}>
+              <Text style={{fontWeight:'bold', marginRight: 24}}>
+                {'x'}
+              </Text>
+              </Pressable>
+              <Pressable>
               <Text style={{fontWeight:'bold', marginRight: 16}}>
                 {'>'}
               </Text>
+              </Pressable>
             </View>
-          </Pressable>
         </Card.Content>
     </Card>
   );
@@ -180,13 +194,37 @@ export default function FriendsScreen({ navigation }){
         {
           method: "POST",
         }
-        ).then((response) => console.log(response));
+        ).then((response) => console.log(response))
+        .then((response) =>{
+          fetchFriendsList(UserId);
+        });
       
     }catch (error) {
       console.error("Error fetching data: ", error);
     }
     
 };
+
+   const DeleteFriend = async (Fid) => {
+    try {
+      const deleteFriendParams = {
+        user_id: UserId, 
+        fid: Fid,
+      };
+      const response= await fetch(
+        `http://127.0.0.1:5000/api/delete_friend?`+
+        objectToUrlParams(deleteFriendParams),
+        {
+          method: "DELETE",
+        }
+        ).then((response) => console.log(response))
+        .then((response) =>{
+          fetchFriendsList(UserId);
+        });
+      }catch (error) {
+        console.error("Error fetching data: ", error);
+      }
+   };
 
   const fetchFriendsList = async (userid) => {
     

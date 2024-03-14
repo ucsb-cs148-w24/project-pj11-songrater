@@ -132,6 +132,8 @@ function MainContainer() {
               iconName = focused ? "search" : "search-outline";
             } else if (route.name === profileName) {
               iconName = focused ? "person-circle" : "person-circle-outline";
+            } else if (route.name === friendName) {
+              iconName = focused ? "person-add" : "person-add-outline";
             }
 
             return <Ionicons name={iconName} size={size} color={color} />;
