@@ -23,29 +23,41 @@ import { typography } from "./helper/Typography";
 import { buttons } from "./helper/Buttons";
 import { objectToUrlParams } from "./helper/functions";
 
-import {getAuth} from "firebase/auth";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 
 export default function FriendsScreen({ navigation }){
 
-  const [UserId, setUserId] = useState(9);
-
+  const [UserId, setUserId] = useState(0);
   const [friendsdata, setFriendsData] = useState([]);
-
   const [searchFriendsData, setSearchFriendsData] = useState([]);
-
   const [newname, setName] = useState("");
-
   const [fid, setFid] = useState(0);
   const [fexist, setFexist] = useState("");
 
   useEffect(() => {
-    console.log(fid); // This will log the updated value of fid after the component re-renders
+    console.log(fid);
+    console.log(UserId); // This will log the updated value of fid after the component re-renders
   }, [fid]);
 
-  // useEffect(() => {
-  //   console.log(fexist); // This will log the updated value of fid after the component re-renders
-  // }, [fexist]);
+  useEffect(() => {
+    const auth = getAuth();
+    const sub = onAuthStateChanged(auth, (user) => {
+      console.log(user.uid);
+      if (user) {
+        const response = fetch(
+          `http://127.0.0.1:5000/api/get_profile?uid=${user.uid}`
+        )
+          .then((response) => response.json())
+          .then((data) => {
+            setUserId(data?.results[0]?.id);
+            fetchFriendsList(data?.results[0]?.id);
+          })
+      }
+    });
+    return sub;
+  }, []);
+
 
   const renderCard= ({ item }) => (
     <Card style={styles.card} mode={'elevated'}>
@@ -176,11 +188,11 @@ export default function FriendsScreen({ navigation }){
     
 };
 
-  const fetchFriendsList = async () => {
+  const fetchFriendsList = async (userid) => {
     
     try {
     const Friends= await fetch(
-      `http://127.0.0.1:5000/api/get_friends?user_id=${UserId}`
+      `http://127.0.0.1:5000/api/get_friends?user_id=${userid}`
       ).then((Friends) => Friends.json());
 
      setFriendsData(Friends.results);
@@ -189,10 +201,6 @@ export default function FriendsScreen({ navigation }){
     }
   };
 
-  useEffect(() => {
-    fetchFriendsList();
-  }, []);
-  
 
   return (
     <View style={{display:'flex',flex:1,backgroundColor: "#BBCDE5"}}>
