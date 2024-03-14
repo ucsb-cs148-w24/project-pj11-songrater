@@ -208,19 +208,11 @@ def get_profile():
   # This function should return back to the user his profile info
   
   try:
-<<<<<<< HEAD
-     uname = request.args.get("uname")
-     conn = get_db_connection()
-     cur = conn.cursor()
-
-     sql_query = f"SELECT * FROM \"User\" WHERE username = '{uname}';"
-=======
      uid = request.args.get("uid")
      conn = get_db_connection()
      cur = conn.cursor()
 
      sql_query = f"SELECT * FROM \"User\" WHERE uid = '{uid}';"
->>>>>>> cccdd47560eb839ffd15d11a0cfc19d802ff92e0
      cur.execute(sql_query)
      user_profile = cur.fetchall()
 

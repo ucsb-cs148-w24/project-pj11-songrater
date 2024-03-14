@@ -97,7 +97,8 @@ export default function SearchSongScreen({ navigation }) {
             return data.json();
           })
           .then((data) => {
-            setSongData(data.results);
+            console.log(data.results);
+            setSongData(data.results[0].id);
           });
       }
     } catch (error) {
