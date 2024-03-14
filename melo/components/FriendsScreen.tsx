@@ -33,7 +33,7 @@ export default function FriendsScreen({ navigation }){
   const [friendsdata, setFriendsData] = useState([]);
   const [searchFriendsData, setSearchFriendsData] = useState([]);
   const [newname, setName] = useState("");
-  const [fid, setFid] = useState(0);
+  const [fid, setFid] = useState([]);
   const [fexist, setFexist] = useState("");
 
   useEffect(() => {
@@ -52,18 +52,18 @@ export default function FriendsScreen({ navigation }){
       }
     });
     return sub;
-  }, [navigation, useIsFocused()]);
+  }, [useIsFocused()]);
 
   useEffect(() => {
     console.log(fid);
     console.log(UserId); // This will log the updated value of fid after the component re-renders
   }, [fid]);
 
-  useEffect(() => {
-    if(UserId!=0){
-    fetchFriendsList(UserId);
-    }
-  },[UserId])
+  // useEffect(() => {
+  //   if(UserId!=0){
+  //   fetchFriendsList(UserId);
+  //   }
+  // },[UserId])
 
 
   const renderCard= ({ item }) => (
@@ -76,6 +76,7 @@ export default function FriendsScreen({ navigation }){
               </Text>
               <Pressable onPress={() => {
                   DeleteFriend(item.id);
+                  IfExist(item.id);
                 }}>
               <Text style={{fontWeight:'bold', marginRight: 24}}>
                 {'x'}
@@ -102,7 +103,7 @@ export default function FriendsScreen({ navigation }){
            <Pressable
                 onPress={() => {
                   if(fexist == "You can add him/her as a friend."){
-                    AddFriend(fid);
+                    AddFriend(item.id);
                   }
                 }}
               >
@@ -197,6 +198,7 @@ export default function FriendsScreen({ navigation }){
         ).then((response) => console.log(response))
         .then((response) =>{
           fetchFriendsList(UserId);
+          IfExist(Fid);
         });
       
     }catch (error) {
@@ -220,6 +222,7 @@ export default function FriendsScreen({ navigation }){
         ).then((response) => console.log(response))
         .then((response) =>{
           fetchFriendsList(UserId);
+          IfExist(Fid);
         });
       }catch (error) {
         console.error("Error fetching data: ", error);
