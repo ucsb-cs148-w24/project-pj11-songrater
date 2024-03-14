@@ -205,6 +205,11 @@ function MainContainer() {
           component={ProfileStack}
           options={{ unmountOnBlur: true }}
         />
+        <Tab.Screen 
+        name={friendName} 
+        component={FriendsScreen} 
+        options={{ unmountOnBlur: true }}
+        />
       </Tab.Navigator>
     </NavigationContainer>
   );

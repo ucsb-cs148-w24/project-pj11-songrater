@@ -59,24 +59,23 @@ export default function FriendsScreen({ navigation }){
     console.log(UserId); // This will log the updated value of fid after the component re-renders
   }, [fid]);
 
-  // useEffect(() => {
-  //   if(UserId!=0){
-  //   fetchFriendsList(UserId);
-  //   }
-  // },[UserId])
+  useEffect(() => {
+    if(UserId!=0){
+    fetchFriendsList(UserId);
+    }
+  },[UserId])
 
 
   const renderCard= ({ item }) => (
     <Card style={styles.card} mode={'elevated'}>
         <Card.Content>
             <View style={{flex:1, flexDirection:'row', alignItems: 'center'}}>
-              <Avatar.Image size={40} source={item.avatar} />
+            <Avatar.Text size={64} label={item.username[0]} style={{backgroundColor:'#3187D8'}}/>
               <Text style={{flex:1, marginLeft: 40 }}>
                 <Text style={{fontSize: 20, fontWeight:'bold'}}>{item.username}</Text>
               </Text>
               <Pressable onPress={() => {
                   DeleteFriend(item.id);
-                  IfExist(item.id);
                 }}>
               <Text style={{fontWeight:'bold', marginRight: 24}}>
                 {'x'}
@@ -96,7 +95,7 @@ export default function FriendsScreen({ navigation }){
     <Card style={styles.card} mode={'elevated'}>
      <Card.Content>
         <View style={{flex:1, flexDirection:'row', alignItems: 'center'}}>
-          <Avatar.Image size={40} source={item.avatar} />
+        <Avatar.Text size={64} label={item.username[0]} style={{backgroundColor:'#3187D8'}}/>
            <Text style={{flex:1, marginLeft: 40}}>
              <Text style={{fontSize: 20, fontWeight:'bold'}}>{item.username}</Text>
            </Text>
@@ -198,7 +197,7 @@ export default function FriendsScreen({ navigation }){
         ).then((response) => console.log(response))
         .then((response) =>{
           fetchFriendsList(UserId);
-          IfExist(Fid);
+         
         });
       
     }catch (error) {
