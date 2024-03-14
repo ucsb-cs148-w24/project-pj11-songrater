@@ -19,7 +19,7 @@ export default function ProfileScreen({ navigation }) {
   const [uname, setUname] = useState("");
   const [description, setDescription] = useState("");
   const [songData, setSongData] = useState([]);
-
+  
   const navigateEditUserScreen = ({}) => {
     navigation.navigate("EditUserScreen");
   };
