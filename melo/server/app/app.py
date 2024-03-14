@@ -194,7 +194,7 @@ def create_user():
      conn.close()     
 
      response["MESSAGE"] = "Successfully created new user and added to db"
-     print(uname,email)
+     print(username,email)
   except Exception as e:
         response["MESSAGE"] = f"EXCEPTION: /api/signup {e}"
         print("ERROR: \n" + response["MESSAGE"] + "\n")
@@ -215,7 +215,6 @@ def get_profile():
      sql_query = f"SELECT * FROM \"User\" WHERE uid = '{uid}';"
      cur.execute(sql_query)
      user_profile = cur.fetchall()
-
      final_result = []
 
      for profile in user_profile:
@@ -247,17 +246,21 @@ def update_profile():
 
      conn = get_db_connection()
      cur = conn.cursor()
+     if new_uname != None:
+         sql_query = f"SELECT * FROM \"User\" WHERE username = '{new_uname}';"
+         cur.execute(sql_query)
+         user_exists = cur.fetchall()
+         num_rows = int(cur.rowcount)
 
-     sql_query = f"SELECT * FROM \"User\" WHERE username = '{new_uname}';"
-     cur.execute(sql_query)
-     user_exists = cur.fetchall()
-     num_rows = int(cur.rowcount)
-
-     if num_rows > 0:
-        response["MESSAGE"] = "Sorry this username is already taken. Please try again."
-        return jsonify(response)
-     
-     update_query = f"UPDATE \"User\" SET username = '{new_uname}', description = '{new_description}' WHERE id = {user_id};"
+         if num_rows > 0:
+            response["MESSAGE"] = "Sorry this username is already taken. Please try again."
+            return jsonify(response)
+         if new_description == None:
+            update_query = f"UPDATE \"User\" SET username = '{new_uname}' WHERE id = {user_id};"
+         else:
+            update_query = f"UPDATE \"User\" SET username = '{new_uname}', description = '{new_description}' WHERE id = {user_id};"
+     elif new_description != None:
+      update_query = f"UPDATE \"User\" SET description = '{new_description}' WHERE id = {user_id};"
      cur.execute(update_query)
      conn.commit()
 

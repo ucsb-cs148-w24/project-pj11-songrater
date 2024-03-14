@@ -4,47 +4,56 @@ import { typography } from "./helper/Typography";
 import { useCallback, useState, useEffect } from "react";
 import { objectToUrlParams } from "./helper/functions";
 
-function linspace(startValue, endValue, num, index) {
+function linspace(rating, num, index) {
+  let endValue;
+  let startValue;
+  if (rating == "good") {
+    startValue = 7.0;
+    endValue = 10.0;
+  } else if (rating == "ok") {
+    startValue = 4.0;
+    endValue = 7.0;
+  } else if (rating == "bad") {
+    startValue = 0.0;
+    endValue = 4.0;
+  }
   const arr = [];
-  const step = (endValue - startValue) / (num - 1);
-  for (let i = 0; i < num; i++) {
+  const step = (endValue - startValue) / num;
+  console.log(`step: ${step}`);
+  for (let i = 1; i <= num; i++) {
     arr.push(startValue + step * i);
   }
   return arr[index];
 }
 
 export default function RateSongScreen({ route }) {
-  const { rating, title, artist, review, mbid, date, cover } = route.params;
+  const { rating, title, artist, review, mbid, date, cover, user_id } =
+    route.params;
   const [indices, setIndices] = useState({
     leftIndex: 0,
-    rightIndex: 1,
-    currentIndex: 1,
+    rightIndex: 0,
+    currentIndex: 0,
   });
   const [doneRanking, setDoneRanking] = useState(false);
-  const [ready, setReady] = useState(false);
   const [userSongs, setUserSongs] = useState({});
+  const [finish, setFinish] = useState(false);
 
   useEffect(() => {
-    console.log(`rating: ${rating}`);
     fetchUserSongs({ rating });
     setDoneRanking(false);
   }, []);
 
   useEffect(() => {
-    console.log(
-      `indices: [${indices.leftIndex}, ${indices.rightIndex}, ${indices.currentIndex}], doneRanking: ${doneRanking}`
-    );
     if (doneRanking) {
-      console.log(`user song has been added.`);
       addUserSong();
     }
   }, [doneRanking]);
 
   const addUserSong = async () => {
     const addUserSongParams = {
-      user_id: 1, // TODO : change once we get valid user IDs
+      user_id: user_id, // TODO : change once we get valid user IDs
       song_id: mbid,
-      rank: indices.currentIndex,
+      rank: indices.currentIndex + 1,
       review: review,
       type: rating,
     };
@@ -55,7 +64,7 @@ export default function RateSongScreen({ route }) {
       {
         method: "POST",
       }
-    ).then((response) => console.log(response));
+    );
   };
 
   const fetchUserSongs = async ({ rating }) => {
@@ -65,29 +74,21 @@ export default function RateSongScreen({ route }) {
     };
 
     const response = await fetch(
-      `http://127.0.0.1:5000/api/get_user_songs?user_id=1&type=${rating}`
+      `http://127.0.0.1:5000/api/get_user_songs?user_id=${user_id}&type=${rating}`
     )
       .then((response) => response.json())
       .then((data) => {
-        console.log(`data.results: ${data.results}`);
         if (!data?.results || data.results.length === 0) {
-          console.log("trigger 1");
           setDoneRanking(true);
         } else {
-          console.log("trigger 2");
-          console.log(data);
           setUserSongs(data.results);
           setIndices({
-            leftIndex: 1,
-            rightIndex: data.results.length,
-            currentIndex: Math.floor(data.results.length / 2),
+            leftIndex: 0,
+            rightIndex: data.results.length - 1,
+            currentIndex: Math.floor((data.results.length - 1) / 2),
           });
-          console.log(indices);
-          setReady(true);
         }
       });
-
-    console.log(response);
   };
 
   const updateIndices = useCallback((status) => {
@@ -103,15 +104,22 @@ export default function RateSongScreen({ route }) {
         }
       } else if (status === "old") {
         newLeft = prevState.currentIndex + 1;
+        if (newLeft == userSongs.length) {
+          newLeft = userSongs.length - 1;
+        }
+      }
+      let newCurrent;
+      if (newRight == -1) {
+        newCurrent = 1;
+      } else {
+        newCurrent = Math.floor((newLeft + newRight) / 2);
       }
 
-      const newCurrent = Math.floor((newLeft + newRight) / 2);
-
       // Logging for debugging
-      console.log(`left: ${newLeft}, right: ${newRight}, curr: ${newCurrent}`);
 
-      if (newRight < newLeft) {
+      if (newRight < newLeft || (userSongs.length < 2 && newRight <= newLeft)) {
         setDoneRanking(true);
+        setFinish(true);
       }
 
       return {
@@ -144,7 +152,7 @@ export default function RateSongScreen({ route }) {
     );
   };
 
-  if (userSongs.length > 0) {
+  if (userSongs.length > 0 && !finish) {
     return (
       <View style={styles.mainContainer}>
         <View style={styles.headerContainer}>
@@ -157,34 +165,26 @@ export default function RateSongScreen({ route }) {
             review={review}
             status={"new"}
           />
-          {console.log(
-            `currentIndex: ${indices.currentIndex}, userSongs: ${userSongs}`
-          )}
           <RateSongComponent
             title={userSongs[indices.currentIndex].song_name}
             artist={userSongs[indices.currentIndex].artist}
             review={userSongs[indices.currentIndex].review}
             status={"old"}
           />
+          {doneRanking ? (
+            <View style={styles.resultContainer}>
+              <Text style={typography.header2}>
+                New Rank: {indices.currentIndex + 1}
+              </Text>
+              <Text style={typography.header2}>
+                Calibrated Rating:{" "}
+                {linspace(rating, userSongs.length + 1, indices.currentIndex)}
+              </Text>
+            </View>
+          ) : (
+            <View></View>
+          )}
         </View>
-        {doneRanking ? (
-          <View style={styles.resultContainer}>
-            <Text style={typography.header2}>
-              New Rank: {indices.currentIndex + 1}
-            </Text>
-            <Text style={typography.header2}>
-              Calibrated Rating:{" "}
-              {linspace(
-                10.0,
-                7.0,
-                userSongs.length + 1,
-                indices.currentIndex - 1
-              )}
-            </Text>
-          </View>
-        ) : (
-          <View></View>
-        )}
       </View>
     );
   } else {
@@ -204,11 +204,11 @@ export default function RateSongScreen({ route }) {
         {doneRanking ? (
           <View style={styles.resultContainer}>
             <Text style={typography.header2}>
-              New Rank: {indices.currentIndex}
+              New Rank: {indices.currentIndex + 1}
             </Text>
             <Text style={typography.header2}>
               Calibrated Rating:{" "}
-              {linspace(10.0, 7.0, userSongs.length + 1, indices.currentIndex)}
+              {linspace(rating, userSongs.length + 1, indices.currentIndex)}
             </Text>
           </View>
         ) : (

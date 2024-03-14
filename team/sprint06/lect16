@@ -1,0 +1,44 @@
+# Lect16
+
+Assigned: Friday, 3/1/2024
+Due: Friday, 3/8/2024
+
+## Scrum
+
+Lead: Emily
+Present: Amy, Aryaman, Katya, Leyang, Jeffrey, Collin
+Absent: 
+
+### 2 Questions:
+1. What have you been up to?
+2. Anything giving you trouble? What's preventing you from moving forward. 
+
+### Team Responses:
+
+Katya:
+1. Nothing much ,busy with another class. 
+2. Busy with another class. 
+
+Amy:
+1. Looked over Collin's code and the feedback from Monday. Did some small changes. 
+2. Nothing really. Just life.
+
+Emily:
+1. Working on the profile page and the edit profile page. Finding difficulties getting the modal to show up.
+2. React native difficulties; infamiliarity with the codebase. 
+
+Aryaman:
+1. Finished all of the necessary endpoints for the application. Most of the basic ones are done, and they are pushed up. 
+2. Same as above ^, continuing and finishing.
+
+Leyang:
+1. Made the friends page (really simple) and connected it to the endpoints. 
+2. Unfamiliarity with making functions with react native and connecting with an endpoint. 
+
+Jeffery:
+1. Fully completed merging with Aryaman's branch, finished rate song and search song screens to work with new endpoints. Working on algorithm. Also did the EVAL_RESPONSE doc.
+2. Database indexing starts at 1, but javascript indexing starts at 0. Once that is fixed up, it should be good.
+
+Collin:
+1. Leyang and collin finished the friends screen. Merged it with Amy's so now there are sign in / sign up.
+2. Nothing really stopping them now. Just needs to merge the code. 

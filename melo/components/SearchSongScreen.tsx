@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import * as React from "react";
 import {
   FlatList,
@@ -11,6 +11,7 @@ import {
   Keyboard,
   // Stylesheet
 } from "react-native";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 import {
   Searchbar,
@@ -38,9 +39,27 @@ export default function SearchSongScreen({ navigation }) {
   const [selectedMBID, setSelectedMBID] = useState("");
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedCover, setSelectedCover] = useState("");
-
+  const [user_id, setUserId] = useState(0);
   const [songData, setSongData] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
+
+  useEffect(() => {
+    const auth = getAuth();
+    const sub = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        console.log(user.uid);
+        const response = fetch(
+          `http://127.0.0.1:5000/api/get_profile?uid=${user.uid}`
+        )
+          .then((response) => response.json())
+          .then((data) => {
+            setUserId(data?.results[0]?.id);
+          });
+      }
+    });
+
+    return sub;
+  }, [navigation]);
 
   const SongResult = ({ songTitle, songArtist, mbid, date, cover }) => {
     const updateSelectedStateVariables = () => {
@@ -80,6 +99,7 @@ export default function SearchSongScreen({ navigation }) {
       mbid: selectedMBID,
       date: selectedDate,
       cover: selectedCover,
+      user_id: user_id,
     });
   };
 
