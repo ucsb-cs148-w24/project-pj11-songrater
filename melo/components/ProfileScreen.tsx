@@ -10,28 +10,45 @@ import { useIsFocused } from '@react-navigation/native';
 import { styles } from "./helper/Styles";
 import { typography } from "./helper/Typography";
 import { Avatar, Divider, Card, Button } from 'react-native-paper';
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 //<a href="https://www.flaticon.com/free-icons/pencil" title="pencil icons">Pencil icons created by Pixel perfect - Flaticon</a>
 const mockFriendCount = 10;
 const snow = '#FFFBFA';
-const user_id = 1;
 export default function ProfileScreen({ navigation }) {
   const [uname, setUname] = useState("");
   const [description, setDescription] = useState("");
   const [songData, setSongData] = useState([]);
-  
+  const [user_id, setUserId] = useState(0);
+
+  useEffect(() => {
+    const auth = getAuth();
+    const sub = onAuthStateChanged(auth, (user) => {
+      console.log(user.uid);
+      if (user) {
+        const response = fetch(
+          `http://127.0.0.1:5000/api/get_profile?uid=${user.uid}`
+        )
+          .then((response) => response.json())
+          .then((data) => {
+            setUserId(data?.results[0]?.id);
+            setUname(data?.results[0]?.username);
+            setDescription(data?.results[0]?.description);
+            fetchUserSongList(data?.results[0]?.id);
+          })
+      }
+    });
+    return sub;
+  }, [navigation, useIsFocused()]);
+
   const navigateEditUserScreen = ({}) => {
     navigation.navigate("EditUserScreen");
   };
 
-  useEffect(() => {
-    fetchUserSongList({});
-    fetchUserInfo();
-  }, [useIsFocused()]);
-
+/*
   const fetchUserInfo = async () => {
     const curr_info = await fetch(
-      `http://127.0.0.1:5000/api/get_profile?user_id=${user_id}`
+      `http://127.0.0.1:5000/api/get_profile?uid=${uid}`
     ).then((curr_info) => curr_info.json())
     try{
       setUname(curr_info.results[0].username);
@@ -39,10 +56,12 @@ export default function ProfileScreen({ navigation }) {
     }
     catch{
       console.log('Error getting User Info');
+      console.log(uid);
     }
   }
+  */
 
-  const fetchUserSongList = async ({}) => {
+  const fetchUserSongList = async (user_id) => {
     try{
       const responseGood = await fetch(
         `http://127.0.0.1:5000/api/get_user_songs?user_id=${user_id}&type=good`
@@ -63,6 +82,7 @@ export default function ProfileScreen({ navigation }) {
       newArr = newArr.filter(function( element ) {
         return element !== undefined;
      });
+     console.log(newArr);
      setSongData(newArr);
     }
     catch{

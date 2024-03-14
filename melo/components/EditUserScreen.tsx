@@ -3,16 +3,15 @@ import { typography } from "./helper/Typography";
 // import { styles } from "./helper/Styles";
 import { useEffect, useState } from "react";
 import { Avatar, Divider, Modal, Portal, PaperProvider, TextInput, HelperText, Button} from 'react-native-paper';
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
-export function TextBox({title}){
+export function TextBox({title, user_id}){
     const [text, setText] = useState('');
     const [error, setError] = useState(false);
     const [success, setSuccess] = useState(false);
-
     const submitted = () => {CallAPI(title,text)};
 
     const CallAPI = async(title,text) => {
-        const user_id = 1
         var response;
         try{
             if(title=='Username'){
@@ -73,7 +72,24 @@ export function TextBox({title}){
 export default function EditUser({ route }) {
     const [visible, setVisible] = useState(false);
     const [pressedButton, setPressedButton] = useState([]);
-
+    const [user_id, setUserId] = useState(0);
+    useEffect(() => {
+      const auth = getAuth();
+      const sub = onAuthStateChanged(auth, (user) => {
+        if (user) {
+          console.log(user.uid);
+          const response = fetch(
+            `http://127.0.0.1:5000/api/get_profile?uid=${user.uid}`
+          )
+            .then((response) => response.json())
+            .then((data) => {
+              setUserId(data?.results[0]?.id);
+            });
+        }
+      });
+  
+      return sub;
+    }, [route]);
     const showModal = () => setVisible(true);
     const hideModal = () => setVisible(false);
 
@@ -83,7 +99,7 @@ export default function EditUser({ route }) {
             <Portal>
                 <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={styles.containerStyle}>
                     <Text style={{fontSize:20,flexWrap: 'wrap-reverse',flex:1, marginBottom:20}}>Enter a new {pressedButton}</Text>
-                    <TextBox title={pressedButton}/>
+                    <TextBox title={pressedButton} user_id={user_id}/>
                 </Modal>
             </Portal>
         );
