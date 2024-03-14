@@ -5,6 +5,7 @@ import LandingScreen from "./components/LandingScreen";
 import SearchSongScreen from "./components/SearchSongScreen";
 import ProfileScreen from "./components/ProfileScreen";
 import MainContainer from "./navigation/MainContainer";
+import FriendsScreen from "./components/FriendsScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -25,6 +26,11 @@ export default function MyStack() {
         <Stack.Screen
           name="Profile"
           component={ProfileScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Friend"
+          component={FriendsScreen}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>

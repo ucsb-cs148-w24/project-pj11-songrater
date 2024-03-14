@@ -1,98 +1,95 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { typography } from "./helper/Typography";
 // import { styles } from "./helper/Styles";
-import { useCallback, useState } from "react";
+import { useCallback, useState, useEffect } from "react";
+import { objectToUrlParams } from "./helper/functions";
 
-const mockData = [
-  {
-    song_id: 7,
-    artist: "Megan Thee Stallion",
-    song_name: "Hiss",
-    rank: "1",
-    review: "An electrifying track with a powerful performance.",
-  },
-  {
-    song_id: 13,
-    artist: "Jack Harlow",
-    song_name: "Lovin On Me",
-    rank: "2",
-    review: "A catchy tune that's climbing the charts rapidly.",
-  },
-  {
-    song_id: 68,
-    artist: "Taylor Swift",
-    song_name: "Cruel Summer",
-    rank: "3",
-    review: "An emotional rollercoaster packed into a song.",
-  },
-  {
-    song_id: 45,
-    artist: "Teddy Swims",
-    song_name: "Lose Control",
-    rank: "4",
-    review: "A soulful ballad that resonates with many.",
-  },
-  {
-    song_id: 80,
-    artist: "Tate Mcrae",
-    song_name: "Greedy",
-    rank: "5",
-    review: "An energetic song that gets you moving.",
-  },
-  {
-    song_id: 36,
-    artist: "Zach Bryan and Kacey Musgraves",
-    song_name: "I Remember Everything",
-    rank: "6",
-    review: "A heartfelt story turned into a beautiful melody.",
-  },
-  {
-    song_id: 5,
-    artist: "Doja Cat",
-    song_name: "Agora Hills",
-    rank: "7",
-    review: "A dynamic hit with an unforgettable rhythm.",
-  },
-  {
-    song_id: 50,
-    artist: "Benson Boone",
-    song_name: "Beautiful Things",
-    rank: "8",
-    review: "A track that showcases true musical talent.",
-  },
-  {
-    song_id: 78,
-    artist: "21 Savage",
-    song_name: "Redrum",
-    rank: "9",
-    review: "A bold and raw piece that captivates listeners.",
-  },
-  {
-    song_id: 37,
-    artist: "SZA",
-    song_name: "Snooze",
-    rank: "10",
-    review: "A smooth and catchy number with a cool vibe.",
-  },
-];
-
-function linspace(startValue, endValue, num, index) {
+function linspace(rating, num, index) {
+  let endValue;
+  let startValue;
+  if (rating == "good") {
+    startValue = 7.0;
+    endValue = 10.0;
+  } else if (rating == "ok") {
+    startValue = 4.0;
+    endValue = 7.0;
+  } else if (rating == "bad") {
+    startValue = 0.0;
+    endValue = 4.0;
+  }
   const arr = [];
-  const step = (endValue - startValue) / (num - 1);
-  for (let i = 0; i < num; i++) {
+  const step = (endValue - startValue) / num;
+  console.log(`step: ${step}`);
+  for (let i = 1; i <= num; i++) {
     arr.push(startValue + step * i);
   }
   return arr[index];
 }
 
 export default function RateSongScreen({ route }) {
-  const { rating, title, artist, review, mbid } = route.params;
+  const { rating, title, artist, review, mbid, date, cover, user_id } =
+    route.params;
   const [indices, setIndices] = useState({
     leftIndex: 0,
-    rightIndex: mockData.length - 1,
-    currentIndex: Math.floor((mockData.length - 1) / 2),
+    rightIndex: 0,
+    currentIndex: 0,
   });
   const [doneRanking, setDoneRanking] = useState(false);
+  const [userSongs, setUserSongs] = useState({});
+  const [finish, setFinish] = useState(false);
+
+  useEffect(() => {
+    fetchUserSongs({ rating });
+    setDoneRanking(false);
+  }, []);
+
+  useEffect(() => {
+    if (doneRanking) {
+      addUserSong();
+    }
+  }, [doneRanking]);
+
+  const addUserSong = async () => {
+    const addUserSongParams = {
+      user_id: user_id, // TODO : change once we get valid user IDs
+      song_id: mbid,
+      rank: indices.currentIndex + 1,
+      review: review,
+      type: rating,
+    };
+
+    const response = await fetch(
+      "http://127.0.0.1:5000/api/add_song?" +
+        objectToUrlParams(addUserSongParams),
+      {
+        method: "POST",
+      }
+    );
+  };
+
+  const fetchUserSongs = async ({ rating }) => {
+    const fetchUserSongParams = {
+      type: rating,
+      user_id: 1, // TODO : change once we get valid user IDs
+    };
+
+    const response = await fetch(
+      `http://127.0.0.1:5000/api/get_user_songs?user_id=${user_id}&type=${rating}`
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        if (!data?.results || data.results.length === 0) {
+          setDoneRanking(true);
+        } else {
+          setUserSongs(data.results);
+          setIndices({
+            leftIndex: 0,
+            rightIndex: data.results.length - 1,
+            currentIndex: Math.floor((data.results.length - 1) / 2),
+          });
+        }
+      });
+  };
 
   const updateIndices = useCallback((status) => {
     setIndices((prevState) => {
@@ -107,15 +104,22 @@ export default function RateSongScreen({ route }) {
         }
       } else if (status === "old") {
         newLeft = prevState.currentIndex + 1;
+        if (newLeft == userSongs.length) {
+          newLeft = userSongs.length - 1;
+        }
+      }
+      let newCurrent;
+      if (newRight == -1) {
+        newCurrent = 1;
+      } else {
+        newCurrent = Math.floor((newLeft + newRight) / 2);
       }
 
-      const newCurrent = Math.floor((newLeft + newRight) / 2);
-
       // Logging for debugging
-      console.log(`left: ${newLeft}, right: ${newRight}, curr: ${newCurrent}`);
 
-      if (newRight < newLeft) {
+      if (newRight < newLeft || (userSongs.length < 2 && newRight <= newLeft)) {
         setDoneRanking(true);
+        setFinish(true);
       }
 
       return {
@@ -148,52 +152,72 @@ export default function RateSongScreen({ route }) {
     );
   };
 
-  const fetchUserSongs = ({ rating }) => {};
-
-  return (
-    <View style={styles.mainContainer}>
-      <View style={styles.headerContainer}>
-        <Text style={typography.header}>Choose which song you prefer!</Text>
-      </View>
-      <View style={styles.rateSongContainer}>
-        <RateSongComponent
-          title={title}
-          artist={artist}
-          review={review}
-          status={"new"}
-        />
-        <RateSongComponent
-          title={mockData[indices.currentIndex].song_name}
-          artist={mockData[indices.currentIndex].artist}
-          review={mockData[indices.currentIndex].review}
-          status={"old"}
-        />
-      </View>
-      {doneRanking ? (
-        <View style={styles.resultContainer}>
-          <Text style={typography.header2}>
-            New Rank: {indices.currentIndex + 1}
-          </Text>
-          <Text style={typography.header2}>
-            Calibrated Rating:{" "}
-            {linspace(10.0, 7.0, mockData.length + 1, indices.currentIndex)}
-          </Text>
+  if (userSongs.length > 0 && !finish) {
+    return (
+      <View style={styles.mainContainer}>
+        <View style={styles.headerContainer}>
+          <Text style={typography.header}>Choose which song you prefer!</Text>
         </View>
-      ) : (
-        <View></View>
-      )}
-    </View>
-  );
+        <View style={styles.rateSongContainer}>
+          <RateSongComponent
+            title={title}
+            artist={artist}
+            review={review}
+            status={"new"}
+          />
+          <RateSongComponent
+            title={userSongs[indices.currentIndex].song_name}
+            artist={userSongs[indices.currentIndex].artist}
+            review={userSongs[indices.currentIndex].review}
+            status={"old"}
+          />
+          {doneRanking ? (
+            <View style={styles.resultContainer}>
+              <Text style={typography.header2}>
+                New Rank: {indices.currentIndex + 1}
+              </Text>
+              <Text style={typography.header2}>
+                Calibrated Rating:{" "}
+                {linspace(rating, userSongs.length + 1, indices.currentIndex)}
+              </Text>
+            </View>
+          ) : (
+            <View></View>
+          )}
+        </View>
+      </View>
+    );
+  } else {
+    return (
+      <View style={styles.mainContainer}>
+        <View style={styles.headerContainer}>
+          <Text style={typography.header}>Song has been added!</Text>
+        </View>
+        <View style={styles.rateSongContainer}>
+          <RateSongComponent
+            title={title}
+            artist={artist}
+            review={review}
+            status={"new"}
+          />
+        </View>
+        {doneRanking ? (
+          <View style={styles.resultContainer}>
+            <Text style={typography.header2}>
+              New Rank: {indices.currentIndex + 1}
+            </Text>
+            <Text style={typography.header2}>
+              Calibrated Rating:{" "}
+              {linspace(rating, userSongs.length + 1, indices.currentIndex)}
+            </Text>
+          </View>
+        ) : (
+          <View></View>
+        )}
+      </View>
+    );
+  }
 }
-
-/**
- * UseEffect to get all songs that the user has (future case, right now just MockData)
- *
- * When user selects a song, this should be inserted into the database with unique MBID
- * When getting all of a user's songs, backend should join this data
- *
- * Would be also nice to get 'last updated'
- */
 
 const styles = StyleSheet.create({
   mainContainer: {

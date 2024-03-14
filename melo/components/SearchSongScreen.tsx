@@ -1,5 +1,5 @@
-import { useState } from "react";
-import * as React from 'react';
+import { useState, useEffect } from "react";
+import * as React from "react";
 import {
   FlatList,
   Pressable,
@@ -11,6 +11,7 @@ import {
   Keyboard,
   // Stylesheet
 } from "react-native";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 import {
   Searchbar,
@@ -21,13 +22,13 @@ import {
   IconButton,
   Paragraph,
   Divider,
-} from 'react-native-paper';
+} from "react-native-paper";
 
 import { typography } from "./helper/Typography";
 import { styles } from "./helper/Styles";
 import { PlusIcon } from "./helper/SVGIcons";
 // import Ionicons from "react-native-vector-icons/Ionicons";
-import ScreenWrapper from './helper/ScreenWrapper';
+import ScreenWrapper from "./helper/ScreenWrapper";
 
 export default function SearchSongScreen({ navigation }) {
   const [title, setTitle] = useState("");
@@ -36,16 +37,38 @@ export default function SearchSongScreen({ navigation }) {
   const [selectedTitle, setSelectedTitle] = useState("");
   const [selectedArtist, setSelectedArtist] = useState("");
   const [selectedMBID, setSelectedMBID] = useState("");
-
+  const [selectedDate, setSelectedDate] = useState("");
+  const [selectedCover, setSelectedCover] = useState("");
+  const [user_id, setUserId] = useState(0);
   const [songData, setSongData] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
 
-  const SongResult = ({ songTitle, songArtist, mbid }) => {
+  useEffect(() => {
+    const auth = getAuth();
+    const sub = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        console.log(user.uid);
+        const response = fetch(
+          `http://127.0.0.1:5000/api/get_profile?uid=${user.uid}`
+        )
+          .then((response) => response.json())
+          .then((data) => {
+            setUserId(data?.results[0]?.id);
+          });
+      }
+    });
+
+    return sub;
+  }, [navigation]);
+
+  const SongResult = ({ songTitle, songArtist, mbid, date, cover }) => {
     const updateSelectedStateVariables = () => {
       setModalVisible(true);
       setSelectedTitle(songTitle);
       setSelectedArtist(songArtist);
       setSelectedMBID(mbid);
+      setSelectedDate(date);
+      setSelectedCover(cover);
     };
 
     return (
@@ -66,12 +89,6 @@ export default function SearchSongScreen({ navigation }) {
     );
   };
 
-  const SongRatings = {
-    GREAT: 0,
-    OKAY: 1,
-    BAD: 2,
-  };
-
   const navigateRateSong = ({ rating }) => {
     setModalVisible(false);
     navigation.navigate("RateSong", {
@@ -80,6 +97,9 @@ export default function SearchSongScreen({ navigation }) {
       artist: selectedArtist,
       review: review,
       mbid: selectedMBID,
+      date: selectedDate,
+      cover: selectedCover,
+      user_id: user_id,
     });
   };
 
@@ -108,17 +128,17 @@ export default function SearchSongScreen({ navigation }) {
 
   const [isVisible, setIsVisible] = React.useState(false);
   const [searchQueries, setSearchQuery] = React.useState({
-    searchBarMode: '',
-    traileringIcon: '',
-    traileringIconWithRightItem: '',
-    rightItem: '',
-    loadingBarMode: '',
-    searchViewMode: '',
-    searchWithoutBottomLine: '',
-    loadingViewMode: '',
-    clickableBack: '',
-    clickableDrawer: '',
-    clickableLoading: '',
+    searchBarMode: "",
+    traileringIcon: "",
+    traileringIconWithRightItem: "",
+    rightItem: "",
+    loadingBarMode: "",
+    searchViewMode: "",
+    searchWithoutBottomLine: "",
+    loadingViewMode: "",
+    clickableBack: "",
+    clickableDrawer: "",
+    clickableLoading: "",
   });
 
   return (
@@ -128,7 +148,7 @@ export default function SearchSongScreen({ navigation }) {
           <Text style={typography.title}>Melo</Text>
         </View>
       </View>
-      
+
       <View style={styles.preference}>
         <Searchbar
           value={title}
@@ -139,20 +159,9 @@ export default function SearchSongScreen({ navigation }) {
           style={styles.searchbar}
         />
       </View>
-      <View style={styles.preference}>
-        <Searchbar
-          value={artist}
-          onChangeText={setArtist}
-          loading={isLoading}
-          placeholder="Enter an Artist..."
-          onSubmitEditing={fetchSong}
-          style={styles.searchbar}
-        />
-        <Button style={styles.button} labelStyle={typography.default_w} onPress={fetchSong}>
-          Search
-        </Button>
-      </View>
-
+      <Pressable onPress={fetchSong}>
+        <Text style={styles.enterButton}>Search</Text>
+      </Pressable>
       <Modal
         transparent={true}
         visible={modalVisible}
@@ -184,7 +193,7 @@ export default function SearchSongScreen({ navigation }) {
             <View style={styles.ModalRatingContainer}>
               <Pressable
                 onPress={() => {
-                  navigateRateSong({ rating: SongRatings.GREAT });
+                  navigateRateSong({ rating: "good" });
                 }}
                 style={styles.GoodButton}
               >
@@ -192,7 +201,7 @@ export default function SearchSongScreen({ navigation }) {
               </Pressable>
               <Pressable
                 onPress={() => {
-                  navigateRateSong({ rating: SongRatings.OKAY });
+                  navigateRateSong({ rating: "ok" });
                 }}
                 style={styles.OkayButton}
               >
@@ -200,7 +209,7 @@ export default function SearchSongScreen({ navigation }) {
               </Pressable>
               <Pressable
                 onPress={() => {
-                  navigateRateSong({ rating: SongRatings.BAD });
+                  navigateRateSong({ rating: "bad" });
                 }}
                 style={styles.BadButton}
               >
@@ -219,6 +228,8 @@ export default function SearchSongScreen({ navigation }) {
               songTitle={item.title}
               songArtist={item.artist}
               mbid={item.mbid}
+              date={item.release_date}
+              cover={item.image}
             />
           )}
         />
@@ -226,7 +237,6 @@ export default function SearchSongScreen({ navigation }) {
     </View>
   );
 }
-
 
 //Surface, Segmented Buttons, List.Accordian, Progress Bar?
 
