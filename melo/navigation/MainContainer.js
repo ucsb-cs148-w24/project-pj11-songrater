@@ -63,6 +63,11 @@ function ProfileStack(){
         component={EditUserScreen}
         options={{ headerShown: false }}
       />
+      <Stack.Screen
+        name="FriendsScreen"
+        component={FriendsScreen}
+        options={{headerShown:false}}
+      />
     </Stack.Navigator>  )
 }
 
@@ -198,7 +203,6 @@ function MainContainer() {
           component={ProfileStack}
           options={{ unmountOnBlur: true }}
         />
-        <Tab.Screen name={friendName} component={FriendsScreen} />
       </Tab.Navigator>
     </NavigationContainer>
   );

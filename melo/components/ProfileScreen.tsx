@@ -13,7 +13,6 @@ import { Avatar, Divider, Card, Button } from 'react-native-paper';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 //<a href="https://www.flaticon.com/free-icons/pencil" title="pencil icons">Pencil icons created by Pixel perfect - Flaticon</a>
-const mockFriendCount = 10;
 const snow = '#FFFBFA';
 export default function ProfileScreen({ navigation }) {
   const [uname, setUname] = useState("");
@@ -91,7 +90,9 @@ export default function ProfileScreen({ navigation }) {
    
   };
 
-  const handleButton = () => {};
+  const handleButton = () => {
+    navigation.navigate("FriendsScreen");
+  };
   const renderCard = ({ item }) => (
     <Card style={styles.card} mode={'elevated'}>
       <Card.Content>
@@ -124,9 +125,8 @@ export default function ProfileScreen({ navigation }) {
          <Pressable style={{marginLeft:17,marginRight:17,marginTop:5,marginBottom:5, flex:1, borderRadius:10,justifyContent:'flex-start'}} onPress={() => handleButton()}>
           <Divider style={{height: 1.5, marginTop: 17, marginHorizontal: 17, backgroundColor : "#3187D8" }} />
           <View style={{display:'flex', flex:1, flexDirection:'row'}}>
-            <Text style={{fontSize:20,alignSelf:'center',marginLeft:17}}>
-              <Text style={{fontWeight:'bold'}}>{mockFriendCount}</Text>
-              {' '}Friends
+            <Text style={{fontSize:20,alignSelf:'center',marginLeft:17, fontWeight:'bold'}}>
+              Friends
             </Text>
             <Text style={{fontSize:20,alignSelf:'center',marginLeft:'auto',marginRight:17}}>{">"}</Text>
           </View>
