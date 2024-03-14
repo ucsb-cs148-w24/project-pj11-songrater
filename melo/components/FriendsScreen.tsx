@@ -21,27 +21,16 @@ import {
 import { styles } from "./helper/Styles";
 import { typography } from "./helper/Typography";
 import { buttons } from "./helper/Buttons";
+import { objectToUrlParams } from "./helper/functions";
 
 import {getAuth} from "firebase/auth";
 
-const UserId = 5
-const snow = '#FFFBFA'
 
 export default function FriendsScreen({ navigation }){
 
-  const [friendsdata, setFriendsData] = useState([]);
+  const [UserId, setUserId] = useState(9);
 
-  // const [friendsdata, setFriendData] = useState([
-  //   {id:'1', mockname: 'Friend1', avatar: require('../assets/default-avatar.jpeg')},
-  //   {id:'2', mockname: 'Friend2', avatar: require('../assets/default-avatar.jpeg')},
-  //   {id:'3', mockname: 'Friend3', avatar: require('../assets/default-avatar.jpeg')},
-  //   {id:'4', mockname: 'Friend4', avatar: require('../assets/default-avatar.jpeg')},
-  //   {id:'5', mockname: 'Friend5', avatar: require('../assets/default-avatar.jpeg')},
-  //   {id:'6', mockname: 'Friend6', avatar: require('../assets/default-avatar.jpeg')},
-  //   {id:'7', mockname: 'Friend7', avatar: require('../assets/default-avatar.jpeg')},
-  //   {id:'8', mockname: 'Friend8', avatar: require('../assets/default-avatar.jpeg')},
-  //   {id:'9', mockname: 'Friend9', avatar: require('../assets/default-avatar.jpeg')},
-  // ]);
+  const [friendsdata, setFriendsData] = useState([]);
 
   const [searchFriendsData, setSearchFriendsData] = useState([]);
 
@@ -49,6 +38,14 @@ export default function FriendsScreen({ navigation }){
 
   const [fid, setFid] = useState(0);
   const [fexist, setFexist] = useState("");
+
+  useEffect(() => {
+    console.log(fid); // This will log the updated value of fid after the component re-renders
+  }, [fid]);
+
+  // useEffect(() => {
+  //   console.log(fexist); // This will log the updated value of fid after the component re-renders
+  // }, [fexist]);
 
   const renderCard= ({ item }) => (
     <Card style={styles.card} mode={'elevated'}>
@@ -78,9 +75,9 @@ export default function FriendsScreen({ navigation }){
            </Text>
            <Pressable
                 onPress={() => {
-                  // setFid(parseInt(item.id, 10));
-                  // console.log(fid);
-                  AddFriend();
+                  if(fexist == "You can add him/her as a friend."){
+                    AddFriend(fid);
+                  }
                 }}
               >
                 <Text style={{fontWeight:'bold', marginRight: 16}}>
@@ -112,11 +109,11 @@ export default function FriendsScreen({ navigation }){
           setSearchFriendsState(true);
           setSearchFriendsData(data.results);
 
-          setFid(data["results"]["id"]);
-          console.log(fid);
-
+          console.log(data.results[0].id);
+          setFid(data.results[0].id);
         });
-
+        
+        IfExist(fid);
         
       }
 
@@ -142,27 +139,41 @@ export default function FriendsScreen({ navigation }){
     return responseJson["results"]["id"]
   }
 
-  const AddFriend = async() => {
-    
+  const IfExist = async(Fid) =>{
     try{
-     await fetch(`http://127.0.0.1:5000/api/friend_exists?user_id=${UserId}&fid=${fid}`).
-      then((data) => {
-      return data.json();
-    }).then((data) =>{
-      setFexist(data.MESSAGE);
-    })
-    console.log(fexist);
+      await fetch(`http://127.0.0.1:5000/api/friend_exists?user_id=${UserId}&fid=${Fid}`).
+       then((data) => {
+       return data.json();
+     }).then((data) =>{
+       setFexist(data.MESSAGE);
+       console.log(data.MESSAGE);
+     });
     }catch (error) {
       console.error("Error fetching data: ", error);
     }
+  };
 
-    if(fexist == "You can add him/her as a friend."){
+  const AddFriend = async(Fid) => {
+    
+    try{
+      const addFriendParams = {
+        user_id: UserId, // TODO : change once we get valid user IDs
+        fid: Fid,
+      };
+
       // add friend
-      await fetch(`http://127.0.0.1:5000/api/add_friend?user_id=${UserId}&fid=${fid}`).
-      then((data) => {
-        return data.json();
-      });
+      const response = await fetch(
+        `http://127.0.0.1:5000/api/add_friend?`+
+          objectToUrlParams(addFriendParams),
+        {
+          method: "POST",
+        }
+        ).then((response) => console.log(response));
+      
+    }catch (error) {
+      console.error("Error fetching data: ", error);
     }
+    
 };
 
   const fetchFriendsList = async () => {
@@ -172,10 +183,6 @@ export default function FriendsScreen({ navigation }){
       `http://127.0.0.1:5000/api/get_friends?user_id=${UserId}`
       ).then((Friends) => Friends.json());
 
-    //   var newArr = Friends.results;
-    //   newArr = newArr.filter(function( element ) {
-    //     return element !== undefined;
-    //  });
      setFriendsData(Friends.results);
     }catch (error) {
       console.error("Error fetching data: ", error);
@@ -184,8 +191,8 @@ export default function FriendsScreen({ navigation }){
 
   useEffect(() => {
     fetchFriendsList();
-  }, [])
-
+  }, []);
+  
 
   return (
     <View style={{display:'flex',flex:1,backgroundColor: "#BBCDE5"}}>
