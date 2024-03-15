@@ -885,7 +885,6 @@ def get_friends_top_songs():
         conn = get_db_connection()
         cur = conn.cursor()
 
-        # Use a parameterized query to prevent SQL injection
         sql_query = sql.SQL("""
         WITH friend_ids AS (
             SELECT uid2 AS friend_id FROM public."Friend" WHERE uid1 = %s
@@ -896,7 +895,7 @@ def get_friends_top_songs():
         FROM friend_ids
         JOIN public."User_Lists_Good" ul ON friend_ids.friend_id = ul.user_id
         JOIN public."Song_Info" s ON ul.song_id = s.song_id
-        ORDER BY ul.updated_at DESC, ul.rank ASC
+        ORDER BY ul.updated_at DESC
         LIMIT %s;
         """)
         
@@ -918,3 +917,54 @@ def get_friends_top_songs():
             conn.close()
 
     return jsonify(response)
+
+
+# @app.route("/api/friends_top_songs", methods=['GET'])
+# def get_friends_top_songs():
+#     response = {}
+#     try:
+#         user_id = request.args.get("user_id")
+#         if not user_id:
+#             raise ValueError("user_id is required")
+
+#         # Set default value for top_k if not provided or invalid
+#         try:
+#             top_k = int(request.args.get("top_k", 10))
+#         except ValueError:
+#             top_k = 10
+        
+#         conn = get_db_connection()
+#         cur = conn.cursor()
+
+#         sql_query = sql.SQL("""
+#         WITH friend_ids AS (
+#             SELECT uid2 AS friend_id FROM public."Friend" WHERE uid1 = %s
+#             UNION
+#             SELECT uid1 AS friend_id FROM public."Friend" WHERE uid2 = %s
+#         )
+#         SELECT s.song_id, s.song_name, s.artist_name, ul.rank
+#         FROM friend_ids
+#         JOIN public."User_Lists_Good" ul ON friend_ids.friend_id = ul.user_id
+#         JOIN public."Song_Info" s ON ul.song_id = s.song_id
+#         ORDER BY ul.updated_at DESC, ul.rank ASC
+#         LIMIT %s;
+#         """)
+        
+#         cur.execute(sql_query, (user_id, user_id, top_k))
+#         songs = cur.fetchall()
+        
+#         # Format the response data
+#         songs_list = [{"song_id": song[0], "song_name": song[1], "artist_name": song[2], "rank": song[3]} for song in songs]
+#         response["top_songs"] = songs_list
+        
+#     except Exception as e:
+#         response["MESSAGE"] = f"EXCEPTION: /api/friends_top_songs {e}"
+#         print(response["MESSAGE"])
+#     finally:
+#         # Ensure cursor and connection are closed properly
+#         if cur:
+#             cur.close()
+#         if conn:
+#             conn.close()
+
+#     return jsonify(response)
