@@ -1,86 +1,164 @@
-import React, { useState, useEffect } from 'react';
-import { View, ScrollView, FlatList, TouchableWithoutFeedback, Pressable } from 'react-native';
-import { useIsFocused } from '@react-navigation/native';
-import { Searchbar, Avatar, Card, IconButton, Text, Paragraph, Divider } from 'react-native-paper';
-import ScreenWrapper from './helper/ScreenWrapper';
-import { styles } from './helper/Styles';
-import { typography } from './helper/Typography';
-import { useExampleTheme } from './helper/Themes';
-import { buttons } from './helper/Buttons';
+import React, { useState, useEffect } from "react";
+import {
+  View,
+  ScrollView,
+  FlatList,
+  TouchableWithoutFeedback,
+  Pressable,
+} from "react-native";
+import { useIsFocused } from "@react-navigation/native";
+import {
+  Searchbar,
+  Avatar,
+  Card,
+  IconButton,
+  Text,
+  Paragraph,
+  Divider,
+} from "react-native-paper";
+import ScreenWrapper from "./helper/ScreenWrapper";
+import { styles } from "./helper/Styles";
+import { typography } from "./helper/Typography";
+import { useExampleTheme } from "./helper/Themes";
+import { buttons } from "./helper/Buttons";
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
-import { useEffect } from 'react';
-import SplashScreen from './SplashScreen';
+import SplashScreen from "./SplashScreen";
 
 function LandingScreen({ navigation }) {
   const [uname, setUname] = useState("");
-  const [songData, setSongData] = useState([]);
+  const [feedData, setFeedData] = useState([]);
+  const [user_id, setUserId] = useState(0);
 
   useEffect(() => {
-    fetchFriendSongFeed({});
-    fetchUserInfo();
-  }, [useIsFocused()]);
+    const auth = getAuth();
+    const sub = onAuthStateChanged(auth, (user) => {
+      console.log(user.uid);
+      if (user) {
+        const response = fetch(
+          `http://127.0.0.1:5000/api/get_profile?uid=${user.uid}`
+        )
+          .then((response) => response.json())
+          .then((data) => {
+            setUserId(data?.results[0]?.id);
+            setUname(data?.results[0]?.username);
+            fetchFeed(data?.results[0]?.id);
+          });
+      }
+    });
+    return sub;
+  }, [navigation, useIsFocused()]);
 
   const fetchUserInfo = async () => {
     const curr_info = await fetch(
       `http://127.0.0.1:5000/api/get_profile?user_id=${user_id}`
-    ).then((curr_info) => curr_info.json())
-    try{
+    ).then((curr_info) => curr_info.json());
+    try {
       setUname(curr_info.results[0].username);
+    } catch {
+      console.log("Error getting User Info");
     }
-    catch{
-      console.log('Error getting User Info');
-    }
-  }
+  };
 
   const fetchFeed = async (user_id) => {
-    try{
+    try {
       const feedSongs = await fetch(
         `http://127.0.0.1:5000/api/friends_top_songs?user_id=${user_id}`
       ).then((feedSongs) => feedSongs.json());
 
       var newArr = [];
-      newArr = newArr.concat(responseGood.results)
-      newArr = newArr.concat(responseOk.results)
-      newArr = newArr.concat(responseBad.results)
+      newArr = newArr.concat(feedSongs.top_songs);
 
-      newArr = newArr.filter(function( element ) {
+      newArr = newArr.filter(function (element) {
         return element !== undefined;
-     });
-     setSongData(newArr);
+      });
+      setSongData(newArr);
+    } catch {
+      console.log("Error fetching user lists");
     }
-    catch{
-      console.log("Error fetching user lists")
-    }
-   
   };
 
-// const LandingScreen = ({ navigation }) => {
   const { colors, isV3 } = useExampleTheme();
   const [selectedCard, setSelectedCard] = useState(null);
   const [selectedHearts, setSelectedHearts] = useState({});
   const [selectedPluses, setSelectedPluses] = useState({});
   const [data, setData] = useState([
-    { id: '1', title: 'Love Story', artist: 'Taylor Swift', rating: 9.1, name: 'Amy W.', avatar: require('../assets/default-avatar.jpeg'), cover: require('../assets/fearless-album-cover.jpeg') },
-    { id: '2', title: 'Shape of You', artist: 'Ed Sheeran', rating: 5.3, name: 'Jefferey M.', avatar: require('../assets/default-avatar.jpeg'), cover: require('../assets/shape-of-you-album-cover.jpeg') },
-    { id: '3', title: 'Baby', artist: 'Justin Bieber', rating: 1.1, name: 'Emily H.', avatar: require('../assets/default-avatar.jpeg'), cover: require('../assets/shape-of-you-album-cover.jpeg') },
-    { id: '4', title: 'Blinding Lights', artist: 'The Weeknd', rating: 8.6, name: 'Collin Q.', avatar: require('../assets/default-avatar.jpeg'), cover: require('../assets/fearless-album-cover.jpeg') },
-    { id: '5', title: 'Uptown Funk', artist: 'Bruno Mars', rating: 6.3, name: 'Anshuman D.', avatar: require('../assets/default-avatar.jpeg'), cover: require('../assets/shape-of-you-album-cover.jpeg') },
-    { id: '6', title: 'Ocean Eyes', artist: 'Billie Eilish', rating: 7.9, name: 'Katya R.', avatar: require('../assets/default-avatar.jpeg'), cover: require('../assets/shape-of-you-album-cover.jpeg') },
-    { id: '7', title: 'Old Town Road', artist: 'Lil Nas X', rating: 3.2, name: 'Leyang N.', avatar: require('../assets/default-avatar.jpeg'), cover: require('../assets/shape-of-you-album-cover.jpeg') },
+    {
+      id: "1",
+      title: "Love Story",
+      artist: "Taylor Swift",
+      rating: 9.1,
+      name: "Amy W.",
+      avatar: require("../assets/default-avatar.jpeg"),
+      cover: require("../assets/fearless-album-cover.jpeg"),
+    },
+    {
+      id: "2",
+      title: "Shape of You",
+      artist: "Ed Sheeran",
+      rating: 5.3,
+      name: "Jefferey M.",
+      avatar: require("../assets/default-avatar.jpeg"),
+      cover: require("../assets/shape-of-you-album-cover.jpeg"),
+    },
+    {
+      id: "3",
+      title: "Baby",
+      artist: "Justin Bieber",
+      rating: 1.1,
+      name: "Emily H.",
+      avatar: require("../assets/default-avatar.jpeg"),
+      cover: require("../assets/shape-of-you-album-cover.jpeg"),
+    },
+    {
+      id: "4",
+      title: "Blinding Lights",
+      artist: "The Weeknd",
+      rating: 8.6,
+      name: "Collin Q.",
+      avatar: require("../assets/default-avatar.jpeg"),
+      cover: require("../assets/fearless-album-cover.jpeg"),
+    },
+    {
+      id: "5",
+      title: "Uptown Funk",
+      artist: "Bruno Mars",
+      rating: 6.3,
+      name: "Anshuman D.",
+      avatar: require("../assets/default-avatar.jpeg"),
+      cover: require("../assets/shape-of-you-album-cover.jpeg"),
+    },
+    {
+      id: "6",
+      title: "Ocean Eyes",
+      artist: "Billie Eilish",
+      rating: 7.9,
+      name: "Katya R.",
+      avatar: require("../assets/default-avatar.jpeg"),
+      cover: require("../assets/shape-of-you-album-cover.jpeg"),
+    },
+    {
+      id: "7",
+      title: "Old Town Road",
+      artist: "Lil Nas X",
+      rating: 3.2,
+      name: "Leyang N.",
+      avatar: require("../assets/default-avatar.jpeg"),
+      cover: require("../assets/shape-of-you-album-cover.jpeg"),
+    },
   ]); //delete later
 
   const [searchQueries, setSearchQuery] = React.useState({
-    searchBarMode: '',
-    traileringIcon: '',
-    traileringIconWithRightItem: '',
-    rightItem: '',
-    loadingBarMode: '',
-    searchViewMode: '',
-    searchWithoutBottomLine: '',
-    loadingViewMode: '',
-    clickableBack: '',
-    clickableDrawer: '',
-    clickableLoading: '',
+    searchBarMode: "",
+    traileringIcon: "",
+    traileringIconWithRightItem: "",
+    rightItem: "",
+    loadingBarMode: "",
+    searchViewMode: "",
+    searchWithoutBottomLine: "",
+    loadingViewMode: "",
+    clickableBack: "",
+    clickableDrawer: "",
+    clickableLoading: "",
   });
 
   const TextComponent = isV3 ? Text : Paragraph;
@@ -99,41 +177,50 @@ function LandingScreen({ navigation }) {
 
   const renderRatingColor = (rating) => {
     if (rating >= 7.5) {
-      return 'green'; // High ratings
+      return "green"; // High ratings
     } else if (rating >= 5 && rating <= 7.4) {
-      return 'orange'; // Mediocre ratings
+      return "orange"; // Mediocre ratings
     } else {
-      return 'red'; // Low ratings
+      return "red"; // Low ratings
     }
   };
 
   const renderItem = ({ item }) => (
     <Pressable onPress={() => handleCardPress(item)}>
-      <Card style={styles.card} mode={'elevated'}>
-      {selectedCard === item.id && (
-        <>
-          <Card.Cover source={item.cover} />
-          <View style={styles.iconContainer}>
-            <View style={styles.circleBackground}>
-              <IconButton
-                icon={selectedPluses[item.id] ? 'plus-thick' : 'plus'}
-                iconColor={selectedPluses[item.id] ? '#3187D8' : '#BBCDE5'}
-                size={40}
-                onPress={() => handlePlusPress(item)}
-              />
+      <Card style={styles.card} mode={"elevated"}>
+        {selectedCard === item.id && (
+          <>
+            <Card.Cover source={item.cover} />
+            <View style={styles.iconContainer}>
+              <View style={styles.circleBackground}>
+                <IconButton
+                  icon={selectedPluses[item.id] ? "plus-thick" : "plus"}
+                  iconColor={selectedPluses[item.id] ? "#3187D8" : "#BBCDE5"}
+                  size={40}
+                  onPress={() => handlePlusPress(item)}
+                />
+              </View>
             </View>
-          </View>
-        </>
-      )}
+          </>
+        )}
 
         <Card.Title
           title={
             <>
-              <Text style={{ fontWeight: 'bold' }}>{item.name}</Text> gave a{' '}
-              <Text style={{ fontWeight: 'bold', color: renderRatingColor(item.rating) }}>{item.rating}</Text>
+              <Text style={{ fontWeight: "bold" }}>{item.name}</Text> gave a{" "}
+              <Text
+                style={{
+                  fontWeight: "bold",
+                  color: renderRatingColor(item.rating),
+                }}
+              >
+                {item.rating}
+              </Text>
             </>
           }
-          titleVariant={selectedCard === item.id ? 'headlineSmall' : 'bodyLarge'}
+          titleVariant={
+            selectedCard === item.id ? "headlineSmall" : "bodyLarge"
+          }
           left={(props) => (
             <Avatar.Image
               style={styles.avatar}
@@ -144,8 +231,8 @@ function LandingScreen({ navigation }) {
           right={(props: any) => (
             <IconButton
               {...props}
-              icon={selectedHearts[item.id] ? 'heart' : 'heart-outline'}
-              iconColor={selectedHearts[item.id] ? '#3187D8' : '#BBCDE5'}
+              icon={selectedHearts[item.id] ? "heart" : "heart-outline"}
+              iconColor={selectedHearts[item.id] ? "#3187D8" : "#BBCDE5"}
               onPress={() => handleHeartPress(item)}
             />
           )}
@@ -153,11 +240,14 @@ function LandingScreen({ navigation }) {
 
         <Card.Content>
           <TextComponent
-            variant={selectedCard === item.id ? 'bodyMedium' : 'bodySmall'}
-            style={{ paddingLeft: 55, paddingBottom: selectedCard === item.id ? 20 : 14 }}
+            variant={selectedCard === item.id ? "bodyMedium" : "bodySmall"}
+            style={{
+              paddingLeft: 55,
+              paddingBottom: selectedCard === item.id ? 20 : 14,
+            }}
           >
-            to <Text style={{ fontWeight: 'bold' }}>{item.title}</Text> by{' '}
-            <Text style={{ fontWeight: 'bold' }}>{item.artist}</Text>
+            to <Text style={{ fontWeight: "bold" }}>{item.title}</Text> by{" "}
+            <Text style={{ fontWeight: "bold" }}>{item.artist}</Text>
           </TextComponent>
         </Card.Content>
       </Card>
@@ -166,43 +256,57 @@ function LandingScreen({ navigation }) {
 
   const renderItem2 = ({ item }) => (
     <Pressable onPress={() => handleCardPress(item)}>
-      <Card style={styles.card} mode={'elevated'}>
-      {selectedCard === item.song_id && (
-        <>
-          <Card.Cover source={require('../assets/fearless-album-cover.jpeg')} />
-          <View style={styles.iconContainer}>
-            <View style={styles.circleBackground}>
-              <IconButton
-                icon={selectedPluses[item.song_id] ? 'plus-thick' : 'plus'}
-                iconColor={selectedPluses[item.song_id] ? '#3187D8' : '#BBCDE5'}
-                size={40}
-                onPress={() => handlePlusPress(item)}
-              />
+      <Card style={styles.card} mode={"elevated"}>
+        {selectedCard === item.song_id && (
+          <>
+            <Card.Cover
+              source={require("../assets/fearless-album-cover.jpeg")}
+            />
+            <View style={styles.iconContainer}>
+              <View style={styles.circleBackground}>
+                <IconButton
+                  icon={selectedPluses[item.song_id] ? "plus-thick" : "plus"}
+                  iconColor={
+                    selectedPluses[item.song_id] ? "#3187D8" : "#BBCDE5"
+                  }
+                  size={40}
+                  onPress={() => handlePlusPress(item)}
+                />
+              </View>
             </View>
-          </View>
-        </>
-      )}
+          </>
+        )}
 
         <Card.Title
           title={
             <>
-              <Text style={{ fontWeight: 'bold' }}>{item.song_name}</Text> gave a{' '}
-              <Text style={{ fontWeight: 'bold', color: renderRatingColor(item.rank) }}>{item.rank}</Text>
+              <Text style={{ fontWeight: "bold" }}>{item.song_name}</Text> gave
+              a{" "}
+              <Text
+                style={{
+                  fontWeight: "bold",
+                  color: renderRatingColor(item.rank),
+                }}
+              >
+                {item.rank}
+              </Text>
             </>
           }
-          titleVariant={selectedCard === item.song_id ? 'headlineSmall' : 'bodyLarge'}
+          titleVariant={
+            selectedCard === item.song_id ? "headlineSmall" : "bodyLarge"
+          }
           left={(props) => (
             <Avatar.Image
               style={styles.avatar}
-              source={require('../assets/default-avatar.jpeg')}
+              source={require("../assets/default-avatar.jpeg")}
               size={40}
             />
           )}
           right={(props: any) => (
             <IconButton
               {...props}
-              icon={selectedHearts[item.song_id] ? 'heart' : 'heart-outline'}
-              iconColor={selectedHearts[item.song_id] ? '#3187D8' : '#BBCDE5'}
+              icon={selectedHearts[item.song_id] ? "heart" : "heart-outline"}
+              iconColor={selectedHearts[item.song_id] ? "#3187D8" : "#BBCDE5"}
               onPress={() => handleHeartPress(item)}
             />
           )}
@@ -210,11 +314,14 @@ function LandingScreen({ navigation }) {
 
         <Card.Content>
           <TextComponent
-            variant={selectedCard === item.song_id ? 'bodyMedium' : 'bodySmall'}
-            style={{ paddingLeft: 55, paddingBottom: selectedCard === item.id ? 20 : 14 }}
+            variant={selectedCard === item.song_id ? "bodyMedium" : "bodySmall"}
+            style={{
+              paddingLeft: 55,
+              paddingBottom: selectedCard === item.id ? 20 : 14,
+            }}
           >
-            to <Text style={{ fontWeight: 'bold' }}>{item.song_name}</Text> by{' '}
-            <Text style={{ fontWeight: 'bold' }}>{item.artist_name}</Text>
+            to <Text style={{ fontWeight: "bold" }}>{item.song_name}</Text> by{" "}
+            <Text style={{ fontWeight: "bold" }}>{item.artist_name}</Text>
           </TextComponent>
         </Card.Content>
       </Card>
@@ -228,43 +335,52 @@ function LandingScreen({ navigation }) {
     const sub = onAuthStateChanged(auth, (user) => {
       if (!user) {
         setIsLoggedIn(false);
-        navigation.navigate("Splash")
-      }
-      else {
+        navigation.navigate("Splash");
+      } else {
         setIsLoggedIn(true);
       }
     });
 
     return sub;
-    }, [navigation]);
-  
+  }, [navigation]);
+
   const navigateToSearch = () => {
     navigation.navigate("Search");
   };
 
   const navigateToLogin = () => {
     navigation.navigate("Login");
-  }
+  };
 
   const Logout = () => {
     const auth = getAuth();
-    signOut(auth).then(() => {
-      setIsLoggedIn(false);
-      navigation.navigate("Splash");
-    }).catch((error) => {
-      console.error("Log Out Failed")
-    });
-  }
+    signOut(auth)
+      .then(() => {
+        setIsLoggedIn(false);
+        navigation.navigate("Splash");
+      })
+      .catch((error) => {
+        console.error("Log Out Failed");
+      });
+  };
 
   return (
     <ScreenWrapper contentContainerStyle={styles.content}>
       <ScrollView>
-        <View style={[styles.preference, {flexDirection: 'row', justifyContent: 'space-between'}]}>
+        <View
+          style={[
+            styles.preference,
+            { flexDirection: "row", justifyContent: "space-between" },
+          ]}
+        >
           <View style={styles.titleContainer}>
             <Text style={typography.title}>Melo</Text>
           </View>
-          <View style={[buttons.primary, {width: 144, height: 48}]}>
-            <Pressable style={[buttons.outline, {width: 144, height: 48}]} onPress={Logout}>
+          <View style={[buttons.primary, { width: 144, height: 48 }]}>
+            <Pressable
+              style={[buttons.outline, { width: 144, height: 48 }]}
+              onPress={Logout}
+            >
               <Text>Logout</Text>
             </Pressable>
           </View>
@@ -273,7 +389,9 @@ function LandingScreen({ navigation }) {
         <View style={styles.preference}>
           <Searchbar
             placeholder="Rank a Song..."
-            onChangeText={(query) => setSearchQuery({ ...searchQueries, searchBarMode: query })}
+            onChangeText={(query) =>
+              setSearchQuery({ ...searchQueries, searchBarMode: query })
+            }
             value={searchQueries.searchBarMode}
             style={styles.searchbar}
             mode="bar"
@@ -295,8 +413,6 @@ function LandingScreen({ navigation }) {
           style={[styles.container]}
           contentContainerStyle={styles.content}
         />
-<<<<<<< HEAD
-=======
 
         <FlatList
           data={feedData}
@@ -305,13 +421,11 @@ function LandingScreen({ navigation }) {
           style={[styles.container]}
           contentContainerStyle={styles.content}
         />
-
->>>>>>> ac1d2a68 (attempted connecting landing screen to backend, get request not working)
       </ScrollView>
     </ScreenWrapper>
   );
-};
+}
 
-LandingScreen.title = 'Landing Screen';
+LandingScreen.title = "Landing Screen";
 
 export default LandingScreen;
