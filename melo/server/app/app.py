@@ -917,3 +917,5 @@ def get_friends_top_songs():
       return jsonify(response), 500
    return jsonify(response)
 
+if __name__ == '__main__':
+    app.run(debug=True)
