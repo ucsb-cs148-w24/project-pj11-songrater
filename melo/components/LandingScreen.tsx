@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, ScrollView, FlatList, TouchableWithoutFeedback, Pressable } from 'react-native';
+import { useIsFocused } from '@react-navigation/native';
 import { Searchbar, Avatar, Card, IconButton, Text, Paragraph, Divider } from 'react-native-paper';
 import ScreenWrapper from './helper/ScreenWrapper';
 import { styles } from './helper/Styles';
@@ -10,7 +11,61 @@ import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import { useEffect } from 'react';
 import SplashScreen from './SplashScreen';
 
-const LandingScreen = ({ navigation }) => {
+const mockFriendCount = 10;
+const snow = '#FFFBFA';
+const user_id = 1;
+
+function LandingScreen({ navigation }) {
+  const [uname, setUname] = useState("");
+  const [songData, setSongData] = useState([]);
+
+  useEffect(() => {
+    fetchFriendSongFeed({});
+    fetchUserInfo();
+  }, [useIsFocused()]);
+
+  const fetchUserInfo = async () => {
+    const curr_info = await fetch(
+      `http://127.0.0.1:5000/api/get_profile?user_id=${user_id}`
+    ).then((curr_info) => curr_info.json())
+    try{
+      setUname(curr_info.results[0].username);
+    }
+    catch{
+      console.log('Error getting User Info');
+    }
+  }
+
+  const fetchFriendSongFeed = async ({}) => {
+    try{
+      const responseGood = await fetch(
+        `http://127.0.0.1:5000/api/get_user_songs?user_id=${user_id}&type=good`
+      ).then((responseGood) => responseGood.json());
+
+      const responseOk = await fetch(
+        `http://127.0.0.1:5000/api/get_user_songs?user_id=${user_id}&type=ok`
+      ).then((responseOk) => responseOk.json());
+
+      const responseBad = await fetch(
+        `http://127.0.0.1:5000/api/get_user_songs?user_id=${user_id}&type=bad`
+      ).then((responseBad) => responseBad.json());
+      var newArr = [];
+      newArr = newArr.concat(responseGood.results)
+      newArr = newArr.concat(responseOk.results)
+      newArr = newArr.concat(responseBad.results)
+
+      newArr = newArr.filter(function( element ) {
+        return element !== undefined;
+     });
+     setSongData(newArr);
+    }
+    catch{
+      console.log("Error fetching user lists")
+    }
+   
+  };
+
+// const LandingScreen = ({ navigation }) => {
   const { colors, isV3 } = useExampleTheme();
   const [selectedCard, setSelectedCard] = useState(null);
   const [selectedHearts, setSelectedHearts] = useState({});
