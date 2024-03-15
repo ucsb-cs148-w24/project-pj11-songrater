@@ -34,7 +34,7 @@ export default function SplashScreen({ navigation }) {
     }, [navigation]);
 
   return (
-    <View style={{ flex: 1, backgroundColor: "#FFFAEA", padding: 20 }}>
+    <View style={{ flex: 1, backgroundColor: "#FFFBFA", padding: 20 }}>
       <View style={styles.titleContainer}>
         <Text style={typography.title}>Melo</Text>
       </View>

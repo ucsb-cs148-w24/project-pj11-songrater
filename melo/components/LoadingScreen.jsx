@@ -19,7 +19,7 @@ export const LoadingScreen = ({navigation}) => {
     }, [navigation]);
 
   return (
-    <View style={{ flex: 1, backgroundColor: "#FFFAEA", padding: 20, pointerEvents: "none" }}>
+    <View style={{ flex: 1, backgroundColor: "#FFFBFA", padding: 20, pointerEvents: "none" }}>
       <Text>Loading...</Text>
     </View>
   );

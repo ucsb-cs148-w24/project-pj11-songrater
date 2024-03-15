@@ -110,8 +110,8 @@ export const Login = ({navigation}) => {
         <TouchableOpacity style={styles.button} onPress={handleGoogleLogin}>
           <Text style={styles.buttonText}>Sign in With Google</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={navigateRegister}>
-          <Text style={styles.buttonText}>Register</Text>
+        <TouchableOpacity onPress={navigateRegister}>
+          <Text style={styles.normalText}>Don't have an account? Click here to register</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -123,7 +123,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: '#FFFBFA',
   },
   container: {
     width: '80%',
@@ -141,8 +141,12 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     borderRadius: 5,
   },
+  normalText: {
+    fontSize: 16, 
+    textAlign: "center", 
+  },
   button: {
-    backgroundColor: 'blue',
+    backgroundColor: '#3187D8',
     padding: 15,
     borderRadius: 5,
     alignItems: 'center',

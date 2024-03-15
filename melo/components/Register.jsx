@@ -108,8 +108,8 @@ export const Register = ({ navigation }) => {
         >
           <Text style={styles.buttonText}>Sign Up</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={navigateLogin}>
-          <Text style={styles.buttonText}>Login</Text>
+        <TouchableOpacity onPress={navigateLogin}>
+          <Text style={styles.normalText}>Have an account? Log in</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -121,7 +121,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#fff", // Sets background color to white
+    backgroundColor: "#FFFBFA", // Sets background color to white
   },
   container: {
     width: "80%", // Sets the width to 80% of the parent container
@@ -132,6 +132,10 @@ const styles = StyleSheet.create({
     marginBottom: 20, // Adds a margin below the title for spacing
     textAlign: "center", // Centers the title text
   },
+  normalText: {
+    fontSize: 16, 
+    textAlign: "center", 
+  },
   inputField: {
     borderWidth: 1, // Adds a border with 1px width
     borderColor: "#ddd", // Sets the border color
@@ -140,7 +144,7 @@ const styles = StyleSheet.create({
     borderRadius: 5, // Rounds the corners of the text fields
   },
   button: {
-    backgroundColor: "blue", // Sets the button background color
+    backgroundColor: "#3187D8", // Sets the button background color
     padding: 15, // Adds padding inside the button for spacing
     borderRadius: 5, // Rounds the corners of the button
     alignItems: "center", // Centers the button text
