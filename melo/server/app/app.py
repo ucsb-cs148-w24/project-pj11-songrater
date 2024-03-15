@@ -885,7 +885,7 @@ def get_friends_top_songs():
         conn = get_db_connection()
         cur = conn.cursor()
 
-        sql_query = sql.SQL("""
+        sql_query = f"""
         WITH friend_ids AS (
             SELECT uid2 AS friend_id FROM public."Friend" WHERE uid1 = %s
             UNION
@@ -897,7 +897,7 @@ def get_friends_top_songs():
         JOIN public."Song_Info" s ON ul.song_id = s.song_id
         ORDER BY ul.updated_at DESC
         LIMIT %s;
-        """)
+        """
         
         cur.execute(sql_query, (user_id, user_id, top_k))
         songs = cur.fetchall()

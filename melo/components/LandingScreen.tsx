@@ -11,10 +11,6 @@ import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import { useEffect } from 'react';
 import SplashScreen from './SplashScreen';
 
-const mockFriendCount = 10;
-const snow = '#FFFBFA';
-const user_id = 1;
-
 function LandingScreen({ navigation }) {
   const [uname, setUname] = useState("");
   const [songData, setSongData] = useState([]);
@@ -36,19 +32,12 @@ function LandingScreen({ navigation }) {
     }
   }
 
-  const fetchFriendSongFeed = async ({}) => {
+  const fetchFeed = async (user_id) => {
     try{
-      const responseGood = await fetch(
-        `http://127.0.0.1:5000/api/get_user_songs?user_id=${user_id}&type=good`
-      ).then((responseGood) => responseGood.json());
+      const feedSongs = await fetch(
+        `http://127.0.0.1:5000/api/friends_top_songs?user_id=${user_id}`
+      ).then((feedSongs) => feedSongs.json());
 
-      const responseOk = await fetch(
-        `http://127.0.0.1:5000/api/get_user_songs?user_id=${user_id}&type=ok`
-      ).then((responseOk) => responseOk.json());
-
-      const responseBad = await fetch(
-        `http://127.0.0.1:5000/api/get_user_songs?user_id=${user_id}&type=bad`
-      ).then((responseBad) => responseBad.json());
       var newArr = [];
       newArr = newArr.concat(responseGood.results)
       newArr = newArr.concat(responseOk.results)
@@ -78,7 +67,7 @@ function LandingScreen({ navigation }) {
     { id: '5', title: 'Uptown Funk', artist: 'Bruno Mars', rating: 6.3, name: 'Anshuman D.', avatar: require('../assets/default-avatar.jpeg'), cover: require('../assets/shape-of-you-album-cover.jpeg') },
     { id: '6', title: 'Ocean Eyes', artist: 'Billie Eilish', rating: 7.9, name: 'Katya R.', avatar: require('../assets/default-avatar.jpeg'), cover: require('../assets/shape-of-you-album-cover.jpeg') },
     { id: '7', title: 'Old Town Road', artist: 'Lil Nas X', rating: 3.2, name: 'Leyang N.', avatar: require('../assets/default-avatar.jpeg'), cover: require('../assets/shape-of-you-album-cover.jpeg') },
-  ]);
+  ]); //delete later
 
   const [searchQueries, setSearchQuery] = React.useState({
     searchBarMode: '',
@@ -175,6 +164,63 @@ function LandingScreen({ navigation }) {
     </Pressable>
   );
 
+  const renderItem2 = ({ item }) => (
+    <Pressable onPress={() => handleCardPress(item)}>
+      <Card style={styles.card} mode={'elevated'}>
+      {selectedCard === item.song_id && (
+        <>
+          <Card.Cover source={require('../assets/fearless-album-cover.jpeg')} />
+          <View style={styles.iconContainer}>
+            <View style={styles.circleBackground}>
+              <IconButton
+                icon={selectedPluses[item.song_id] ? 'plus-thick' : 'plus'}
+                iconColor={selectedPluses[item.song_id] ? '#3187D8' : '#BBCDE5'}
+                size={40}
+                onPress={() => handlePlusPress(item)}
+              />
+            </View>
+          </View>
+        </>
+      )}
+
+        <Card.Title
+          title={
+            <>
+              <Text style={{ fontWeight: 'bold' }}>{item.song_name}</Text> gave a{' '}
+              <Text style={{ fontWeight: 'bold', color: renderRatingColor(item.rank) }}>{item.rank}</Text>
+            </>
+          }
+          titleVariant={selectedCard === item.song_id ? 'headlineSmall' : 'bodyLarge'}
+          left={(props) => (
+            <Avatar.Image
+              style={styles.avatar}
+              source={require('../assets/default-avatar.jpeg')}
+              size={40}
+            />
+          )}
+          right={(props: any) => (
+            <IconButton
+              {...props}
+              icon={selectedHearts[item.song_id] ? 'heart' : 'heart-outline'}
+              iconColor={selectedHearts[item.song_id] ? '#3187D8' : '#BBCDE5'}
+              onPress={() => handleHeartPress(item)}
+            />
+          )}
+        />
+
+        <Card.Content>
+          <TextComponent
+            variant={selectedCard === item.song_id ? 'bodyMedium' : 'bodySmall'}
+            style={{ paddingLeft: 55, paddingBottom: selectedCard === item.id ? 20 : 14 }}
+          >
+            to <Text style={{ fontWeight: 'bold' }}>{item.song_name}</Text> by{' '}
+            <Text style={{ fontWeight: 'bold' }}>{item.artist_name}</Text>
+          </TextComponent>
+        </Card.Content>
+      </Card>
+    </Pressable>
+  );
+
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
@@ -249,6 +295,18 @@ function LandingScreen({ navigation }) {
           style={[styles.container]}
           contentContainerStyle={styles.content}
         />
+<<<<<<< HEAD
+=======
+
+        <FlatList
+          data={feedData}
+          keyExtractor={(item) => item.id}
+          renderItem={renderItem2}
+          style={[styles.container]}
+          contentContainerStyle={styles.content}
+        />
+
+>>>>>>> ac1d2a68 (attempted connecting landing screen to backend, get request not working)
       </ScrollView>
     </ScreenWrapper>
   );
