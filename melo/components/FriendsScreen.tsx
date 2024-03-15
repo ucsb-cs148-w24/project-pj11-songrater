@@ -19,6 +19,7 @@ import {
   Divider,
 } from 'react-native-paper';
 import { useIsFocused } from '@react-navigation/native';
+import Ionicons from "react-native-vector-icons/Ionicons";
 import { styles } from "./helper/Styles";
 import { typography } from "./helper/Typography";
 import { buttons } from "./helper/Buttons";
@@ -65,6 +66,10 @@ export default function FriendsScreen({ navigation }){
     }
   },[UserId])
 
+  useEffect(() => {
+    IfExist(fid);
+  }, [fid]);
+
 
   const renderCard= ({ item }) => (
     <Card style={styles.card} mode={'elevated'}>
@@ -77,13 +82,8 @@ export default function FriendsScreen({ navigation }){
               <Pressable onPress={() => {
                   DeleteFriend(item.id);
                 }}>
-              <Text style={{fontWeight:'bold', marginRight: 24}}>
+              <Text style={{fontWeight:'bold', fontSize:20, marginRight: 16}}>
                 {'x'}
-              </Text>
-              </Pressable>
-              <Pressable>
-              <Text style={{fontWeight:'bold', marginRight: 16}}>
-                {'>'}
               </Text>
               </Pressable>
             </View>
@@ -106,7 +106,7 @@ export default function FriendsScreen({ navigation }){
                   }
                 }}
               >
-                <Text style={{fontWeight:'bold', marginRight: 16}}>
+                <Text style={{fontWeight:'bold', fontSize: 20, marginRight: 16}}>
                 {'+'}
               </Text>
               </Pressable>
@@ -121,7 +121,6 @@ export default function FriendsScreen({ navigation }){
   const [searchFriendsState, setSearchFriendsState] = useState(false);
 
   const fetchFriend = async() => {
-    
     setIsLoading(true);
     try{
       setIsLoading(true);
@@ -134,15 +133,9 @@ export default function FriendsScreen({ navigation }){
         .then((data) => {
           setSearchFriendsState(true);
           setSearchFriendsData(data.results);
-
-          console.log(data.results[0].id);
           setFid(data.results[0].id);
-        });
-        
-        IfExist(fid);
-        
+        });        
       }
-
     }catch (error) {
     setIsLoading(false);
     console.error("Error fetching data: ", error);
@@ -221,7 +214,6 @@ export default function FriendsScreen({ navigation }){
         ).then((response) => console.log(response))
         .then((response) =>{
           fetchFriendsList(UserId);
-          IfExist(Fid);
         });
       }catch (error) {
         console.error("Error fetching data: ", error);
@@ -260,28 +252,41 @@ export default function FriendsScreen({ navigation }){
           style={styles.searchbar}
           value={newname}
         />
-        <View style={styles.buttonContainer}><Button style={styles.button} labelStyle={typography.default_w} onPress={fetchFriend}>
+        <View style={styles.buttonContainer}><Button style={styles.button} labelStyle={typography.default_w} 
+        onPress={
+            fetchFriend
+          }
+        >
           Search
         </Button></View>
       </View>
 
-      {searchFriendsState && <View style={{flex:6}}>
+      {searchFriendsState && (
+      <View style={{flex: 8}}>
         <View style={styles.preference}>
           <View style={styles.titleContainer}>
             <Text style={typography.header}>New Friend</Text>
           </View>
-        </View>
-        <View style={{flex:6}}>
-          <FlatList
-          data={searchFriendsData}
-          keyExtractor={(item) => item.id}
-          renderItem={renderNewcard}
-          style={[styles.container]}
-          contentContainerStyle={styles.content}
-          />
-        </View>  
+          <Pressable
+              // style={styles.closeButton} 
+              onPress={() => setSearchFriendsState(false)}
+            > 
+            <View style={{height:5, width:30, marginRight:10}}>
+              <Ionicons name="close-outline" size={20} color="black"/>
+            </View>
+          </Pressable>
       </View>
-      }
+    <View style={{flex: 6}}>
+      <FlatList
+        data={searchFriendsData}
+        keyExtractor={(item) => item.id}
+        renderItem={renderNewcard}
+        style={[styles.container]}
+        contentContainerStyle={styles.content}
+      />
+    </View>  
+  </View>
+)}
      
       <View style={styles.preference}>
         <View style={styles.titleContainer}>
