@@ -17,10 +17,10 @@ cover_art_url = "http://coverartarchive.org/release"
 #export DB_USERNAME="postgres"
 #export DB_PASSWORD="your_passwork"
 def get_db_connection():
-  conn = psycopg2.connect(host='localhost',
-                          database='musicdb',
-                          user=os.environ['DB_USERNAME'],
-                          password=os.environ['DB_PASSWORD'])
+  conn = psycopg2.connect(host='melo-db.cl42gyco25t3.us-east-2.rds.amazonaws.com',
+                          database='melo-db',
+                          user='postgres',
+                          password='wi2ceITIK4Boa08XgQyU')
   return conn
 
 def parse_date(date_str):
@@ -194,7 +194,6 @@ def create_user():
      conn.close()     
 
      response["MESSAGE"] = "Successfully created new user and added to db"
-     print(uname,email)
   except Exception as e:
         response["MESSAGE"] = f"EXCEPTION: /api/signup {e}"
         print("ERROR: \n" + response["MESSAGE"] + "\n")
