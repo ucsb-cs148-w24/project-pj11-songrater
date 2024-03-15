@@ -18,12 +18,17 @@ function linspace(rating, num, index) {
     endValue = 4.0;
   }
   const arr = [];
-  const step = (endValue - startValue) / num;
-  console.log(`step: ${step}`);
-  for (let i = 1; i <= num; i++) {
-    arr.push(startValue + step * i);
+  let step = 0;
+  if (num - 1 <= 1) {
+    step = endValue - startValue;
+  } else {
+    step = (endValue - startValue) / num;
   }
-  return arr[index];
+  for (let i = 0; i < num; i++) {
+    arr.push(endValue - step * i);
+  }
+  console.log(arr);
+  return Math.round(arr[index] * 10) / 10;
 }
 
 export default function RateSongScreen({ route }) {
@@ -91,10 +96,12 @@ export default function RateSongScreen({ route }) {
       });
   };
 
-  const updateIndices = useCallback((status) => {
+  const updateIndices = useCallback(async (status) => {
+    let newLeft;
+    let newRight;
     setIndices((prevState) => {
-      let newLeft = prevState.leftIndex;
-      let newRight = prevState.rightIndex;
+      newLeft = prevState.leftIndex;
+      newRight = prevState.rightIndex;
 
       if (status === "new") {
         newRight = prevState.currentIndex - 1;
@@ -112,14 +119,7 @@ export default function RateSongScreen({ route }) {
       if (newRight == -1) {
         newCurrent = 1;
       } else {
-        newCurrent = Math.floor((newLeft + newRight) / 2);
-      }
-
-      // Logging for debugging
-
-      if (newRight < newLeft || (userSongs.length < 2 && newRight <= newLeft)) {
-        setDoneRanking(true);
-        setFinish(true);
+        newCurrent = Math.ceil((newLeft + newRight) / 2);
       }
 
       return {
@@ -128,6 +128,10 @@ export default function RateSongScreen({ route }) {
         currentIndex: newCurrent,
       };
     });
+    if (newRight < newLeft || (userSongs.length < 2 && newRight <= newLeft)) {
+      setDoneRanking(true);
+      setFinish(true);
+    }
   }, []);
 
   const RateSongComponent = ({ title, artist, review, rating, status }) => {
@@ -203,9 +207,6 @@ export default function RateSongScreen({ route }) {
         </View>
         {doneRanking ? (
           <View style={styles.resultContainer}>
-            <Text style={typography.header2}>
-              New Rank: {indices.currentIndex + 1}
-            </Text>
             <Text style={typography.header2}>
               Calibrated Rating:{" "}
               {linspace(rating, userSongs.length + 1, indices.currentIndex)}

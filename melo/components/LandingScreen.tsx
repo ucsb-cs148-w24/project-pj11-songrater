@@ -71,9 +71,10 @@ function LandingScreen({ navigation }) {
       newArr = newArr.filter(function (element) {
         return element !== undefined;
       });
-      setSongData(newArr);
+      console.log(newArr);
+      setFeedData(newArr);
     } catch {
-      console.log("Error fetching user lists");
+      console.log("Error fetching feed");
     }
   };
 
@@ -81,71 +82,6 @@ function LandingScreen({ navigation }) {
   const [selectedCard, setSelectedCard] = useState(null);
   const [selectedHearts, setSelectedHearts] = useState({});
   const [selectedPluses, setSelectedPluses] = useState({});
-  const [data, setData] = useState([
-    {
-      id: "1",
-      title: "Love Story",
-      artist: "Taylor Swift",
-      rating: 9.1,
-      name: "Amy W.",
-      avatar: require("../assets/default-avatar.jpeg"),
-      cover: require("../assets/fearless-album-cover.jpeg"),
-    },
-    {
-      id: "2",
-      title: "Shape of You",
-      artist: "Ed Sheeran",
-      rating: 5.3,
-      name: "Jefferey M.",
-      avatar: require("../assets/default-avatar.jpeg"),
-      cover: require("../assets/shape-of-you-album-cover.jpeg"),
-    },
-    {
-      id: "3",
-      title: "Baby",
-      artist: "Justin Bieber",
-      rating: 1.1,
-      name: "Emily H.",
-      avatar: require("../assets/default-avatar.jpeg"),
-      cover: require("../assets/shape-of-you-album-cover.jpeg"),
-    },
-    {
-      id: "4",
-      title: "Blinding Lights",
-      artist: "The Weeknd",
-      rating: 8.6,
-      name: "Collin Q.",
-      avatar: require("../assets/default-avatar.jpeg"),
-      cover: require("../assets/fearless-album-cover.jpeg"),
-    },
-    {
-      id: "5",
-      title: "Uptown Funk",
-      artist: "Bruno Mars",
-      rating: 6.3,
-      name: "Anshuman D.",
-      avatar: require("../assets/default-avatar.jpeg"),
-      cover: require("../assets/shape-of-you-album-cover.jpeg"),
-    },
-    {
-      id: "6",
-      title: "Ocean Eyes",
-      artist: "Billie Eilish",
-      rating: 7.9,
-      name: "Katya R.",
-      avatar: require("../assets/default-avatar.jpeg"),
-      cover: require("../assets/shape-of-you-album-cover.jpeg"),
-    },
-    {
-      id: "7",
-      title: "Old Town Road",
-      artist: "Lil Nas X",
-      rating: 3.2,
-      name: "Leyang N.",
-      avatar: require("../assets/default-avatar.jpeg"),
-      cover: require("../assets/shape-of-you-album-cover.jpeg"),
-    },
-  ]); //delete later
 
   const [searchQueries, setSearchQuery] = React.useState({
     searchBarMode: "",
@@ -405,22 +341,21 @@ function LandingScreen({ navigation }) {
             <Text style={typography.header}>Your Feed</Text>
           </View>
         </View>
-
-        <FlatList
-          data={data}
-          keyExtractor={(item) => item.id}
-          renderItem={renderItem}
-          style={[styles.container]}
-          contentContainerStyle={styles.content}
-        />
-
-        <FlatList
-          data={feedData}
-          keyExtractor={(item) => item.id}
-          renderItem={renderItem2}
-          style={[styles.container]}
-          contentContainerStyle={styles.content}
-        />
+        {feedData.length == 0 ? (
+          <View style={styles.titleContainer}>
+            <Text style={typography.header2}>
+              Please add more friends to see your feed
+            </Text>
+          </View>
+        ) : (
+          <FlatList
+            data={feedData}
+            keyExtractor={(item) => item.id}
+            renderItem={renderItem2}
+            style={[styles.container]}
+            contentContainerStyle={styles.content}
+          />
+        )}
       </ScrollView>
     </ScreenWrapper>
   );

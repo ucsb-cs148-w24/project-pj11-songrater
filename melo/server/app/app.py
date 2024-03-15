@@ -864,10 +864,6 @@ def delete_friend():
         print(response["MESSAGE"])
   return jsonify(response)
 
-
-if __name__ == '__main__':
-    app.run(debug=True)
-
 @app.route("/api/friends_top_songs", methods=['GET'])
 def get_friends_top_songs():
     response = {}
@@ -917,6 +913,10 @@ def get_friends_top_songs():
             conn.close()
 
     return jsonify(response)
+
+
+if __name__ == '__main__':
+    app.run(debug=True)
 
 
 # @app.route("/api/friends_top_songs", methods=['GET'])
