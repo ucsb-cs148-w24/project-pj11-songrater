@@ -214,7 +214,7 @@ export default function FriendsScreen({ navigation }){
         .then((response) =>{
           fetchFriendsList(UserId);
         }).then((response) => {
-          setFid([]);
+          setFid(Fid);
         });
       }catch (error) {
         console.error("Error fetching data: ", error);
