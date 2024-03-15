@@ -121,7 +121,6 @@ export default function FriendsScreen({ navigation }){
   const [searchFriendsState, setSearchFriendsState] = useState(false);
 
   const fetchFriend = async() => {
-    setIsLoading(true);
     try{
       setIsLoading(true);
       if(!(newname=="")){
@@ -190,7 +189,7 @@ export default function FriendsScreen({ navigation }){
         ).then((response) => console.log(response))
         .then((response) =>{
           fetchFriendsList(UserId);
-         
+          setFid([]);
         });
       
     }catch (error) {
@@ -214,6 +213,8 @@ export default function FriendsScreen({ navigation }){
         ).then((response) => console.log(response))
         .then((response) =>{
           fetchFriendsList(UserId);
+        }).then((response) => {
+          setFid([]);
         });
       }catch (error) {
         console.error("Error fetching data: ", error);
