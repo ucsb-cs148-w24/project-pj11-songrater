@@ -24,7 +24,6 @@ export default function ProfileScreen({ navigation }) {
   useEffect(() => {
     const auth = getAuth();
     const sub = onAuthStateChanged(auth, (user) => {
-      console.log(user.uid);
       if (user) {
         const response = fetch(
           `http://127.0.0.1:5000/api/get_profile?uid=${user.uid}`
@@ -44,22 +43,6 @@ export default function ProfileScreen({ navigation }) {
   const navigateEditUserScreen = ({}) => {
     navigation.navigate("EditUserScreen");
   };
-
-  /*
-  const fetchUserInfo = async () => {
-    const curr_info = await fetch(
-      `http://127.0.0.1:5000/api/get_profile?uid=${uid}`
-    ).then((curr_info) => curr_info.json())
-    try{
-      setUname(curr_info.results[0].username);
-      setDescription(curr_info.results[0].description);
-    }
-    catch{
-      console.log('Error getting User Info');
-      console.log(uid);
-    }
-  }
-  */
 
   const fetchUserSongList = async (user_id) => {
     try {
@@ -82,7 +65,6 @@ export default function ProfileScreen({ navigation }) {
       newArr = newArr.filter(function (element) {
         return element !== undefined;
       });
-      console.log(newArr);
       setSongData(newArr);
     } catch {
       console.log("Error fetching user lists");

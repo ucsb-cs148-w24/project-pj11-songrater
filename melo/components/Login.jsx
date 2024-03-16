@@ -1,40 +1,50 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
-import { getAuth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import React, { useState } from "react";
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+} from "react-native";
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  signInWithPopup,
+  GoogleAuthProvider,
+} from "firebase/auth";
 
-export const Login = ({navigation}) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+export const Login = ({ navigation }) => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const createProfile = async (uid, email) => {
     try {
       const formData = new FormData();
-      formData.append('uid', uid);
-      formData.append('email', email);
+      formData.append("uid", uid);
+      formData.append("email", email);
       // Assuming username and description are required by your Flask API.
       // You'll need to add these fields or modify as necessary.
-      formData.append('description', ""); // Update this with actual description
-  
-      const response = await fetch('http://127.0.0.1:5000/api/signup', {
-        method: 'POST',
+      formData.append("description", ""); // Update this with actual description
+
+      const response = await fetch("http://127.0.0.1:5000/api/signup", {
+        method: "POST",
         body: formData,
       });
-  
+
       if (!response.ok) {
-        throw new Error('Network response was not ok');
+        throw new Error("Network response was not ok");
       }
-  
+
       const jsonResponse = await response.json();
-      console.log("Received jsonResponse");
-      console.log(jsonResponse); // Handle or display the response as needed
+
       return jsonResponse;
     } catch (error) {
-      console.error('Error creating profile:', error);
-      return { "MESSAGE": `Error creating profile: ${error}` }; // Return or handle error response as needed
+      console.error("Error creating profile:", error);
+      return { MESSAGE: `Error creating profile: ${error}` }; // Return or handle error response as needed
     }
   };
 
-  const handleGoogleLogin = async() => {
+  const handleGoogleLogin = async () => {
     const auth = getAuth();
     const provider = new GoogleAuthProvider();
     await signInWithPopup(auth, provider)
@@ -47,43 +57,41 @@ export const Login = ({navigation}) => {
 
         createProfile(result.user.uid, result.user.email);
 
-        console.log('User logged in:', result.user);
+        console.log("User logged in:", result.user);
 
         if (result.user) {
           navigation.navigate("LandingScreen");
-      }
+        }
 
         // IdP data available using getAdditionalUserInfo(result)
         // ...
-      }).catch((error) => {
-        console.error("ERROR:", error)
+      })
+      .catch((error) => {
+        console.error("ERROR:", error);
       });
-  }
+  };
 
   const handleLogin = async () => {
     try {
-        const auth = getAuth();
-        const response = await signInWithEmailAndPassword(auth, email, password);
-        console.log('User logged in:', response.user);
+      const auth = getAuth();
+      const response = await signInWithEmailAndPassword(auth, email, password);
+      console.log("User logged in:", response.user);
 
-        if (response.user) {
-            navigation.navigate("LandingScreen");
-        }
-
+      if (response.user) {
+        navigation.navigate("LandingScreen");
+      }
     } catch (error) {
-        console.error('Login error:', error);
+      console.error("Login error:", error);
     }
   };
 
   const navigateRegister = async () => {
     try {
-        navigation.navigate("Register");
+      navigation.navigate("Register");
+    } catch (error) {
+      console.error("Register: ", error);
     }
-    catch (error) {
-        console.error("Register: ", error);
-    }
-  }
-
+  };
 
   return (
     <View style={styles.contentView}>
@@ -110,8 +118,10 @@ export const Login = ({navigation}) => {
         <TouchableOpacity style={styles.button} onPress={handleGoogleLogin}>
           <Text style={styles.buttonText}>Sign in With Google</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={navigateRegister}>
-          <Text style={styles.normalText}>Don't have an account? Click here to register</Text>
+        <TouchableOpacity onPress={navigateRegister} style={styles.button}>
+          <Text style={styles.buttonText}>
+            Don't have an account? Click here to register
+          </Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -121,39 +131,39 @@ export const Login = ({navigation}) => {
 const styles = StyleSheet.create({
   contentView: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#FFFBFA',
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#FFFBFA",
   },
   container: {
-    width: '80%',
+    width: "80%",
   },
   titleText: {
     fontSize: 24,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 20,
-    textAlign: 'center',
+    textAlign: "center",
   },
   inputField: {
     borderWidth: 1,
-    borderColor: '#ddd',
+    borderColor: "#ddd",
     padding: 10,
     marginBottom: 10,
     borderRadius: 5,
   },
   normalText: {
-    fontSize: 16, 
-    textAlign: "center", 
+    fontSize: 16,
+    textAlign: "center",
   },
   button: {
-    backgroundColor: '#3187D8',
+    backgroundColor: "#3187D8",
     padding: 15,
     borderRadius: 5,
-    alignItems: 'center',
+    alignItems: "center",
     margin: 5,
   },
   buttonText: {
-    color: '#fff',
+    color: "#fff",
     fontSize: 16,
   },
 });

@@ -17,6 +17,9 @@ function linspace(rating, num, index) {
     startValue = 0.0;
     endValue = 4.0;
   }
+  if (isNaN(num)) {
+    num = 1;
+  }
   const arr = [];
   let step = 0;
   if (num - 1 <= 1) {
@@ -27,7 +30,6 @@ function linspace(rating, num, index) {
   for (let i = 0; i < num; i++) {
     arr.push(endValue - step * i);
   }
-  console.log(arr);
   return Math.round(arr[index] * 10) / 10;
 }
 
@@ -73,11 +75,6 @@ export default function RateSongScreen({ route }) {
   };
 
   const fetchUserSongs = async ({ rating }) => {
-    const fetchUserSongParams = {
-      type: rating,
-      user_id: 1, // TODO : change once we get valid user IDs
-    };
-
     const response = await fetch(
       `http://127.0.0.1:5000/api/get_user_songs?user_id=${user_id}&type=${rating}`
     )
@@ -171,7 +168,7 @@ export default function RateSongScreen({ route }) {
           />
           <RateSongComponent
             title={userSongs[indices.currentIndex].song_name}
-            artist={userSongs[indices.currentIndex].artist}
+            artist={userSongs[indices.currentIndex].artist_name}
             review={userSongs[indices.currentIndex].review}
             status={"old"}
           />

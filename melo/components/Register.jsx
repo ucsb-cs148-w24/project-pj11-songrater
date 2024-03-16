@@ -108,8 +108,8 @@ export const Register = ({ navigation }) => {
         >
           <Text style={styles.buttonText}>Sign Up</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={navigateLogin}>
-          <Text style={styles.normalText}>Have an account? Log in</Text>
+        <TouchableOpacity onPress={navigateLogin} styles={styles.button}>
+          <Text style={styles.buttonText}>Have an account? Log in</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -133,8 +133,8 @@ const styles = StyleSheet.create({
     textAlign: "center", // Centers the title text
   },
   normalText: {
-    fontSize: 16, 
-    textAlign: "center", 
+    fontSize: 16,
+    textAlign: "center",
   },
   inputField: {
     borderWidth: 1, // Adds a border with 1px width

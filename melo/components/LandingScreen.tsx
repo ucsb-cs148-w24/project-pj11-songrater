@@ -41,7 +41,12 @@ function LandingScreen({ navigation }) {
           .then((data) => {
             setUserId(data?.results[0]?.id);
             setUname(data?.results[0]?.username);
-            fetchFeed(data?.results[0]?.id);
+            return data?.results[0]?.id;
+          })
+          .then((id) => {
+            if (id != 0) {
+              fetchFeed(id);
+            }
           });
       }
     });
@@ -216,12 +221,11 @@ function LandingScreen({ navigation }) {
         <Card.Title
           title={
             <>
-              <Text style={{ fontWeight: "bold" }}>{item.song_name}</Text> gave
-              a{" "}
+              <Text style={{ fontWeight: "bold" }}>{item.friend_name}</Text>{" "}
+              ranked this song at #{" "}
               <Text
                 style={{
                   fontWeight: "bold",
-                  color: renderRatingColor(item.rank),
                 }}
               >
                 {item.rank}
@@ -350,7 +354,7 @@ function LandingScreen({ navigation }) {
         ) : (
           <FlatList
             data={feedData}
-            keyExtractor={(item) => item.id}
+            keyExtractor={(item) => item.song_id.toString()}
             renderItem={renderItem2}
             style={[styles.container]}
             contentContainerStyle={styles.content}

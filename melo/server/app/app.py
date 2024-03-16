@@ -866,55 +866,74 @@ def delete_friend():
 
 @app.route("/api/friends_top_songs", methods=['GET'])
 def get_friends_top_songs():
-   response = {}
-   try:
-      user_id = request.args.get("user_id")
-      if not user_id:
-         raise ValueError("user_id is required")
+    response = {}
+    try:
+        user_id = request.args.get("user_id")
+        if not user_id:
+            raise ValueError("user_id is required")
 
-      # set default value for top_k if not provided or invalid
-      try:
-         top_k = int(request.args.get("top_k", "10"))
-      except ValueError:
-         raise ValueError("top_k must be an integer") from None
+        # set default value for top_k if not provided or invalid
+        try:
+            top_k = int(request.args.get("top_k", "10"))
+        except ValueError:
+            raise ValueError("top_k must be an integer") from None
 
-      conn = get_db_connection()
-      cur = conn.cursor()
+        conn = get_db_connection()
+        cur = conn.cursor()
 
-      sql_query = """
-      WITH friend_ids AS (
-         SELECT uid2 AS friend_id FROM public."Friend" WHERE uid1 = %s
-         UNION
-         SELECT uid1 AS friend_id FROM public."Friend" WHERE uid2 = %s
-      )
-      SELECT s.song_id, s.song_name, s.artist_name, ul.rank, u.username AS friend_name
-      FROM friend_ids
-      JOIN public."User_Lists_Good" ul ON friend_ids.friend_id = ul.user_id
-      JOIN public."Song_Info" s ON ul.song_id = s.song_id
-      JOIN public."User" u ON friend_ids.friend_id = u.id
-      ORDER BY ul.updated_at DESC
-      LIMIT %s;
-      """
+        sql_query = """
+        WITH friend_ids AS (
+            SELECT uid2 AS friend_id FROM public."Friend" WHERE uid1 = %s
+            UNION
+            SELECT uid1 AS friend_id FROM public."Friend" WHERE uid2 = %s
+        ), combined_lists AS (
+            SELECT ul.song_id, s.song_name, s.artist_name, ul.rank, u.username AS friend_name, 'Good' AS list_type, ul.updated_at
+            FROM friend_ids
+            JOIN public."User_Lists_Good" ul ON friend_ids.friend_id = ul.user_id
+            JOIN public."Song_Info" s ON ul.song_id = s.song_id
+            JOIN public."User" u ON friend_ids.friend_id = u.id
+            UNION ALL
+            SELECT ul.song_id, s.song_name, s.artist_name, ul.rank, u.username AS friend_name, 'Okay' AS list_type, ul.updated_at
+            FROM friend_ids
+            JOIN public."User_Lists_Ok" ul ON friend_ids.friend_id = ul.user_id
+            JOIN public."Song_Info" s ON ul.song_id = s.song_id
+            JOIN public."User" u ON friend_ids.friend_id = u.id
+            UNION ALL
+            SELECT ul.song_id, s.song_name, s.artist_name, ul.rank, u.username AS friend_name, 'Bad' AS list_type, ul.updated_at
+            FROM friend_ids
+            JOIN public."User_Lists_Bad" ul ON friend_ids.friend_id = ul.user_id
+            JOIN public."Song_Info" s ON ul.song_id = s.song_id
+            JOIN public."User" u ON friend_ids.friend_id = u.id
+        ), ranked_lists AS (
+            SELECT *,
+                   ROW_NUMBER() OVER (ORDER BY CASE list_type WHEN 'Good' THEN 1 WHEN 'Okay' THEN 2 WHEN 'Bad' THEN 3 END, updated_at DESC) AS continuous_rank
+            FROM combined_lists
+        )
+        SELECT song_id, song_name, artist_name, continuous_rank AS rank, friend_name, list_type
+        FROM ranked_lists
+        ORDER BY continuous_rank
+        LIMIT %s;
+        """
 
-      cur.execute(sql_query, (user_id, user_id, top_k))
-      songs = cur.fetchall()
+        cur.execute(sql_query, (user_id, user_id, top_k))
+        songs = cur.fetchall()
 
-      if not songs:
-         return jsonify({"MESSAGE": "No songs found"}), 404
+        if not songs:
+            return jsonify({"MESSAGE": "No songs found"}), 404
 
-      songs_list = [{"song_id": song[0], "song_name": song[1], "artist_name": song[2], "rank": song[3], "friend_name": song[4]} for song in songs]
-      response["top_songs"] = songs_list
-      
-      cur.close()
-      conn.close()
-   except ValueError as ve:
-      response["MESSAGE"] = str(ve)
-      return jsonify(response), 400
-   except Exception as e:
-      response["MESSAGE"] = f"EXCEPTION: /api/friends_top_songs {e}"
-      print(response["MESSAGE"])
-      return jsonify(response), 500
-   return jsonify(response) 
+        songs_list = [{"song_id": song[0], "song_name": song[1], "artist_name": song[2], "rank": song[3], "friend_name": song[4], "list_type": song[5]} for song in songs]
+        response["top_songs"] = songs_list
+
+        cur.close()
+        conn.close()
+    except ValueError as ve:
+        response["MESSAGE"] = str(ve)
+        return jsonify(response), 400
+    except Exception as e:
+        response["MESSAGE"] = f"EXCEPTION: /api/friends_top_songs {e}"
+        print(response["MESSAGE"])
+        return jsonify(response), 500
+    return jsonify(response)
 
 
 if __name__ == '__main__':
