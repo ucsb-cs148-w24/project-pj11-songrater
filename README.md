@@ -54,8 +54,8 @@ Please make sure that you have the latest version of:
 3. Run the following command:
    `npx expo start` / `npm start`
 4. Follow the steps on Expo to run the demo
-   a. Press 'w' to open the web browser
-   b. If you have Expo Go on your mobile device, scan the QR code to open it there
+   5. Press 'w' to open the web browser
+   6. If you have Expo Go on your mobile device, scan the QR code to open it there
 
 
 
