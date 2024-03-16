@@ -5,12 +5,21 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { Login } from "../components/Login";
 import { Register } from "../components/Register";
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
-
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+} from "react-native";
+import { SERVER_URL } from "../App";
 
 export const LoginButton = ({ navigation }) => {
   return (
-    <TouchableOpacity onPress={() => navigation.navigate("Login")} style={styles.loginButton}>
+    <TouchableOpacity
+      onPress={() => navigation.navigate("Login")}
+      style={styles.loginButton}
+    >
       {/* For Text */}
       <Text style={styles.loginButtonText}>Login</Text>
       {/* For Icon */}
@@ -22,16 +31,16 @@ export const LoginButton = ({ navigation }) => {
 const styles = StyleSheet.create({
   loginButton: {
     marginRight: 10,
-    backgroundColor: 'transparent', // Clear background
-    border: '2px solid black', // Black border
-    color: 'black', // Text color
-    padding: '10px 20px', // Inner space of the button
-    fontSize: '16px', // Text size
-    cursor: 'pointer', // Cursor appearance on hover
-    borderRadius: '5px', // Rounded corners
+    backgroundColor: "transparent", // Clear background
+    border: "2px solid black", // Black border
+    color: "black", // Text color
+    padding: "10px 20px", // Inner space of the button
+    fontSize: "16px", // Text size
+    cursor: "pointer", // Cursor appearance on hover
+    borderRadius: "5px", // Rounded corners
   },
   loginButtonText: {
-    color: 'blue',
+    color: "blue",
     // Add more styling as needed
   },
 });

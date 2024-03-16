@@ -21,8 +21,13 @@ const firebaseConfig = {
   storageBucket: "melo-c42ea.appspot.com",
   messagingSenderId: "948219294613",
   appId: "1:948219294613:web:d6190054fbfd44983cfc9c",
-  measurementId: "G-7QFZJD1QMV"
+  measurementId: "G-7QFZJD1QMV",
 };
+
+// When using local, change server_url to local_url
+export const AWS_URL = "http://18.224.93.12:5000";
+export const LOCAL_URL = "http://127.0.0.1:5000";
+export const SERVER_URL = AWS_URL;
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);

@@ -13,6 +13,7 @@ import {
   Button,
 } from "react-native-paper";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { SERVER_URL } from "../App";
 
 export function TextBox({ title, user_id }) {
   const [text, setText] = useState("");
@@ -27,12 +28,12 @@ export function TextBox({ title, user_id }) {
     try {
       if (title == "Username") {
         response = await fetch(
-          `http://127.0.0.1:5000/api/update_profile?user_id=${user_id}&uname=${text}`,
+          `${SERVER_URL}/api/update_profile?user_id=${user_id}&uname=${text}`,
           { method: "PUT" }
         ).then((response) => response.json());
       } else if (title == "Description") {
         response = await fetch(
-          `http://127.0.0.1:5000/api/update_profile?user_id=${user_id}&description=${text}`,
+          `${SERVER_URL}/api/update_profile?user_id=${user_id}&description=${text}`,
           { method: "PUT" }
         ).then((response) => response.json());
       }
@@ -89,9 +90,7 @@ export default function EditUser({ route }) {
     const auth = getAuth();
     const sub = onAuthStateChanged(auth, (user) => {
       if (user) {
-        const response = fetch(
-          `http://127.0.0.1:5000/api/get_profile?uid=${user.uid}`
-        )
+        const response = fetch(`${SERVER_URL}/api/get_profile?uid=${user.uid}`)
           .then((response) => response.json())
           .then((data) => {
             setUserId(data?.results[0]?.id);

@@ -10,6 +10,7 @@ import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { objectToUrlParams } from "./helper/functions";
+import { SERVER_URL } from "../App";
 
 export const Register = ({ navigation }) => {
   const [name, setName] = useState("");
@@ -24,8 +25,7 @@ export const Register = ({ navigation }) => {
       };
 
       const response = await fetch(
-        "http://127.0.0.1:5000/api/signup?" +
-          objectToUrlParams(userProfileParams),
+        "${SERVER_URL}/api/signup?" + objectToUrlParams(userProfileParams),
         {
           method: "POST",
         }
@@ -108,8 +108,8 @@ export const Register = ({ navigation }) => {
         >
           <Text style={styles.buttonText}>Sign Up</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={navigateLogin} styles={styles.button}>
-          <Text style={styles.buttonText}>Have an account? Log in</Text>
+        <TouchableOpacity onPress={navigateLogin}>
+          <Text style={styles.normalText}>Have an account? Login</Text>
         </TouchableOpacity>
       </View>
     </View>

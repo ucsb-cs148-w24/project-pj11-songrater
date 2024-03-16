@@ -449,7 +449,7 @@ def get_user_songs_by_type():
   
   # type is a string with one of three values: "good", "ok", "bad"
   # make sure that when making this GET call, the type string is spelled properly with one of the three values shown above
-  # Example GET call: "http://127.0.0.1:5000/api/get_user_songs?user_id=${user_id}&type=${type}"
+  # Example GET call: "${SERVER_URL}/api/get_user_songs?user_id=${user_id}&type=${type}"
   # Use the GET call above (same exact syntax) in the frontend
 
   # This function retrieves all songs for a particular user id given his song type preference

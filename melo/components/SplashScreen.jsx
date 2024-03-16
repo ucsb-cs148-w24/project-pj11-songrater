@@ -4,34 +4,36 @@ import { buttons } from "./helper/Buttons";
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import { useEffect } from "react";
 import { useState } from "react";
-
+import { SERVER_URL } from "../App";
 
 export default function SplashScreen({ navigation }) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const navigateToLogin = () => {
-    navigation.navigate('Login');
-  }
+    navigation.navigate("Login");
+  };
 
   const Logout = () => {
     const auth = getAuth();
-    signOut(auth).then(() => {
-      setIsLoggedIn(false);
-    }).catch((error) => {
-      console.error("Log Out Failed")
-    });
-  }
+    signOut(auth)
+      .then(() => {
+        setIsLoggedIn(false);
+      })
+      .catch((error) => {
+        console.error("Log Out Failed");
+      });
+  };
 
-  useEffect (() => {
+  useEffect(() => {
     const auth = getAuth();
     const sub = onAuthStateChanged(auth, (user) => {
       if (user) {
-        navigation.navigate("Landing")
+        navigation.navigate("Landing");
       }
     });
 
     return sub;
-    }, [navigation]);
+  }, [navigation]);
 
   return (
     <View style={{ flex: 1, backgroundColor: "#FFFBFA", padding: 20 }}>

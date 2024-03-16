@@ -12,6 +12,7 @@ import {
   signInWithPopup,
   GoogleAuthProvider,
 } from "firebase/auth";
+import { SERVER_URL } from "../App";
 
 export const Login = ({ navigation }) => {
   const [email, setEmail] = useState("");
@@ -26,7 +27,7 @@ export const Login = ({ navigation }) => {
       // You'll need to add these fields or modify as necessary.
       formData.append("description", ""); // Update this with actual description
 
-      const response = await fetch("http://127.0.0.1:5000/api/signup", {
+      const response = await fetch("${SERVER_URL}/api/signup", {
         method: "POST",
         body: formData,
       });
@@ -118,8 +119,8 @@ export const Login = ({ navigation }) => {
         <TouchableOpacity style={styles.button} onPress={handleGoogleLogin}>
           <Text style={styles.buttonText}>Sign in With Google</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={navigateRegister} style={styles.button}>
-          <Text style={styles.buttonText}>
+        <TouchableOpacity onPress={navigateRegister}>
+          <Text style={styles.normalText}>
             Don't have an account? Click here to register
           </Text>
         </TouchableOpacity>

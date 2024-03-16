@@ -12,6 +12,7 @@ import { styles } from "./helper/Styles";
 import { typography } from "./helper/Typography";
 import { Avatar, Divider, Card, Button } from "react-native-paper";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { SERVER_URL } from "../App";
 
 //<a href="https://www.flaticon.com/free-icons/pencil" title="pencil icons">Pencil icons created by Pixel perfect - Flaticon</a>
 const snow = "#FFFBFA";
@@ -25,9 +26,7 @@ export default function ProfileScreen({ navigation }) {
     const auth = getAuth();
     const sub = onAuthStateChanged(auth, (user) => {
       if (user) {
-        const response = fetch(
-          `http://127.0.0.1:5000/api/get_profile?uid=${user.uid}`
-        )
+        const response = fetch(`${SERVER_URL}/api/get_profile?uid=${user.uid}`)
           .then((response) => response.json())
           .then((data) => {
             setUserId(data?.results[0]?.id);
@@ -47,15 +46,15 @@ export default function ProfileScreen({ navigation }) {
   const fetchUserSongList = async (user_id) => {
     try {
       const responseGood = await fetch(
-        `http://127.0.0.1:5000/api/get_user_songs?user_id=${user_id}&type=good`
+        `${SERVER_URL}/api/get_user_songs?user_id=${user_id}&type=good`
       ).then((responseGood) => responseGood.json());
 
       const responseOk = await fetch(
-        `http://127.0.0.1:5000/api/get_user_songs?user_id=${user_id}&type=ok`
+        `${SERVER_URL}/api/get_user_songs?user_id=${user_id}&type=ok`
       ).then((responseOk) => responseOk.json());
 
       const responseBad = await fetch(
-        `http://127.0.0.1:5000/api/get_user_songs?user_id=${user_id}&type=bad`
+        `${SERVER_URL}/api/get_user_songs?user_id=${user_id}&type=bad`
       ).then((responseBad) => responseBad.json());
       var newArr = [];
       newArr = newArr.concat(responseGood.results);
@@ -78,18 +77,18 @@ export default function ProfileScreen({ navigation }) {
     <Card style={styles.card} mode={"elevated"}>
       <Card.Content>
         <View style={{ flex: 1, flexDirection: "row" }}>
-          <Text style={{ flex: 1 }}>
-            <Text style={{ fontWeight: "bold" }}>{item.song_name}</Text>
-            <Text> by </Text>
-            <Text style={{ fontWeight: "bold" }}>{item.artist_name}</Text>
-          </Text>
+          <Text style={typography.default_bold}>{item.song_name}</Text>
+          <Text> by </Text>
+          <Text>{item.artist_name}</Text>
           <Text
-            style={{
-              fontWeight: "bold",
-              alignSelf: "center",
-              marginLeft: "auto",
-              marginRight: 17,
-            }}
+            style={[
+              typography.default_bold,
+              {
+                alignSelf: "center",
+                marginLeft: "auto",
+                marginRight: 17,
+              },
+            ]}
           >
             {Math.round(item.rating * 10) / 10}
           </Text>
@@ -175,9 +174,6 @@ export default function ProfileScreen({ navigation }) {
         <Divider
           style={{
             height: 1.5,
-            marginTop: 17,
-            marginVertical: 17,
-            marginHorizontal: 17,
             backgroundColor: "#3187D8",
           }}
         />
@@ -206,9 +202,6 @@ export default function ProfileScreen({ navigation }) {
         <Divider
           style={{
             height: 1.5,
-            marginVertical: 17,
-            marginBottom: 17,
-            marginHorizontal: 17,
             backgroundColor: "#3187D8",
           }}
         />
@@ -218,15 +211,18 @@ export default function ProfileScreen({ navigation }) {
           <Text style={typography.header}>Your Songs</Text>
         </View>
       </View>
-      <View style={{ flex: 10 }}>
-        <FlatList
-          data={songData}
-          keyExtractor={(item) => item.rating}
-          renderItem={renderCard}
-          style={[styles.container]}
-          contentContainerStyle={styles.content}
-        />
-      </View>
+      {songData.length < 1 ? (
+        <View />
+      ) : (
+        <View style={{ flex: 10 }}>
+          <FlatList
+            data={songData}
+            keyExtractor={(item) => item.song_id}
+            renderItem={renderCard}
+            style={styles.container}
+          />
+        </View>
+      )}
     </View>
   );
 }

@@ -1,29 +1,35 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { useEffect } from "react";
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
+import { SERVER_URL } from "../App";
 
-export const LoadingScreen = ({navigation}) => {
-
+export const LoadingScreen = ({ navigation }) => {
   useEffect(() => {
     const auth = getAuth();
     const sub = onAuthStateChanged(auth, (user) => {
       if (!user) {
-        navigation.navigate("Splash")
-      }
-      else {
-        navigation.navigate("Landing")
+        navigation.navigate("Splash");
+      } else {
+        navigation.navigate("Landing");
       }
     });
 
     return sub;
-    }, [navigation]);
+  }, [navigation]);
 
   return (
-    <View style={{ flex: 1, backgroundColor: "#FFFBFA", padding: 20, pointerEvents: "none" }}>
+    <View
+      style={{
+        flex: 1,
+        backgroundColor: "#FFFBFA",
+        padding: 20,
+        pointerEvents: "none",
+      }}
+    >
       <Text>Loading...</Text>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   titleContainer: {

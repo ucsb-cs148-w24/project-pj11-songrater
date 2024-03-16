@@ -12,37 +12,36 @@ import { styles } from "./helper/Styles";
 import { typography } from "./helper/Typography";
 import { Avatar, Divider, Card, Button } from "react-native-paper";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { SERVER_URL } from "../App";
 
-export default function ProfileScreen({ route }) {
+export default function FriendProfile({ route }) {
   const [uname, setUname] = useState("");
   // const [description, setDescription] = useState("");
   const [songData, setSongData] = useState([]);
-//   const [user_id, setUserId] = useState(0);
-  const { user_id, username, description} = route.params;
+  //   const [user_id, setUserId] = useState(0);
+  const { user_id, username, description } = route.params;
   console.log("friend's userid:", user_id);
 
-
   useEffect(() => {
-    if(user_id!=0){
-    console.log("successfully fecthed songlists:");
-    setUname(username);
-    fetchUserSongList(user_id);
+    if (user_id != 0) {
+      console.log("successfully fecthed songlists:");
+      setUname(username);
+      fetchUserSongList(user_id);
     }
-  },[user_id])
-
+  }, [user_id]);
 
   const fetchUserSongList = async (user_id) => {
     try {
       const responseGood = await fetch(
-        `http://127.0.0.1:5000/api/get_user_songs?user_id=${user_id}&type=good`
+        `${SERVER_URL}/api/get_user_songs?user_id=${user_id}&type=good`
       ).then((responseGood) => responseGood.json());
 
       const responseOk = await fetch(
-        `http://127.0.0.1:5000/api/get_user_songs?user_id=${user_id}&type=ok`
+        `${SERVER_URL}/api/get_user_songs?user_id=${user_id}&type=ok`
       ).then((responseOk) => responseOk.json());
 
       const responseBad = await fetch(
-        `http://127.0.0.1:5000/api/get_user_songs?user_id=${user_id}&type=bad`
+        `${SERVER_URL}/api/get_user_songs?user_id=${user_id}&type=bad`
       ).then((responseBad) => responseBad.json());
       var newArr = [];
       newArr = newArr.concat(responseGood.results);
@@ -136,56 +135,6 @@ export default function ProfileScreen({ route }) {
           {description}
         </Text>
       </View>
-      {/* <Pressable
-        style={{
-          marginLeft: 17,
-          marginRight: 17,
-          marginTop: 5,
-          marginBottom: 5,
-          flex: 1,
-          borderRadius: 10,
-          justifyContent: "flex-start",
-        }}
-        onPress={() => {}}
-      >
-        <Divider
-          style={{
-            height: 1.5,
-            marginTop: 17,
-            marginHorizontal: 17,
-            backgroundColor: "#3187D8",
-          }}
-        />
-        <View style={{ display: "flex", flex: 1, flexDirection: "row" }}>
-          <Text
-            style={{
-              fontSize: 20,
-              alignSelf: "center",
-              marginLeft: 17,
-              fontWeight: "bold",
-            }}
-          >
-            Friends
-          </Text>
-          <Text
-            style={{
-              fontSize: 20,
-              alignSelf: "center",
-              marginLeft: "auto",
-              marginRight: 17,
-            }}
-          >
-            {">"}
-          </Text>
-        </View>
-        <Divider
-          style={{
-            height: 1.5,
-            marginHorizontal: 17,
-            backgroundColor: "#3187D8",
-          }}
-        />
-      </Pressable> */}
       <View style={styles.preference}>
         <View style={styles.titleContainer}>
           <Text style={typography.header}> {uname}'s Songs</Text>
@@ -197,7 +146,6 @@ export default function ProfileScreen({ route }) {
           keyExtractor={(item) => item.rating}
           renderItem={renderCard}
           style={[styles.container]}
-          contentContainerStyle={styles.content}
         />
       </View>
     </View>

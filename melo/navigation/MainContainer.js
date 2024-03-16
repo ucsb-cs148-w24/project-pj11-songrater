@@ -51,8 +51,8 @@ function SongStack() {
     </Stack.Navigator>
   );
 }
-function ProfileStack(){
-  return(
+function ProfileStack() {
+  return (
     <Stack.Navigator initialRouteName={"ProfileScreen"}>
       <Stack.Screen
         name="ProfileScreen"
@@ -67,27 +67,32 @@ function ProfileStack(){
       <Stack.Screen
         name="FriendsScreen"
         component={FriendsScreen}
-        options={{headerShown:false}}
-      />
-    </Stack.Navigator> 
-     );
-}
-
-function FriendStack(){
-  return(
-    <Stack.Navigator initialRouteName={"FriendsScreen"}>
-      <Stack.Screen
-        name="FriendsScreen"
-        component={FriendsScreen}
-        options={{headerShown:false}}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="FriendProfile"
         component={FriendProfile}
         options={{ headerShown: false }}
       />
-    </Stack.Navigator> 
-     );
+    </Stack.Navigator>
+  );
+}
+
+function FriendStack() {
+  return (
+    <Stack.Navigator initialRouteName={"FriendsScreen"}>
+      <Stack.Screen
+        name="FriendsScreen"
+        component={FriendsScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="FriendProfile"
+        component={FriendProfile}
+        options={{ headerShown: false }}
+      />
+    </Stack.Navigator>
+  );
 }
 
 function SplashStack() {
@@ -224,10 +229,10 @@ function MainContainer() {
           component={ProfileStack}
           options={{ unmountOnBlur: true }}
         />
-        <Tab.Screen 
-        name={friendName} 
-        component={FriendStack} 
-        options={{ unmountOnBlur: true }}
+        <Tab.Screen
+          name={friendName}
+          component={FriendStack}
+          options={{ unmountOnBlur: true }}
         />
       </Tab.Navigator>
     </NavigationContainer>

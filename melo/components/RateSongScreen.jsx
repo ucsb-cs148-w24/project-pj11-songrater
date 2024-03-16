@@ -3,6 +3,7 @@ import { typography } from "./helper/Typography";
 // import { styles } from "./helper/Styles";
 import { useCallback, useState, useEffect } from "react";
 import { objectToUrlParams } from "./helper/functions";
+import { SERVER_URL } from "../App";
 
 function linspace(rating, num, index) {
   let endValue;
@@ -66,8 +67,7 @@ export default function RateSongScreen({ route }) {
     };
 
     const response = await fetch(
-      "http://127.0.0.1:5000/api/add_song?" +
-        objectToUrlParams(addUserSongParams),
+      "${SERVER_URL}/api/add_song?" + objectToUrlParams(addUserSongParams),
       {
         method: "POST",
       }
@@ -76,7 +76,7 @@ export default function RateSongScreen({ route }) {
 
   const fetchUserSongs = async ({ rating }) => {
     const response = await fetch(
-      `http://127.0.0.1:5000/api/get_user_songs?user_id=${user_id}&type=${rating}`
+      `${SERVER_URL}/api/get_user_songs?user_id=${user_id}&type=${rating}`
     )
       .then((response) => response.json())
       .then((data) => {

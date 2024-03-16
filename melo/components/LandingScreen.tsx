@@ -23,6 +23,7 @@ import { useExampleTheme } from "./helper/Themes";
 import { buttons } from "./helper/Buttons";
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import SplashScreen from "./SplashScreen";
+import { SERVER_URL } from "../App";
 
 function LandingScreen({ navigation }) {
   const [uname, setUname] = useState("");
@@ -34,9 +35,7 @@ function LandingScreen({ navigation }) {
     const sub = onAuthStateChanged(auth, (user) => {
       console.log(user.uid);
       if (user) {
-        const response = fetch(
-          `http://127.0.0.1:5000/api/get_profile?uid=${user.uid}`
-        )
+        const response = fetch(`${SERVER_URL}/api/get_profile?uid=${user.uid}`)
           .then((response) => response.json())
           .then((data) => {
             setUserId(data?.results[0]?.id);
@@ -55,7 +54,7 @@ function LandingScreen({ navigation }) {
 
   const fetchUserInfo = async () => {
     const curr_info = await fetch(
-      `http://127.0.0.1:5000/api/get_profile?user_id=${user_id}`
+      `${SERVER_URL}/api/get_profile?user_id=${user_id}`
     ).then((curr_info) => curr_info.json());
     try {
       setUname(curr_info.results[0].username);
@@ -67,7 +66,7 @@ function LandingScreen({ navigation }) {
   const fetchFeed = async (user_id) => {
     try {
       const feedSongs = await fetch(
-        `http://127.0.0.1:5000/api/friends_top_songs?user_id=${user_id}`
+        `${SERVER_URL}/api/friends_top_songs?user_id=${user_id}`
       ).then((feedSongs) => feedSongs.json());
 
       var newArr = [];

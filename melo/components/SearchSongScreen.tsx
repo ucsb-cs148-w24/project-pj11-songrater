@@ -29,6 +29,7 @@ import { styles } from "./helper/Styles";
 import { PlusIcon } from "./helper/SVGIcons";
 // import Ionicons from "react-native-vector-icons/Ionicons";
 import ScreenWrapper from "./helper/ScreenWrapper";
+import { SERVER_URL } from "../App";
 
 export default function SearchSongScreen({ navigation }) {
   const [title, setTitle] = useState("");
@@ -48,9 +49,7 @@ export default function SearchSongScreen({ navigation }) {
     const sub = onAuthStateChanged(auth, (user) => {
       if (user) {
         console.log(user.uid);
-        const response = fetch(
-          `http://127.0.0.1:5000/api/get_profile?uid=${user.uid}`
-        )
+        const response = fetch(`${SERVER_URL}/api/get_profile?uid=${user.uid}`)
           .then((response) => response.json())
           .then((data) => {
             setUserId(data?.results[0]?.id);
@@ -109,9 +108,7 @@ export default function SearchSongScreen({ navigation }) {
     try {
       setIsLoading(true);
       if (!(title == "" && artist == "")) {
-        await fetch(
-          `http://127.0.0.1:5000/title?title=${title}&artist=${artist}`
-        )
+        await fetch(`${SERVER_URL}/title?title=${title}&artist=${artist}`)
           .then((data) => {
             setIsLoading(false);
             return data.json();
