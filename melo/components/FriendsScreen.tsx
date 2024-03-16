@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import { Pressable, 
   StyleSheet, 
   Text, 
@@ -18,13 +18,12 @@ import {
   Paragraph,
   Divider,
 } from 'react-native-paper';
-import { useIsFocused } from '@react-navigation/native';
+import ProfileScreen from './ProfileScreen';
+import { useIsFocused } from "@react-navigation/native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { styles } from "./helper/Styles";
 import { typography } from "./helper/Typography";
-import { buttons } from "./helper/Buttons";
 import { objectToUrlParams } from "./helper/functions";
-
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 
@@ -36,6 +35,7 @@ export default function FriendsScreen({ navigation }){
   const [newname, setName] = useState("");
   const [fid, setFid] = useState([]);
   const [fexist, setFexist] = useState("");
+  const [pfid, setPfid] = useState(0);
 
   useEffect(() => {
     const auth = getAuth();
@@ -53,7 +53,7 @@ export default function FriendsScreen({ navigation }){
       }
     });
     return sub;
-  }, [useIsFocused()]);
+  }, [navigation, useIsFocused()]);
 
   useEffect(() => {
     console.log(fid);
@@ -82,8 +82,15 @@ export default function FriendsScreen({ navigation }){
               <Pressable onPress={() => {
                   DeleteFriend(item.id);
                 }}>
-              <Text style={{fontWeight:'bold', fontSize:20, marginRight: 16}}>
+              <Text style={{fontWeight:'bold', fontSize:20, marginRight: 26}}>
                 {'x'}
+              </Text>
+              </Pressable>
+              <Pressable onPress={() => {
+                navigateFriendProfile({ Fid: item.id , Fname: item.username });
+                }}>
+              <Text style={{fontWeight:'bold', fontSize:20, marginRight: 24}}>
+                {'>'}
               </Text>
               </Pressable>
             </View>
@@ -119,6 +126,11 @@ export default function FriendsScreen({ navigation }){
 
   const [isLoading, setIsLoading] = useState(false);
   const [searchFriendsState, setSearchFriendsState] = useState(false);
+
+  const navigateFriendProfile = ({Fid,Fname}) => {
+    console.log('should pass:',Fid); 
+    navigation.navigate("FriendProfile",{user_id: Fid, username: Fname});
+  };
 
   const fetchFriend = async() => {
     try{
