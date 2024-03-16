@@ -38,8 +38,11 @@ Artist can do the following:
 2. Evaluate the song with three choices: "Good", "Ok", "Bad"
 3. Leave a comment for this song
 4. Compare this song with other songs in the same category ("Good", "Ok", "Bad")
-5. Get the rank of the song and its score! 
-
+5. Get the rank of the song and its score!
+6. Getting your song ranking lists in your profile page
+7. Edit your profile
+8. Search for your friends and add them!
+9. See your friends' song ranking lists
 
 # Deployment
 
@@ -50,7 +53,7 @@ Please make sure that you have the latest version of:
 
 ## Running it
 1. `cd` into `/melo` folder
-2. Run 'npm i' to install node packages
+2. Run `npm i` to install node packages
 3. Run the following command:
    `npx expo start` / `npm start`
 4. Follow the steps on Expo to run the demo
