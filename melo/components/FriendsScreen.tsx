@@ -87,7 +87,7 @@ export default function FriendsScreen({ navigation }){
               </Text>
               </Pressable>
               <Pressable onPress={() => {
-                navigateFriendProfile({ Fid: item.id , Fname: item.username });
+                navigateFriendProfile({ Fid: item.id , Fname: item.username, Fdesc:item.description});
                 }}>
               <Text style={{fontWeight:'bold', fontSize:20, marginRight: 16}}>
                 {'>'}
@@ -127,9 +127,9 @@ export default function FriendsScreen({ navigation }){
   const [isLoading, setIsLoading] = useState(false);
   const [searchFriendsState, setSearchFriendsState] = useState(false);
 
-  const navigateFriendProfile = ({Fid,Fname}) => {
+  const navigateFriendProfile = ({Fid,Fname,Fdesc}) => {
     console.log('should pass:',Fid); 
-    navigation.navigate("FriendProfile",{user_id: Fid, username: Fname});
+    navigation.navigate("FriendProfile",{user_id: Fid, username: Fname, description: Fdesc});
   };
 
   const fetchFriend = async() => {

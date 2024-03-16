@@ -15,10 +15,10 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 export default function ProfileScreen({ route }) {
   const [uname, setUname] = useState("");
-  const [description, setDescription] = useState("");
+  // const [description, setDescription] = useState("");
   const [songData, setSongData] = useState([]);
 //   const [user_id, setUserId] = useState(0);
-  const { user_id, username } = route.params;
+  const { user_id, username, description} = route.params;
   console.log("friend's userid:", user_id);
 
 
