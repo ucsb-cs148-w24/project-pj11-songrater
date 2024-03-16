@@ -176,6 +176,7 @@ export default function ProfileScreen({ navigation }) {
           style={{
             height: 1.5,
             marginTop: 17,
+            marginVertical: 17,
             marginHorizontal: 17,
             backgroundColor: "#3187D8",
           }}
@@ -205,6 +206,8 @@ export default function ProfileScreen({ navigation }) {
         <Divider
           style={{
             height: 1.5,
+            marginVertical: 17,
+            marginBottom: 17,
             marginHorizontal: 17,
             backgroundColor: "#3187D8",
           }}

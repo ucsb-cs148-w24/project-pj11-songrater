@@ -248,7 +248,7 @@ export default function FriendsScreen({ navigation }){
 
 
   return (
-    <View style={{display:'flex',flex:1,backgroundColor: "#BBCDE5"}}>
+    <View style={{display:'flex',flex:1,backgroundColor: "#F3F6F7"}}>
 
        <View style={styles.preference}>
         <View style={styles.titleContainer}>
