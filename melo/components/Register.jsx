@@ -16,6 +16,7 @@ export const Register = ({ navigation }) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [regError, setRegError] = useState(false);
 
   const createProfile = async (uid, email) => {
     try {
@@ -61,6 +62,7 @@ export const Register = ({ navigation }) => {
         }
       } catch (error) {
         console.log(error);
+        setRegError(true);
       }
     }
   };
@@ -111,6 +113,14 @@ export const Register = ({ navigation }) => {
         <TouchableOpacity onPress={navigateLogin}>
           <Text style={styles.normalText}>Have an account? Login</Text>
         </TouchableOpacity>
+        {regError == true ? (
+          <View style={{ width: "100%", alignItems: "center" }}>
+            <Text style={styles.errorText}>Email is already taken or</Text>
+            <Text style={styles.errorText}>Password is under 6 characters</Text>
+          </View>
+        ) : (
+          <View></View>
+        )}
       </View>
     </View>
   );
@@ -142,6 +152,9 @@ const styles = StyleSheet.create({
     padding: 10, // Adds padding inside the text fields for spacing
     marginBottom: 10, // Adds a margin below each text field for spacing
     borderRadius: 5, // Rounds the corners of the text fields
+  },
+  errorText: {
+    color: "red",
   },
   button: {
     backgroundColor: "#3187D8", // Sets the button background color

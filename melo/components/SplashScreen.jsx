@@ -46,7 +46,7 @@ export default function SplashScreen({ navigation }) {
           onPress={navigateToLogin}
           style={buttons.outline}
         >
-          <Text style={typography.default_l}>Login</Text>
+          <Text style={typography.default_l}>Enter Melo</Text>
         </Pressable>
       </View>
     </View>

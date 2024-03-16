@@ -162,10 +162,10 @@ function LandingScreen({ navigation }) {
             selectedCard === item.id ? "headlineSmall" : "bodyLarge"
           }
           left={(props) => (
-            <Avatar.Image
-              style={styles.avatar}
-              source={item.avatar}
+            <Avatar.Text
               size={40}
+              label={item.friend_name[0]}
+              style={{ backgroundColor: "#3187D8" }}
             />
           )}
           right={(props: any) => (
@@ -235,17 +235,17 @@ function LandingScreen({ navigation }) {
             selectedCard === item.song_id ? "headlineSmall" : "bodyLarge"
           }
           left={(props) => (
-            <Avatar.Image
-              style={styles.avatar}
-              source={require("../assets/default-avatar.jpeg")}
+            <Avatar.Text
               size={40}
+              label={item.friend_name[0]}
+              style={{ backgroundColor: "#3187D8" }}
             />
           )}
           right={(props: any) => (
             <IconButton
               {...props}
-              icon={selectedHearts[item.song_id] ? "heart" : "heart-outline"}
-              iconColor={selectedHearts[item.song_id] ? "#3187D8" : "#BBCDE5"}
+              icon={selectedHearts[item.id] ? "heart" : "heart-outline"}
+              iconColor={selectedHearts[item.id] ? "#3187D8" : "#BBCDE5"}
               onPress={() => handleHeartPress(item)}
             />
           )}
