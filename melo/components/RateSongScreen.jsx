@@ -67,7 +67,7 @@ export default function RateSongScreen({ route }) {
     };
 
     const response = await fetch(
-      "${SERVER_URL}/api/add_song?" + objectToUrlParams(addUserSongParams),
+      `${SERVER_URL}/api/add_song?" + objectToUrlParams(addUserSongParams)`,
       {
         method: "POST",
       }

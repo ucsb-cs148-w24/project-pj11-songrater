@@ -25,7 +25,7 @@ export const Register = ({ navigation }) => {
       };
 
       const response = await fetch(
-        "${SERVER_URL}/api/signup?" + objectToUrlParams(userProfileParams),
+        `${SERVER_URL}/api/signup?` + objectToUrlParams(userProfileParams),
         {
           method: "POST",
         }
