@@ -325,18 +325,6 @@ function LandingScreen({ navigation }) {
           </View>
         </View>
 
-        <View style={styles.preference}>
-          <Searchbar
-            placeholder="Rank a Song..."
-            onChangeText={(query) =>
-              setSearchQuery({ ...searchQueries, searchBarMode: query })
-            }
-            value={searchQueries.searchBarMode}
-            style={styles.searchbar}
-            mode="bar"
-          />
-        </View>
-
         <Divider style={styles.divider} />
 
         <View style={styles.preference}>

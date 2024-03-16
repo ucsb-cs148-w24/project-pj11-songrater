@@ -211,18 +211,18 @@ export default function ProfileScreen({ navigation }) {
           <Text style={typography.header}>Your Songs</Text>
         </View>
       </View>
-      {songData.length < 1 ? (
-        <View />
-      ) : (
-        <View style={{ flex: 10 }}>
+      <View style={{ flex: 10 }}>
+        {songData.length < 1 ? (
+          <View />
+        ) : (
           <FlatList
             data={songData}
             keyExtractor={(item) => item.song_id}
             renderItem={renderCard}
             style={styles.container}
           />
-        </View>
-      )}
+        )}
+      </View>
     </View>
   );
 }

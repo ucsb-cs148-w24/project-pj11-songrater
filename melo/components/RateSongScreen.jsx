@@ -67,7 +67,7 @@ export default function RateSongScreen({ route }) {
     };
 
     const response = await fetch(
-      `${SERVER_URL}/api/add_song?" + objectToUrlParams(addUserSongParams)`,
+      `${SERVER_URL}/api/add_song?` + objectToUrlParams(addUserSongParams),
       {
         method: "POST",
       }
@@ -146,8 +146,8 @@ export default function RateSongScreen({ route }) {
             : {},
         ]}
       >
-        <Text style={typography.header}>{title}</Text>
-        <Text style={typography.header2}>{artist}</Text>
+        <Text style={typography.header2}>{title}</Text>
+        <Text style={typography.default_bold}>{artist}</Text>
         <Text style={typography.default}>Review: {review}</Text>
       </Pressable>
     );
@@ -220,7 +220,7 @@ export default function RateSongScreen({ route }) {
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
-    backgroundColor: "#FFFBFA",
+    backgroundColor: "#F3F6F7",
     padding: 20,
     display: "flex",
     flexDirection: "column",
@@ -243,8 +243,8 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     justifyContent: "space-between",
     alignItems: "center",
-    width: "70%",
-    height: "30%",
+    width: "80%",
+    height: "40%",
   },
   resultContainer: {
     flex: 1,
