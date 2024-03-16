@@ -19,6 +19,7 @@ import LandingScreen from "../components/LandingScreen";
 import EditUserScreen from "../components/EditUserScreen";
 import { registerVersion } from "firebase/app";
 import FriendsScreen from "../components/FriendsScreen";
+import FriendProfile from "../components/FriendProfile";
 import { LoadingScreen } from "../components/LoadingScreen";
 import SplashScreen from "../components/SplashScreen";
 
@@ -68,7 +69,25 @@ function ProfileStack(){
         component={FriendsScreen}
         options={{headerShown:false}}
       />
-    </Stack.Navigator>  )
+    </Stack.Navigator> 
+     );
+}
+
+function FriendStack(){
+  return(
+    <Stack.Navigator initialRouteName={"FriendsScreen"}>
+      <Stack.Screen
+        name="FriendsScreen"
+        component={FriendsScreen}
+        options={{headerShown:false}}
+      />
+      <Stack.Screen
+        name="FriendProfile"
+        component={FriendProfile}
+        options={{ headerShown: false }}
+      />
+    </Stack.Navigator> 
+     );
 }
 
 function SplashStack() {
@@ -207,7 +226,7 @@ function MainContainer() {
         />
         <Tab.Screen 
         name={friendName} 
-        component={FriendsScreen} 
+        component={FriendStack} 
         options={{ unmountOnBlur: true }}
         />
       </Tab.Navigator>

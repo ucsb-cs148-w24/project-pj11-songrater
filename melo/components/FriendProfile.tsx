@@ -13,36 +13,23 @@ import { typography } from "./helper/Typography";
 import { Avatar, Divider, Card, Button } from "react-native-paper";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
-//<a href="https://www.flaticon.com/free-icons/pencil" title="pencil icons">Pencil icons created by Pixel perfect - Flaticon</a>
-const snow = "#FFFBFA";
-export default function ProfileScreen({ navigation }) {
+export default function ProfileScreen({ route }) {
   const [uname, setUname] = useState("");
-  const [description, setDescription] = useState("");
+  // const [description, setDescription] = useState("");
   const [songData, setSongData] = useState([]);
-  const [user_id, setUserId] = useState(0);
+//   const [user_id, setUserId] = useState(0);
+  const { user_id, username, description} = route.params;
+  console.log("friend's userid:", user_id);
+
 
   useEffect(() => {
-    const auth = getAuth();
-    const sub = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        const response = fetch(
-          `http://127.0.0.1:5000/api/get_profile?uid=${user.uid}`
-        )
-          .then((response) => response.json())
-          .then((data) => {
-            setUserId(data?.results[0]?.id);
-            setUname(data?.results[0]?.username);
-            setDescription(data?.results[0]?.description);
-            fetchUserSongList(data?.results[0]?.id);
-          });
-      }
-    });
-    return sub;
-  }, [navigation, useIsFocused()]);
+    if(user_id!=0){
+    console.log("successfully fecthed songlists:");
+    setUname(username);
+    fetchUserSongList(user_id);
+    }
+  },[user_id])
 
-  const navigateEditUserScreen = ({}) => {
-    navigation.navigate("EditUserScreen");
-  };
 
   const fetchUserSongList = async (user_id) => {
     try {
@@ -65,15 +52,13 @@ export default function ProfileScreen({ navigation }) {
       newArr = newArr.filter(function (element) {
         return element !== undefined;
       });
+      console.log(newArr);
       setSongData(newArr);
     } catch {
       console.log("Error fetching user lists");
     }
   };
 
-  const handleButton = () => {
-    navigation.navigate("FriendsScreen");
-  };
   const renderCard = ({ item }) => (
     <Card style={styles.card} mode={"elevated"}>
       <Card.Content>
@@ -127,15 +112,6 @@ export default function ProfileScreen({ navigation }) {
         >
           {uname}
         </Text>
-        <Pressable
-          style={{ height: 30, width: 30, marginRight: 20 }}
-          onPress={navigateEditUserScreen}
-        >
-          <Image
-            style={{ height: 30, width: 30, marginRight: 20 }}
-            source={require("../assets/edit.png")}
-          />
-        </Pressable>
       </View>
       <View
         style={{
@@ -160,7 +136,7 @@ export default function ProfileScreen({ navigation }) {
           {description}
         </Text>
       </View>
-      <Pressable
+      {/* <Pressable
         style={{
           marginLeft: 17,
           marginRight: 17,
@@ -170,13 +146,12 @@ export default function ProfileScreen({ navigation }) {
           borderRadius: 10,
           justifyContent: "flex-start",
         }}
-        onPress={() => handleButton()}
+        onPress={() => {}}
       >
         <Divider
           style={{
             height: 1.5,
             marginTop: 17,
-            marginVertical: 17,
             marginHorizontal: 17,
             backgroundColor: "#3187D8",
           }}
@@ -206,16 +181,14 @@ export default function ProfileScreen({ navigation }) {
         <Divider
           style={{
             height: 1.5,
-            marginVertical: 17,
-            marginBottom: 17,
             marginHorizontal: 17,
             backgroundColor: "#3187D8",
           }}
         />
-      </Pressable>
+      </Pressable> */}
       <View style={styles.preference}>
         <View style={styles.titleContainer}>
-          <Text style={typography.header}>Your Songs</Text>
+          <Text style={typography.header}> {uname}'s Songs</Text>
         </View>
       </View>
       <View style={{ flex: 10 }}>
