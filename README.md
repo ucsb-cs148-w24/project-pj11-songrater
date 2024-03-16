@@ -25,7 +25,7 @@ Users can do the following:
 1. Perform basic CRUD operations (add themselves as a user in the app, delete their profile, etc.)
 2. Users can rank a song, which will then be added to their music (listening) history
 3. Users can look up user profiles of their friends, and rank their songs too (seeing their music tastes as well as your own)
-4. For later: Users can get recommendations of new songs based on their current music tastes
+4. For the future: Users can get recommendations of new songs based on their current music tastes
 
 Artist can do the following:
 1. See how their music is doing (which songs have been viewed the most, ranked the highest, etc.)
@@ -44,15 +44,18 @@ Artist can do the following:
 # Deployment
 
 ## Installation 
-
-1. latest version of `npm` and `node`
+Please make sure that you have the latest version of:
+1. Latest version of `npm` and `node`
 2. ExpoGO
 
 ## Running it
-1. cd into `/melo` folder
-2. run the following command:
+1. `cd` into `/melo` folder
+2. Run 'npm i' to install node packages
+3. Run the following command:
    `npx expo start` / `npm start`
-3. follow the steps on Expo to run the demo
+4. Follow the steps on Expo to run the demo
+   a. Press 'w' to open the web browser
+   b. If you have Expo Go on your mobile device, scan the QR code to open it there
 
 
 
