@@ -108,7 +108,10 @@ function LandingScreen({ navigation }) {
   };
 
   const handleHeartPress = (item) => {
-    setSelectedHearts((prev) => ({ ...prev, [item.id]: !prev[item.id] }));
+    setSelectedHearts((prev) => ({
+      ...prev,
+      [item.song_id]: !prev[item.song_id],
+    }));
   };
 
   const handlePlusPress = (item) => {
@@ -171,8 +174,8 @@ function LandingScreen({ navigation }) {
           right={(props: any) => (
             <IconButton
               {...props}
-              icon={selectedHearts[item.id] ? "heart" : "heart-outline"}
-              iconColor={selectedHearts[item.id] ? "#3187D8" : "#BBCDE5"}
+              icon={selectedHearts[item.song_id] ? "heart" : "heart-outline"}
+              iconColor={selectedHearts[item.song_id] ? "#3187D8" : "#BBCDE5"}
               onPress={() => handleHeartPress(item)}
             />
           )}
@@ -244,8 +247,8 @@ function LandingScreen({ navigation }) {
           right={(props: any) => (
             <IconButton
               {...props}
-              icon={selectedHearts[item.id] ? "heart" : "heart-outline"}
-              iconColor={selectedHearts[item.id] ? "#3187D8" : "#BBCDE5"}
+              icon={selectedHearts[item.song_id] ? "heart" : "heart-outline"}
+              iconColor={selectedHearts[item.song_id] ? "#3187D8" : "#BBCDE5"}
               onPress={() => handleHeartPress(item)}
             />
           )}
