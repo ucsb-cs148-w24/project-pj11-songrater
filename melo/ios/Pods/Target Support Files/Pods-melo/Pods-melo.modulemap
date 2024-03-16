@@ -1,6 +1,0 @@
-framework module Pods_melo {
-  umbrella header "Pods-melo-umbrella.h"
-
-  export *
-  module * { export * }
-}
