@@ -38,8 +38,6 @@ export const Register = ({ navigation }) => {
 
       const responseData = await response.json(); // This parses the JSON content from the response
 
-      console.log("Received response data");
-      console.log(responseData); // Now you have the parsed data
       return responseData;
     } catch (error) {
       console.error("Error creating profile:", error);
@@ -57,7 +55,6 @@ export const Register = ({ navigation }) => {
         );
         if (response.user) {
           navigation.navigate("Landing");
-          console.log(response.user.email);
           await createProfile(response.user.uid, response.user.email);
         }
       } catch (error) {

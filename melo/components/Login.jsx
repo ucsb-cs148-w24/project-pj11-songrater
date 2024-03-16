@@ -59,8 +59,6 @@ export const Login = ({ navigation }) => {
 
         createProfile(result.user.uid, result.user.email);
 
-        console.log("User logged in:", result.user);
-
         if (result.user) {
           navigation.navigate("LandingScreen");
         }
@@ -77,7 +75,6 @@ export const Login = ({ navigation }) => {
     try {
       const auth = getAuth();
       const response = await signInWithEmailAndPassword(auth, email, password);
-      console.log("User logged in:", response.user);
 
       if (response.user) {
         setLoginError(false);

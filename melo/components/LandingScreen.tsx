@@ -33,7 +33,6 @@ function LandingScreen({ navigation }) {
   useEffect(() => {
     const auth = getAuth();
     const sub = onAuthStateChanged(auth, (user) => {
-      console.log(user.uid);
       if (user) {
         const response = fetch(`${SERVER_URL}/api/get_profile?uid=${user.uid}`)
           .then((response) => response.json())
@@ -75,7 +74,6 @@ function LandingScreen({ navigation }) {
       newArr = newArr.filter(function (element) {
         return element !== undefined;
       });
-      console.log(newArr);
       setFeedData(newArr);
     } catch {
       console.log("Error fetching feed");
@@ -337,18 +335,17 @@ function LandingScreen({ navigation }) {
         </View>
         {feedData.length == 0 ? (
           <View style={styles.titleContainer}>
-            <Text style={typography.header2}>
-              Please add more friends to see your feed
+            <Text style={typography.default_bold}>
+              Please add more friends / have them rate songs to see your feed
             </Text>
           </View>
         ) : (
-          <FlatList
-            data={feedData}
-            keyExtractor={(item) => item.song_id.toString()}
-            renderItem={renderItem2}
-            style={[styles.container]}
-            contentContainerStyle={styles.content}
-          />
+          <View>
+            {feedData.map((item) => {
+              const key = item.song_id.toString();
+              return <View key={key}>{renderItem2({ item })}</View>;
+            })}
+          </View>
         )}
       </ScrollView>
     </ScreenWrapper>

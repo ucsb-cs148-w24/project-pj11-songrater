@@ -40,7 +40,6 @@ export default function FriendsScreen({ navigation }) {
   useEffect(() => {
     const auth = getAuth();
     const sub = onAuthStateChanged(auth, (user) => {
-      console.log(user.uid);
       if (user) {
         const response = fetch(`${SERVER_URL}/api/get_profile?uid=${user.uid}`)
           .then((response) => response.json())
@@ -143,7 +142,6 @@ export default function FriendsScreen({ navigation }) {
   const [searchFriendsState, setSearchFriendsState] = useState(false);
 
   const navigateFriendProfile = ({ Fid, Fname, Fdesc }) => {
-    console.log("should pass:", Fid);
     navigation.navigate("FriendProfile", {
       user_id: Fid,
       username: Fname,
@@ -199,7 +197,6 @@ export default function FriendsScreen({ navigation }) {
         })
         .then((data) => {
           setFexist(data.MESSAGE);
-          console.log(data.MESSAGE);
         });
     } catch (error) {
       console.error("Error fetching data: ", error);

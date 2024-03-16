@@ -20,11 +20,9 @@ export default function FriendProfile({ route }) {
   const [songData, setSongData] = useState([]);
   //   const [user_id, setUserId] = useState(0);
   const { user_id, username, description } = route.params;
-  console.log("friend's userid:", user_id);
 
   useEffect(() => {
     if (user_id != 0) {
-      console.log("successfully fecthed songlists:");
       setUname(username);
       fetchUserSongList(user_id);
     }
@@ -51,7 +49,6 @@ export default function FriendProfile({ route }) {
       newArr = newArr.filter(function (element) {
         return element !== undefined;
       });
-      console.log(newArr);
       setSongData(newArr);
     } catch {
       console.log("Error fetching user lists");

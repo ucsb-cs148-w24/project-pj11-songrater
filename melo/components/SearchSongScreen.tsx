@@ -48,7 +48,6 @@ export default function SearchSongScreen({ navigation }) {
     const auth = getAuth();
     const sub = onAuthStateChanged(auth, (user) => {
       if (user) {
-        console.log(user.uid);
         const response = fetch(`${SERVER_URL}/api/get_profile?uid=${user.uid}`)
           .then((response) => response.json())
           .then((data) => {
