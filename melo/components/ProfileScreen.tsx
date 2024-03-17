@@ -13,7 +13,6 @@ import { typography } from "./helper/Typography";
 import { Avatar, Divider, Card, Button } from "react-native-paper";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { SERVER_URL } from "../App";
-
 //<a href="https://www.flaticon.com/free-icons/pencil" title="pencil icons">Pencil icons created by Pixel perfect - Flaticon</a>
 const snow = "#FFFBFA";
 export default function ProfileScreen({ navigation }) {
@@ -21,7 +20,8 @@ export default function ProfileScreen({ navigation }) {
   const [description, setDescription] = useState("");
   const [songData, setSongData] = useState([]);
   const [user_id, setUserId] = useState(0);
-
+  const [selectedCard, setSelectedCard] = useState(null);
+  
   useEffect(() => {
     const auth = getAuth();
     const sub = onAuthStateChanged(auth, (user) => {
@@ -38,6 +38,7 @@ export default function ProfileScreen({ navigation }) {
     });
     return sub;
   }, [navigation, useIsFocused()]);
+
 
   const navigateEditUserScreen = ({}) => {
     navigation.navigate("EditUserScreen");
@@ -60,7 +61,7 @@ export default function ProfileScreen({ navigation }) {
       newArr = newArr.concat(responseGood.results);
       newArr = newArr.concat(responseOk.results);
       newArr = newArr.concat(responseBad.results);
-
+      console.log(newArr);
       newArr = newArr.filter(function (element) {
         return element !== undefined;
       });
@@ -73,28 +74,38 @@ export default function ProfileScreen({ navigation }) {
   const handleButton = () => {
     navigation.navigate("FriendsScreen");
   };
-  const renderCard = ({ item }) => (
-    <Card style={styles.card} mode={"elevated"}>
-      <Card.Content>
-        <View style={{ flex: 1, flexDirection: "row" }}>
-          <Text style={typography.default_bold}>{item.song_name}</Text>
-          <Text> by </Text>
-          <Text>{item.artist_name}</Text>
-          <Text
-            style={[
-              typography.default_bold,
-              {
-                alignSelf: "center",
-                marginLeft: "auto",
-                marginRight: 17,
-              },
-            ]}
-          >
-            {Math.round(item.rating * 10) / 10}
-          </Text>
-        </View>
-      </Card.Content>
-    </Card>
+  const handleCardPress = (item) => {
+    console.log("press");
+    console.log(item.rank);
+    setSelectedCard(item.rank);
+  };
+  const renderCard = ({ item }) => ( 
+    <Pressable onPress={() => handleCardPress(item)}>
+      <Card style={styles.card} mode={"elevated"}>
+        <Card.Content>
+          {selectedCard != item.rank ?(
+          <View style={{ flex: 1, flexDirection: "row" }}>
+            <Text style={typography.default_bold}>{item.song_name}</Text>
+            <Text> by </Text>
+            <Text>{item.artist_name}</Text>
+            <Text
+              style={[
+                typography.default_bold,
+                {
+                  alignSelf: "center",
+                  marginLeft: "auto",
+                  marginRight: 17,
+                },
+              ]}
+            >
+              {Math.round(item.rating * 10) / 10}
+            </Text>
+          </View>
+          ) 
+          : (<Text>{item.review}</Text>)}
+        </Card.Content>
+      </Card>
+    </Pressable>
   );
 
   return (
@@ -212,7 +223,7 @@ export default function ProfileScreen({ navigation }) {
         </View>
       </View>
       {songData.length < 1 ? (
-        <View />
+        <View style={{flex:10}}/>
       ) : (
         <View style={{ flex: 10 }}>
           <FlatList
