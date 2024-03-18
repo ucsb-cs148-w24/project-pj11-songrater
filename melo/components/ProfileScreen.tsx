@@ -67,6 +67,10 @@ export default function ProfileScreen({ navigation }) {
       newArr = newArr.filter(function (element) {
         return element !== undefined;
       });
+      for(var i = 0; i < newArr.length; i++){
+        newArr[i].rank = i;
+      }
+      console.log(newArr);
       setSongData(newArr);
     } catch {
       console.log("Error fetching user lists");
