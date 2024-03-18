@@ -154,7 +154,7 @@ export default function FriendsScreen({ navigation }) {
       setIsLoading(true);
       if (!(newname == "")) {
         await fetch(
-          `${SERVER_URL}//api/friends_specific?user_id=${UserId}&uname=${newname}`
+          `${SERVER_URL}//api/friends_specific?user_id=${UserId}&uname=${newname.toLowerCase()}`
         )
           .then((data) => {
             setIsLoading(false);
@@ -235,7 +235,7 @@ export default function FriendsScreen({ navigation }) {
       };
       const response = await fetch(
         `${SERVER_URL}/api/delete_friend?` +
-          objectToUrlParams(deleteFriendParams),
+        objectToUrlParams(deleteFriendParams),
         {
           method: "DELETE",
         }
