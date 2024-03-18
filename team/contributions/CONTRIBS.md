@@ -98,9 +98,4 @@ This file documents the roles and GitHub contributions of each team member for o
 - Designed app color palette
 - Implemented and maintained app styling
 
-- Implemented Navigation Bar
-- Implemented Landing Screen and modified Search Screen
-- Designed app color palette
-- Implemented and maintained app styling
-
 Please note that this file will be updated regularly as our project progresses and contributions evolve.
