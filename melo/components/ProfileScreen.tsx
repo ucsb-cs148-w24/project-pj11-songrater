@@ -39,7 +39,9 @@ export default function ProfileScreen({ navigation }) {
     return sub;
   }, [navigation, useIsFocused()]);
 
-
+  useEffect(() => {
+    fetchUserSongList(user_id);
+  }, [useIsFocused()]);
   const navigateEditUserScreen = ({}) => {
     navigation.navigate("EditUserScreen");
   };
@@ -77,7 +79,14 @@ export default function ProfileScreen({ navigation }) {
   const handleCardPress = (item) => {
     console.log("press");
     console.log(item.rank);
-    setSelectedCard(item.rank);
+    console.log(item.review);
+    if(item.rank != selectedCard && item.review){
+      setSelectedCard(item.rank);
+    }
+    else{
+      setSelectedCard(-1);
+    }
+    
   };
   const renderCard = ({ item }) => ( 
     <Pressable onPress={() => handleCardPress(item)}>
@@ -102,7 +111,7 @@ export default function ProfileScreen({ navigation }) {
             </Text>
           </View>
           ) 
-          : (<Text>{item.review}</Text>)}
+          : (<Text>Your review:{item.review}</Text>)}
         </Card.Content>
       </Card>
     </Pressable>
