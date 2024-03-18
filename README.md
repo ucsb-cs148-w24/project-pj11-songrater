@@ -38,6 +38,7 @@ Users can do the following:
 7. Edit your profile
 8. Search for your friends and add them!
 9. See your friends' song ranking lists
+10. Getting a "FEED" based on your friends' most recent activities 
 
 # Deployment
 
