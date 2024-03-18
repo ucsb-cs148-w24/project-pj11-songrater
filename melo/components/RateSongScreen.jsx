@@ -26,10 +26,14 @@ function linspace(rating, num, index) {
   if (num - 1 <= 1) {
     step = endValue - startValue;
   } else {
-    step = (endValue - startValue) / num;
+    step = (endValue - startValue) / (num-1);
   }
-  for (let i = 0; i < num; i++) {
-    arr.push(endValue - step * i);
+  if(num == 1) { 
+    arr.push(startValue);
+  } else {
+    for (let i = 0; i <= num; i++) {
+      arr.push(endValue - step * i);
+    }
   }
   return Math.round(arr[index] * 10) / 10;
 }
