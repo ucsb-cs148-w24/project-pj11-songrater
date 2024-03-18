@@ -33,7 +33,6 @@ function LandingScreen({ navigation }) {
   useEffect(() => {
     const auth = getAuth();
     const sub = onAuthStateChanged(auth, (user) => {
-      console.log(user.uid);
       if (user) {
         const response = fetch(`${SERVER_URL}/api/get_profile?uid=${user.uid}`)
           .then((response) => response.json())
@@ -75,7 +74,6 @@ function LandingScreen({ navigation }) {
       newArr = newArr.filter(function (element) {
         return element !== undefined;
       });
-      console.log(newArr);
       setFeedData(newArr);
     } catch {
       console.log("Error fetching feed");
@@ -108,7 +106,10 @@ function LandingScreen({ navigation }) {
   };
 
   const handleHeartPress = (item) => {
-    setSelectedHearts((prev) => ({ ...prev, [item.id]: !prev[item.id] }));
+    setSelectedHearts((prev) => ({
+      ...prev,
+      [item.song_id]: !prev[item.song_id],
+    }));
   };
 
   const handlePlusPress = (item) => {
@@ -162,17 +163,17 @@ function LandingScreen({ navigation }) {
             selectedCard === item.id ? "headlineSmall" : "bodyLarge"
           }
           left={(props) => (
-            <Avatar.Image
-              style={styles.avatar}
-              source={item.avatar}
+            <Avatar.Text
               size={40}
+              label={item.friend_name[0]}
+              style={{ backgroundColor: "#3187D8" }}
             />
           )}
           right={(props: any) => (
             <IconButton
               {...props}
-              icon={selectedHearts[item.id] ? "heart" : "heart-outline"}
-              iconColor={selectedHearts[item.id] ? "#3187D8" : "#BBCDE5"}
+              icon={selectedHearts[item.song_id] ? "heart" : "heart-outline"}
+              iconColor={selectedHearts[item.song_id] ? "#3187D8" : "#BBCDE5"}
               onPress={() => handleHeartPress(item)}
             />
           )}
@@ -235,10 +236,10 @@ function LandingScreen({ navigation }) {
             selectedCard === item.song_id ? "headlineSmall" : "bodyLarge"
           }
           left={(props) => (
-            <Avatar.Image
-              style={styles.avatar}
-              source={require("../assets/default-avatar.jpeg")}
+            <Avatar.Text
               size={40}
+              label={item.friend_name[0]}
+              style={{ backgroundColor: "#3187D8" }}
             />
           )}
           right={(props: any) => (
@@ -325,18 +326,6 @@ function LandingScreen({ navigation }) {
           </View>
         </View>
 
-        <View style={styles.preference}>
-          <Searchbar
-            placeholder="Rank a Song..."
-            onChangeText={(query) =>
-              setSearchQuery({ ...searchQueries, searchBarMode: query })
-            }
-            value={searchQueries.searchBarMode}
-            style={styles.searchbar}
-            mode="bar"
-          />
-        </View>
-
         <Divider style={styles.divider} />
 
         <View style={styles.preference}>
@@ -346,18 +335,17 @@ function LandingScreen({ navigation }) {
         </View>
         {feedData.length == 0 ? (
           <View style={styles.titleContainer}>
-            <Text style={typography.header2}>
-              Please add more friends to see your feed
+            <Text style={typography.default_bold}>
+              Please add more friends / have them rate songs to see your feed
             </Text>
           </View>
         ) : (
-          <FlatList
-            data={feedData}
-            keyExtractor={(item) => item.song_id.toString()}
-            renderItem={renderItem2}
-            style={[styles.container]}
-            contentContainerStyle={styles.content}
-          />
+          <View>
+            {feedData.map((item) => {
+              const key = item.song_id.toString();
+              return <View key={key}>{renderItem2({ item })}</View>;
+            })}
+          </View>
         )}
       </ScrollView>
     </ScreenWrapper>

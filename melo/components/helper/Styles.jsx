@@ -44,7 +44,6 @@ export const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 20,
     fontWeight: "bold",
-    fontFamily: "Poppins",
   },
   songResultContainer: {
     flex: 1,

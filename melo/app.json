@@ -11,9 +11,7 @@
       "resizeMode": "contain",
       "backgroundColor": "#FDE385"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "googleServicesFile": "./GoogleService-Info.plist",
       "supportsTablet": true,
@@ -38,17 +36,6 @@
           "ios": {
             "useFrameworks": "static"
           }
-        }
-      ],
-      [
-        "expo-font",
-        {
-          "fonts": [
-            "./assets/fonts/Poppins-Bold.ttf",
-            "./assets/fonts/-Regular.ttf",
-            "./assets/fonts/AnonymousPro-Bold.ttf",
-            "./assets/fonts/AnonymousPro-Bold.ttf"
-          ]
         }
       ]
     ]

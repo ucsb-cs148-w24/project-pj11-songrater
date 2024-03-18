@@ -16,6 +16,7 @@ export const Register = ({ navigation }) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [regError, setRegError] = useState(false);
 
   const createProfile = async (uid, email) => {
     try {
@@ -25,7 +26,7 @@ export const Register = ({ navigation }) => {
       };
 
       const response = await fetch(
-        "${SERVER_URL}/api/signup?" + objectToUrlParams(userProfileParams),
+        `${SERVER_URL}/api/signup?` + objectToUrlParams(userProfileParams),
         {
           method: "POST",
         }
@@ -37,8 +38,6 @@ export const Register = ({ navigation }) => {
 
       const responseData = await response.json(); // This parses the JSON content from the response
 
-      console.log("Received response data");
-      console.log(responseData); // Now you have the parsed data
       return responseData;
     } catch (error) {
       console.error("Error creating profile:", error);
@@ -56,11 +55,11 @@ export const Register = ({ navigation }) => {
         );
         if (response.user) {
           navigation.navigate("Landing");
-          console.log(response.user.email);
           await createProfile(response.user.uid, response.user.email);
         }
       } catch (error) {
         console.log(error);
+        setRegError(true);
       }
     }
   };
@@ -111,6 +110,14 @@ export const Register = ({ navigation }) => {
         <TouchableOpacity onPress={navigateLogin}>
           <Text style={styles.normalText}>Have an account? Login</Text>
         </TouchableOpacity>
+        {regError == true ? (
+          <View style={{ width: "100%", alignItems: "center" }}>
+            <Text style={styles.errorText}>Email is already taken or</Text>
+            <Text style={styles.errorText}>Password is under 6 characters</Text>
+          </View>
+        ) : (
+          <View></View>
+        )}
       </View>
     </View>
   );
@@ -142,6 +149,9 @@ const styles = StyleSheet.create({
     padding: 10, // Adds padding inside the text fields for spacing
     marginBottom: 10, // Adds a margin below each text field for spacing
     borderRadius: 5, // Rounds the corners of the text fields
+  },
+  errorText: {
+    color: "red",
   },
   button: {
     backgroundColor: "#3187D8", // Sets the button background color

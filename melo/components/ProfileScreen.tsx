@@ -77,9 +77,6 @@ export default function ProfileScreen({ navigation }) {
     navigation.navigate("FriendsScreen");
   };
   const handleCardPress = (item) => {
-    console.log("press");
-    console.log(item.rank);
-    console.log(item.review);
     if(item.rank != selectedCard && item.review){
       setSelectedCard(item.rank);
     }
@@ -111,7 +108,7 @@ export default function ProfileScreen({ navigation }) {
             </Text>
           </View>
           ) 
-          : (<Text>Your review:{item.review}</Text>)}
+          : (<Text>{item.review}</Text>)}
         </Card.Content>
       </Card>
     </Pressable>
@@ -231,18 +228,18 @@ export default function ProfileScreen({ navigation }) {
           <Text style={typography.header}>Your Songs</Text>
         </View>
       </View>
-      {songData.length < 1 ? (
-        <View style={{flex:10}}/>
-      ) : (
-        <View style={{ flex: 10 }}>
+      <View style={{ flex: 10 }}>
+        {songData.length < 1 ? (
+          <View />
+        ) : (
           <FlatList
             data={songData}
             keyExtractor={(item) => item.song_id}
             renderItem={renderCard}
             style={styles.container}
           />
-        </View>
-      )}
+        )}
+      </View>
     </View>
   );
 }

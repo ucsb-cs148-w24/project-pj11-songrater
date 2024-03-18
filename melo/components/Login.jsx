@@ -17,6 +17,7 @@ import { SERVER_URL } from "../App";
 export const Login = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loginError, setLoginError] = useState(false);
 
   const createProfile = async (uid, email) => {
     try {
@@ -27,7 +28,7 @@ export const Login = ({ navigation }) => {
       // You'll need to add these fields or modify as necessary.
       formData.append("description", ""); // Update this with actual description
 
-      const response = await fetch("${SERVER_URL}/api/signup", {
+      const response = await fetch(`${SERVER_URL}/api/signup`, {
         method: "POST",
         body: formData,
       });
@@ -58,8 +59,6 @@ export const Login = ({ navigation }) => {
 
         createProfile(result.user.uid, result.user.email);
 
-        console.log("User logged in:", result.user);
-
         if (result.user) {
           navigation.navigate("LandingScreen");
         }
@@ -76,13 +75,13 @@ export const Login = ({ navigation }) => {
     try {
       const auth = getAuth();
       const response = await signInWithEmailAndPassword(auth, email, password);
-      console.log("User logged in:", response.user);
 
       if (response.user) {
+        setLoginError(false);
         navigation.navigate("LandingScreen");
       }
     } catch (error) {
-      console.error("Login error:", error);
+      setLoginError(true);
     }
   };
 
@@ -116,14 +115,21 @@ export const Login = ({ navigation }) => {
         <TouchableOpacity style={styles.button} onPress={handleLogin}>
           <Text style={styles.buttonText}>Login</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={handleGoogleLogin}>
+        {/* <TouchableOpacity style={styles.button} onPress={handleGoogleLogin}>
           <Text style={styles.buttonText}>Sign in With Google</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
         <TouchableOpacity onPress={navigateRegister}>
           <Text style={styles.normalText}>
             Don't have an account? Click here to register
           </Text>
         </TouchableOpacity>
+        {loginError == true ? (
+          <View style={{ width: "100%", alignItems: "center" }}>
+            <Text style={styles.errorText}>Invalid email or password</Text>
+          </View>
+        ) : (
+          <View></View>
+        )}
       </View>
     </View>
   );
@@ -138,6 +144,9 @@ const styles = StyleSheet.create({
   },
   container: {
     width: "80%",
+  },
+  errorText: {
+    color: "red",
   },
   titleText: {
     fontSize: 24,

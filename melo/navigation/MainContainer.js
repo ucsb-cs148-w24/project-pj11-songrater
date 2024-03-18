@@ -104,7 +104,6 @@ function SplashStack() {
       if (!user) {
         setInitialRouteName("Loading");
       } else {
-        console.log(user);
         setInitialRouteName("Landing");
       }
     });
