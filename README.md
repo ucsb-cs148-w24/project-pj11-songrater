@@ -19,17 +19,12 @@ Backend: Flask Server w/ PostgreSQL database
 
 __User Roles__
 
-Our song rater app has two kinds of users: One is the general user browsing/ranking songs, and the other is the artist who releases their songs/albums.
+Our song rater app has general user browsing/ranking songs.
 
 Users can do the following:
 1. Perform basic CRUD operations (add themselves as a user in the app, delete their profile, etc.)
 2. Users can rank a song, which will then be added to their music (listening) history
-3. Users can look up user profiles of their friends, and rank their songs too (seeing their music tastes as well as your own)
-4. For the future: Users can get recommendations of new songs based on their current music tastes
-
-Artist can do the following:
-1. See how their music is doing (which songs have been viewed the most, ranked the highest, etc.)
-
+3. Users can look up user profiles of their friends, and see their ranking lists too (seeing their music tastes as well as your own)
 
 
 # Functionality
