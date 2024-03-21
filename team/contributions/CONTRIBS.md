@@ -42,9 +42,12 @@ This file documents the roles and GitHub contributions of each team member for o
 ### Jeffrey
 
 - Connected API to get titles from Musicbrainz
+- Established components / framework to be used throughout the app (structure of a full-stack interaction with http requests, shared typography / design styles, etc...) 
 - Created functions to fetch cover arts
 - Created Rate song and Search song screens
 - Created ranking algorithm
+- Main full-stack lead in connecting backend w/ frontend
+- Acted as point of contact for team members to reach out if they needed help with frontend, full-stack, or debugging work. 
 
 ### Emily
 
