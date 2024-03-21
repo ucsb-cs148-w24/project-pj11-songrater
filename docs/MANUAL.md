@@ -30,4 +30,4 @@ With Melo, it is easy to add friends and check out their profiles. Compare your 
 Under user profiles, users can scroll through a list of songs that they've rated before and look back at their list. Users can look at the list and answer questions like: "What's your all time favorite song?", as well as potentially rediscover old favorites that they've perhaps forgotten about with time.
 
 ## Additional Information
-
+N/A
