@@ -30,3 +30,4 @@ To enable greater efficiency, quality, and cooperation within the team, we made 
 
 
 **Explanation**
+At its core, our program is a social media application that has 4 different functionalities. After signing up / logging into the app, the user is granted with 4 different options to maneuver throughout the app. 1) They can go to the feed page where they will be updated with friend activity (history of rating songs). 2) They can search / rate a song for their personal library. 3) They can add their friends and view their friend's profile page (song rankings). 4) They can view their own profile page with typical CRUD operations.
